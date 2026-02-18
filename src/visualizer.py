@@ -49,7 +49,7 @@ class ReportVisualizer:
             autotext.set_fontsize(9)
             autotext.set_weight('bold')
         
-        ax.set_title('📊 Problem Type Distribution', fontsize=16, weight='bold', pad=20)
+        ax.set_title('Problem Type Distribution', fontsize=16, weight='bold', pad=20)
         
         # Save
         filepath = os.path.join(self.output_dir, 'problem_distribution.png')
@@ -89,7 +89,7 @@ class ReportVisualizer:
         
         ax.set_xlabel('Problem Type', fontsize=12, weight='bold')
         ax.set_ylabel('Number of Problems', fontsize=12, weight='bold')
-        ax.set_title('📈 Problem Count by Type', fontsize=16, weight='bold', pad=20)
+        ax.set_title('Problem Count by Type', fontsize=16, weight='bold', pad=20)
         ax.set_xticks(range(len(type_counts)))
         ax.set_xticklabels(type_counts.keys(), rotation=45, ha='right')
         ax.grid(axis='y', alpha=0.3)
@@ -131,7 +131,7 @@ class ReportVisualizer:
                    ha='left', va='center', fontweight='bold', fontsize=10)
         
         ax.set_xlabel('Number of Theories', fontsize=12, weight='bold')
-        ax.set_title('🧠 Theory Database Coverage by Domain', fontsize=16, weight='bold', pad=20)
+        ax.set_title('Theory Database Coverage by Domain', fontsize=16, weight='bold', pad=20)
         ax.grid(axis='x', alpha=0.3)
         
         # Save
@@ -172,7 +172,7 @@ class ReportVisualizer:
         # 3. Summary statistics text
         if problems:
             stats_text = f"""
-📊 ANALYSIS SUMMARY
+        ANALYSIS SUMMARY
 {'─'*30}
 
 Total Problems: {len(problems)}
@@ -195,7 +195,7 @@ Average Problems Per Type:
         if theories_dict:
             total_theories = sum(len(t) for t in theories_dict.values())
             db_text = f"""
-🧠 THEORY DATABASE
+        THEORY DATABASE
 {'─'*30}
 
 Total Domains: {len(theories_dict)}
@@ -214,7 +214,7 @@ Coverage:
                 family='monospace', bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.5))
         ax4.axis('off')
         
-        fig.suptitle('📈 Homework Analysis Dashboard', fontsize=16, weight='bold', y=0.98)
+        fig.suptitle('Homework Analysis Dashboard', fontsize=16, weight='bold', y=0.98)
         plt.tight_layout()
         
         # Save
@@ -251,7 +251,7 @@ Coverage:
         ax.legend(fontsize=11, loc='upper left')
         ax.set_xlabel('x', fontsize=12, weight='bold')
         ax.set_ylabel('f(x)', fontsize=12, weight='bold')
-        ax.set_title(f'📈 {title}', fontsize=14, weight='bold')
+        ax.set_title(f'{title}', fontsize=14, weight='bold')
         
         # Save
         filepath = os.path.join(self.output_dir, 'function_example.png')

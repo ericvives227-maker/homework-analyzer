@@ -469,14 +469,29 @@
             
             document.getElementById('graph-grid').innerHTML = graphsHtml;
             
-            // Problems
-            const problemsHtml = data.problems.map((problem, idx) => `
-                <div class="problem-card">
-                    <span class="problem-type">${problem.type}</span>
-                    <div class="problem-title">#${String(idx + 1).padStart(2, '0')} - Problem</div>
-                    <div class="problem-text">${problem.text.substring(0, 200)}...</div>
-                </div>
-            `).join('');
+            // Problems with theory usage
+            const problemsHtml = (data.solutions || []).map((solution, idx) => {
+                const theories = (solution.theories || []).map(t => `• ${t}`).join('<br>');
+                const implementation = solution.key_concepts || 'Applied domain-specific rules and verified results.';
+                const firstStep = (solution.steps && solution.steps.length)
+                    ? solution.steps[0].title
+                    : 'Analyze the problem and identify the method.';
+
+                return `
+                    <div class="problem-card">
+                        <span class="problem-type">${solution.type}</span>
+                        <div class="problem-title">#${String(idx + 1).padStart(2, '0')} - Problem</div>
+                        <div class="problem-text">${solution.problem.substring(0, 200)}...</div>
+                        <div class="problem-text" style="margin-top: 12px;">
+                            <strong>Theories Used:</strong><br>${theories || 'No theories listed.'}
+                        </div>
+                        <div class="problem-text" style="margin-top: 12px;">
+                            <strong>Implementation:</strong> ${implementation}<br>
+                            <strong>First Step:</strong> ${firstStep}
+                        </div>
+                    </div>
+                `;
+            }).join('');
             
             document.getElementById('problems-list').innerHTML = problemsHtml ||
                 '<p>No problems to display</p>';

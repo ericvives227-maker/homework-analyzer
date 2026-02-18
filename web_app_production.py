@@ -3,7 +3,8 @@ Production-Ready Web Application
 AI Homework Analyzer with Step-by-Step Solutions
 """
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
+import base64
 import os
 import sys
 import socket
@@ -43,7 +44,15 @@ def get_local_ip():
 def index():
     """Home page"""
     local_ip = get_local_ip()
-    return render_template('index.html', local_ip=local_ip)
+    return render_template('index_with_graphs.html', local_ip=local_ip)
+
+
+def image_to_base64(filepath: str) -> str | None:
+    """Convert a local image file into a base64 string for embedding."""
+    if not filepath or not os.path.exists(filepath):
+        return None
+    with open(filepath, 'rb') as img_file:
+        return base64.b64encode(img_file.read()).decode('utf-8')
 
 
 @app.route('/analyzer')
@@ -69,10 +78,13 @@ def status():
     })
 
 
-@app.route('/analyze', methods=['POST'])
+@app.route('/analyze', methods=['GET', 'POST'])
 def analyze():
     """Analyze PDF and generate complete solution with cliff notes"""
     try:
+        if request.method == 'GET':
+            return redirect(url_for('index'))
+
         if 'file' not in request.files:
             return jsonify({'error': 'No file provided'}), 400
         
@@ -115,11 +127,16 @@ def analyze():
             
             # Generate graphs (optional)
             graph_paths = {}
+            images = {}
             try:
                 from visualizer import ReportVisualizer
                 logger.info("📊 Generating visualizations...")
                 visualizer = ReportVisualizer()
                 graph_paths = visualizer.generate_all_visualizations(problems, theories)
+                for key, path in graph_paths.items():
+                    encoded = image_to_base64(path)
+                    if encoded:
+                        images[key] = encoded
                 logger.info(f"✅ Generated {len(graph_paths)} graphs")
             except Exception as e:
                 logger.warning(f"⚠️ Graph generation skipped: {str(e)}")
@@ -130,6 +147,7 @@ def analyze():
                 'filename': file.filename,
                 'total_problems': len(problems),
                 'problem_types': report['summary']['problem_types'],
+                'problems': problems[:10],
                 'solutions': report['problems_analyzed'],
                 'cliff_notes': report.get('cliff_notes', {}),
                 'statistics': {
@@ -137,7 +155,8 @@ def analyze():
                     'total_domains': len(theories),
                     'problems_solved': len(problems)
                 },
-                'graphs': list(graph_paths.keys())
+                'graphs': list(graph_paths.keys()),
+                'images': images
             }
             
             logger.info("✅ Analysis complete")
