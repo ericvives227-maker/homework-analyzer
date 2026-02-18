@@ -469,25 +469,82 @@
             
             document.getElementById('graph-grid').innerHTML = graphsHtml;
             
-            // Problems with theory usage
+            // Problems with detailed step-by-step solutions
             const problemsHtml = (data.solutions || []).map((solution, idx) => {
                 const theories = (solution.theories || []).map(t => `• ${t}`).join('<br>');
-                const implementation = solution.key_concepts || 'Applied domain-specific rules and verified results.';
-                const firstStep = (solution.steps && solution.steps.length)
-                    ? solution.steps[0].title
-                    : 'Analyze the problem and identify the method.';
+                const keyConc = solution.key_concepts || 'Apply systematic problem-solving approach.';
+                const mistakes = solution.common_mistakes || 'Not verifying results.';
+                
+                // Build comprehensive steps HTML with theory context
+                const stepsHtml = (solution.steps || []).map((step, stepIdx) => {
+                    // Enhanced step explanation
+                    const explanation = step.detailed_explanation || '';
+                    const example = step.worked_example || '';
+                    
+                    return `
+                    <div style="margin-top: 15px; padding: 15px; background: linear-gradient(to right, #f0f4ff, #fff); border-left: 4px solid #667eea; border-radius: 6px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <span style="background: #667eea; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">
+                                ${step.step}
+                            </span>
+                            <strong style="color: #667eea; font-size: 1.1em;">${step.title || ''}</strong>
+                        </div>
+                        
+                        <div style="margin: 12px 0; padding: 10px; background: white; border-radius: 4px; color: #555; line-height: 1.6; border-left: 2px solid #667eea; font-size: 0.95em;">
+                            ${explanation.substring(0, 2500)}${explanation.length > 2500 ? '...' : ''}
+                        </div>
+                        
+                        ${example ? `
+                        <div style="margin: 10px 0; padding: 10px; background: #f9f9f9; border-left: 2px solid #4caf50; font-size: 0.9em; color: #333;">
+                            <strong style="color: #2e7d32;">Example:</strong><br>
+                            <code style="color: #1976d2; font-size: 0.85em;">${example}</code>
+                        </div>
+                        ` : ''}
+                    </div>
+                    `;
+                }).join('');
 
                 return `
-                    <div class="problem-card">
-                        <span class="problem-type">${solution.type}</span>
-                        <div class="problem-title">#${String(idx + 1).padStart(2, '0')} - Problem</div>
-                        <div class="problem-text">${solution.problem.substring(0, 200)}...</div>
-                        <div class="problem-text" style="margin-top: 12px;">
-                            <strong>Theories Used:</strong><br>${theories || 'No theories listed.'}
+                    <div class="problem-card" style="margin-bottom: 25px; padding: 25px; background: white; border: 1px solid #e0e0e0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <span class="problem-type">${solution.type}</span>
+                            <span style="font-size: 0.9em; color: #999;">Problem #${String(idx + 1).padStart(2, '0')}</span>
                         </div>
-                        <div class="problem-text" style="margin-top: 12px;">
-                            <strong>Implementation:</strong> ${implementation}<br>
-                            <strong>First Step:</strong> ${firstStep}
+                        
+                        <div style="margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                            <strong style="color: #333; display: block; margin-bottom: 10px;">📝 Problem Statement:</strong>
+                            <p style="color: #555; line-height: 1.6; margin: 0;">
+                                ${solution.problem.substring(0, 600)}${solution.problem.length > 600 ? '...' : ''}
+                            </p>
+                        </div>
+                        
+                        <div style="margin: 15px 0; padding: 12px; background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%); border-left: 4px solid #ffc107; border-radius: 6px;">
+                            <strong style="color: #f57f17; display: block; margin-bottom: 10px;">📚 Relevant Theories & Concepts:</strong>
+                            <div style="color: #555; font-size: 0.95em;">${theories || 'Core mathematical and scientific principles.'}</div>
+                            <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 4px; font-size: 0.9em; color: #555;">
+                                <strong>Theory Application:</strong> These theories directly apply to analyzing and solving this problem. They provide the mathematical framework needed to identify the solution method and execute the calculations accurately.
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 15px 0;">
+                            <strong style="color: #667eea; display: block; margin-bottom: 12px; font-size: 1.05em;">🎯 Detailed Step-by-Step Solution:</strong>
+                            ${stepsHtml}
+                        </div>
+                        
+                        <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%); border-left: 4px solid #4caf50; border-radius: 6px;">
+                            <strong style="color: #2e7d32; display: block; margin-bottom: 8px;">✅ Key Concept & Main Idea:</strong>
+                            <p style="color: #555; margin: 0; line-height: 1.6;">${keyConc}</p>
+                            <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 4px; font-size: 0.9em; color: #555;">
+                                <strong>Why This Matters:</strong> Understanding this concept helps you solve similar problems and builds foundational knowledge for advanced topics in this domain.
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 12px; padding: 12px; background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); border-left: 4px solid #f44336; border-radius: 6px;">
+                            <strong style="color: #c62828; display: block; margin-bottom: 8px;">⚠️ Common Mistakes to Avoid:</strong>
+                            <p style="color: #555; margin: 0; line-height: 1.6;">${mistakes}</p>
+                            <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 4px; font-size: 0.9em; color: #555;">
+                                <strong>Pro Tip:</strong> Always verify your results and pay attention to signs, units, and dimensional consistency. Double-checking prevents careless errors.
+                            </div>
                         </div>
                     </div>
                 `;
