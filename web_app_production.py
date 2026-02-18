@@ -44,6 +44,13 @@ def get_local_ip():
 def index():
     """Home page"""
     local_ip = get_local_ip()
+    return render_template('home.html', local_ip=local_ip)
+
+
+@app.route('/index_with_graphs.html')
+def analyzer_page():
+    """Analyzer page with graphs"""
+    local_ip = get_local_ip()
     return render_template('index_with_graphs.html', local_ip=local_ip)
 
 
