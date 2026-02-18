@@ -263,7 +263,7 @@ Different functions require different rules. Choosing correctly prevents mistake
   Inside function: g(x) = 3x² + 2
   
   f'(x) = 5(3x² + 2)⁴ · (6x) [derivative of outside using power rule, times derivative of inside]
-        = 30x(3x² + 2)⁴ [simplified]'''',
+        = 30x(3x² + 2)⁴ [simplified]''',
                     'worked_example': '''POWER RULE: f(x) = x⁴ → f'(x) = 4x³
 
 PRODUCT RULE: f(x) = 2x · e^x
@@ -525,104 +525,6 @@ The key to success: (1) Identify function type, (2) Choose correct rule, (3) App
    · sin(x)·x uses PRODUCT rule, not chain
    · sin(x²) uses CHAIN rule
    · Know the difference!'''
-        }
-- When one function is inside another (composition)
-- Differentiate outer function (keeping inner the same), multiply by derivative of inner
-- Example: d/dx[sin(x²)] = cos(x²) · 2x
-
-TRIGONOMETRIC: 
-- d/dx[sin(x)] = cos(x)
-- d/dx[cos(x)] = -sin(x)
-- d/dx[tan(x)] = sec²(x)
-
-EXPONENTIAL & LOGARITHMIC:
-- d/dx[eˣ] = eˣ
-- d/dx[aˣ] = aˣ · ln(a)
-- d/dx[ln(x)] = 1/x
-- d/dx[logₐ(x)] = 1/(x·ln(a))''',
-                    'worked_example': 'For f(x) = 3x⁴ + 2x² - 5: Use power rule on each term separately'
-                },
-                {
-                    'step': 3,
-                    'title': 'Apply the Rule(s) Step-by-Step',
-                    'detailed_explanation': '''Execute the differentiation carefully:
-
-STEP-BY-STEP APPLICATION:
-1. Identify each term/component
-2. Apply the rule to each part
-3. Write out intermediate results clearly
-4. Combine like terms
-
-Show ALL work:
-- Don't skip steps
-- Clearly show exponent changes
-- Show coefficient multiplications
-- Keep careful track of signs
-
-Organize as:
-f(x) = [first component] + [second component] - [third component]
-f'(x) = [derivative of first] + [derivative of second] - [derivative of third]
-f'(x) = [simplified result]''',
-                    'worked_example': 'f(x) = 3x⁴ + 2x² - 5\nf\'(x) = 3·(4x³) + 2·(2x) - 0\nf\'(x) = 12x³ + 4x'
-                },
-                {
-                    'step': 4,
-                    'title': 'Simplify and Verify',
-                    'detailed_explanation': '''SIMPLIFICATION:
-- Combine like terms if any
-- Factor out common factors if helpful
-- Ensure no negative exponents remain (unless originally required)
-- Check for arithmetic errors
-
-VERIFICATION METHODS:
-1. Dimensional analysis: exponents should decrease by 1
-2. Special case check: plug in x=0 or x=1 if possible
-3. Limit check: as x→∞, derivative behavior matches original function trend
-4. Graph interpretation: derivative should match slope visually''',
-                    'worked_example': 'f\'(x) = 12x³ + 4x = 4x(3x² + 1) [factored form]\nVerify: x³ → x² (exponent decreased by 1) ✓'
-                },
-                {
-                    'step': 5,
-                    'title': 'Interpret the Result in Context',
-                    'detailed_explanation': '''INTERPRETATION:
-- State the derivative function f'(x)
-- If asked for slope at specific point: evaluate f'(x₀)
-- If asked for critical points: solve f'(x) = 0
-- If tangent line requested: y - y₀ = m(x - x₀) where m = f'(x₀)
-- If rate of change: express units (units of y per unit of x)
-
-COMMON QUESTIONS:
-• "Find f'(2)" → Substitute x=2 into f'(x) to get slope at that point
-• "Where is tangent horizontal?" → Solve f'(x) = 0
-• "Is function increasing/decreasing at x=3?" → If f'(3)>0 → increasing, if f'(3)<0 → decreasing
-• "Find equation of tangent line at x=1" → Use point-slope form with slope from f'(1)''',
-                    'worked_example': 'f\'(x) = 12x³ + 4x is the derivative function\nAt x=1: f\'(1) = 12(1)³ + 4(1) = 12 + 4 = 16 (slope at x=1)\nTangent line at (x₀,y₀) with slope 16: y - y₀ = 16(x - x₀)'
-                }
-            ],
-            'theories': [
-                'Derivative Definition: f\'(x) = lim[h→0] (f(x+h) - f(x))/h',
-                'Power Rule: d/dx[xⁿ] = n·xⁿ⁻¹',
-                'Product Rule: d/dx[u·v] = u\'v + uv\'',
-                'Quotient Rule: d/dx[u/v] = (u\'v - uv\')/v²',
-                'Chain Rule: d/dx[f(g(x))] = f\'(g(x))·g\'(x)',
-                'Trigonometric Derivatives',
-                'Exponential and Logarithmic Derivatives',
-                'Higher Order Derivatives: f\'\'(x), f\'\'\'(x), etc.'
-            ],
-            'key_concepts': '''Derivatives measure instantaneous rate of change. 
-- First derivative f'(x) gives slope of tangent line
-- f'(x) > 0 means function is increasing
-- f'(x) < 0 means function is decreasing  
-- f'(x) = 0 indicates critical points (maxima/minima)
-- Multiple derivative rules exist for different function types''',
-            'common_mistakes': '''
-1. Forgetting to apply chain rule for composite functions
-2. Sign errors with negative terms
-3. Mixing up product rule with distribution
-4. Using wrong exponent rule (exponent doesn't just multiply coefficient)
-5. Not simplifying final answer
-6. Forgetting to include all terms of the function
-7. Incorrectly applying quotient rule signs (numerator derivation order matters)'''
         }
     
     def _solve_integral(self, num, text, analysis=None):
