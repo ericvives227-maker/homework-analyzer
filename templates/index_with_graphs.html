@@ -490,12 +490,12 @@
                             <strong style="color: #667eea; font-size: 1.1em;">${step.title || ''}</strong>
                         </div>
                         
-                        <div style="margin: 12px 0; padding: 10px; background: white; border-radius: 4px; color: #555; line-height: 1.6; border-left: 2px solid #667eea; font-size: 0.95em;">
+                        <div style="margin: 12px 0; padding: 10px; background: white; border-radius: 4px; color: #555; line-height: 1.6; border-left: 2px solid #667eea; font-size: 0.95em; white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', monospace;">
                             ${explanation.substring(0, 2500)}${explanation.length > 2500 ? '...' : ''}
                         </div>
                         
                         ${example ? `
-                        <div style="margin: 10px 0; padding: 10px; background: #f9f9f9; border-left: 2px solid #4caf50; font-size: 0.9em; color: #333;">
+                        <div style="margin: 10px 0; padding: 10px; background: #f9f9f9; border-left: 2px solid #4caf50; font-size: 0.9em; color: #333; white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', monospace;">
                             <strong style="color: #2e7d32;">Example:</strong><br>
                             <code style="color: #1976d2; font-size: 0.85em;">${example}</code>
                         </div>
