@@ -1011,69 +1011,321 @@ Left = Right ✓ Solution is CORRECT!'''
             'steps': [
                 {
                     'step': 1,
-                    'title': 'Understand the Problem',
-                    'detailed_explanation': '''Read carefully and identify:
-1. WHAT is being asked?
-2. WHAT information is given?
-3. WHAT is unknown?
-4. Are there any special conditions or constraints?
+                    'title': 'Carefully Analyze and Understand the Problem',
+                    'detailed_explanation': '''STEP 1: COMPREHENSIVE PROBLEM ANALYSIS
 
-Organize given information:
+The first critical step in solving ANY problem is to fully understand what is being asked. Many errors come from misinterpreting the problem, so take time with this step.
+
+▸ READ THE PROBLEM MULTIPLE TIMES SLOWLY:
+  • First reading: Get the overall context and general idea
+  • Second reading: Identify specific quantities, numbers, and relationships
+  • Third reading: Determine EXACTLY what is being asked to find
+  • Fourth reading: Look for hidden conditions or special cases
+
+▸ EXTRACT AND LIST ALL GIVEN INFORMATION:
+  • Write down every numerical value with its variable symbol
+  • Include units for each quantity (meters, seconds, kilograms, etc.)
+  • Note any mathematical relationships between variables
+  • Identify constraints or special conditions mentioned
+  • Look for implied information (e.g., "object at rest" means initial velocity = 0)
+
+▸ CLEARLY DEFINE THE UNKNOWN:
+  • What quantity specifically needs to be determined?
+  • What units should the answer have?
+  • Are there multiple unknowns or just one main target?
+
+▸ ASSESS PROBLEM TYPE AND CONTEXT:
+  • Have you seen a similar problem in textbook or class?
+  • What chapter or topic does this relate to?
+  • What general method category fits (algebra, geometry, rate, force, etc.)?
+  • What assumptions might be necessary (friction exists or doesn't, air resistance, etc.)?
+
+▸ CREATE CLEAR VARIABLE DEFINITIONS:
+  • Use standard symbols (v for velocity, F for force, m for mass, t for time)
+  • Write: "Let x = ..." to define your variables clearly
+  • Use subscripts for clarity (v₀ for initial velocity, v_f for final velocity)
+  • This prevents confusion when writing equations''',
+                    'worked_example': '''Example Problem: "A ball is thrown upward from ground level with an initial velocity of 20 m/s. How long does it take to return to ground level? (Use g = 10 m/s²)"
+
+ANALYSIS:
 Given:
-- [Value 1]: [description and units]
-- [Value 2]: [description and units]
-- etc.
+  • v₀ = 20 m/s (initial velocity, upward direction)
+  • Position₀ = 0 m (ground level start)
+  • Position_final = 0 m (returns to ground)
+  • g = 10 m/s² (gravitational acceleration, downward)
 
-Find: [What you need to determine]''',
-                    'worked_example': 'Read problem multiple times until clear what needs solving'
+Find: t = time when ball returns to ground level
+
+Context: This is a projectile motion problem using kinematic equations
+
+Key observation: The ball returns to SAME height (ground), so displacement = 0'''
                 },
                 {
                     'step': 2,
-                    'title': 'Gather Relevant Information and Formulas',
-                    'detailed_explanation': '''Identify which:
-1. Formulas apply to this problem type?
-2. Theorems or principles are relevant?
-3. Previous knowledge connects?
-4. Methods have worked for similar problems?
+                    'title': 'Identify and Gather All Relevant Formulas and Theories',
+                    'detailed_explanation': '''STEP 2: SELECT THE RIGHT MATHEMATICAL TOOLS
 
-List applicable formulas with descriptions''',
-                    'worked_example': 'Determine which mathematical tools are needed'
+Now that problem is understood, identify which formulas, theorems, and principles apply. Using the right tool makes solving efficient.
+
+▸ DETERMINE PROBLEM CATEGORY:
+  • Is this about motion, forces, energy, heat, electricity, geometry, algebra?
+  • What specific topic within that category (constant velocity vs. acceleration)?
+  • What domain of physics/math does it use?
+
+▸ LIST ALL POTENTIALLY RELEVANT FORMULAS:
+  • Write out EACH formula completely
+  • Define EVERY variable in that formula clearly
+  • Note the units for each variable
+  • State any conditions when that formula is valid
+  • Example: "v = v₀ + at is valid only for constant acceleration"
+
+▸ DETERMINE NECESSARY INFORMATION FOR EACH FORMULA:
+  • For each formula, identify what inputs it needs
+  • Check if you have all those inputs from the problem
+  • If you're missing something, you need a different formula or intermediate step
+
+▸ UNDERSTAND THE THEORY BEHIND THE FORMULAS:
+  • Why does each formula work? What's the underlying principle?
+  • What assumptions does it make?
+  • When might it NOT apply?
+  • How does it relate to other formulas in this topic?
+
+▸ IDENTIFY CONNECTIONS BETWEEN FORMULAS:
+  • Can one formula be derived from another?
+  • Do some formulas solve for the same quantity using different methods?
+  • Which sequence of formulas will get you from given to unknown?
+
+▸ COMPARE ALTERNATIVE APPROACHES:
+  • Are there multiple ways to solve this?
+  • Which path is most direct or simpler?
+  • Which requires fewer intermediate calculations?''',
+                    'worked_example': '''For the ball problem above:
+
+FORMULA OPTIONS:
+1. s = v₀t + ½at² [displacement formula]
+   - Inputs needed: v₀ (have it), a (acceleration, have g=10 m/s²), t (unknown, solving for)
+   - This looks promising!
+
+2. v = v₀ + at [velocity formula]
+   - Inputs needed: v₀, a, t
+   - Doesn't directly help find time
+
+3. v² = v₀² + 2as [energy-based formula]
+   - Inputs needed: s (displacement, which is 0!)
+   - This would give: v² = 20² + 0, which doesn't help
+
+BEST CHOICE: Use s = v₀t + ½at²
+  • We know s = 0 (returns to ground)
+  • We know v₀ = 20 m/s (initial velocity)
+  • We know a = -10 m/s² (gravity acts downward)
+  • We need to find t'''
                 },
                 {
                     'step': 3,
-                    'title': 'Plan Solution Strategy',
-                    'detailed_explanation': '''Outline the approach:
-1. What steps will get from given to answer?
-2. In what order should operations proceed?
-3. Are there intermediate calculations needed?
-4. How will you verify the result?
+                    'title': 'Develop and Outline Your Complete Solution Strategy',
+                    'detailed_explanation': '''STEP 3: PLAN YOUR APPROACH BEFORE CALCULATING
 
-Create a roadmap before executing''',
-                    'worked_example': 'Map out the solution path step by step'
+Before doing ANY calculations, map out your complete solution path. This prevents mistakes and wasted effort.
+
+▸ CREATE A STEP-BY-STEP OUTLINE:
+  • What is the FIRST calculation you'll perform?
+  • What does that calculation tell you?
+  • What calculation comes NEXT and why?
+  • How does result from step 1 feed into step 2?
+  • Continue this logic until reaching final answer
+  • Write outline BEFORE starting calculations
+
+▸ IDENTIFY INTERMEDIATE VALUES:
+  • What helper calculations are needed?
+  • In what sequence should they occur?
+  • Does calculation B depend on result of calculation A?
+  • Are there any parallel paths that must merge?
+
+▸ VERIFY LOGICAL COMPLETENESS:
+  • Does each step lead naturally to the next?
+  • Have you avoided large logical jumps?
+  • Could someone else follow your plan without getting lost?
+  • Are dependencies between steps clear?
+
+▸ CONSIDER ALTERNATIVE SOLUTION PATHS:
+  • Is there a different sequence that might be simpler?
+  • Would using different formulas make it clearer?
+  • What are advantages and disadvantages of each approach?
+  • Which path shows the concepts most clearly?
+
+▸ PLAN YOUR VERIFICATION STRATEGY:
+  • What checks will confirm correctness?
+  • Can you solve it a completely different way to verify?
+  • How should the units work out?
+  • What should the magnitude of answer be approximately?''',
+                    'worked_example': '''SOLUTION PLAN FOR BALL PROBLEM:
+
+Step A (Setup):
+  Identify that we use: 0 = 20t - ½(10)t²
+  Why: displacement = 0, so s = v₀t + ½at² becomes 0 = 20t - 5t²
+
+Step B (Algebra):
+  Rearrange: 0 = 20t - 5t²
+  Factor: 0 = t(20 - 5t)
+  Why: Factor out common t to get solvable form
+
+Step C (Solve):
+  From factored form get two solutions:
+  • t = 0 (ball at ground at start-makes sense)
+  • 20 - 5t = 0, so t = 4 seconds (what we want)
+
+Step D (Verify):
+  Check: Does t = 4s make physical sense?
+  Method 1: Substitute back: 0 = 20(4) - 5(4²) = 80 - 80 = 0 ✓
+  Method 2: Symmetry check (up and down should be equal time) ✓
+  Method 3: Is 4 seconds reasonable for 20 m/s throw? Yes, seems right ✓'''
                 },
                 {
                     'step': 4,
-                    'title': 'Execute the Solution',
-                    'detailed_explanation': '''Follow the plan:
-1. Apply formulas and techniques
-2. Show all work clearly
-3. Keep track of units
-4. Maintain significant figures
-5. Check reasonableness of intermediate results''',
-                    'worked_example': 'Carry out calculations systematically'
+                    'title': 'Execute Calculations Methodically, Showing All Work',
+                    'detailed_explanation': '''STEP 4: DO THE MATH STEP-BY-STEP WITH FULL DETAIL
+
+Now execute your planned approach carefully and completely. Show EVERY step so work can be followed and checked.
+
+▸ WRITE EVERY SUBSTITUTION EXPLICITLY:
+  • Start with the chosen formula
+  • Show blank formula: s = v₀t + ½at²
+  • Fill in each value step-by-step: s = (20)t + ½(-10)t²
+  • Use proper symbols for each quantity
+  • Include units in parentheses: (0 m) = (20 m/s)·t + ½(-10 m/s²)·t²
+
+▸ PERFORM ALGEBRAIC OPERATIONS ONE AT A TIME:
+  • Each line should show ONE operation
+  • Never skip steps, even if they seem obvious
+  • Show: 0 = 20t - 5t² (first simplified the ½(-10) to -5)
+  • Then: 0 = t(20 - 5t) (factored out t)
+  • Then: t = 0 or 20 - 5t = 0 (applied zero product rule)
+  • Then: t = 0 or t = 4 s (solved each factor)
+
+▸ HANDLE UNITS CAREFULLY THROUGHOUT:
+  • Keep units attached to every number
+  • Cancel units like algebraic variables
+  • Example: (20 m/s) × (s) = 20 m (units of meters, correct for displacement)
+  • If units don't work out, you made an error
+
+▸ MAINTAIN APPROPRIATE PRECISION:
+  • Don't round intermediate results (loss of precision)
+  • Work with full precision until final step
+  • Keep track of significant figures from input data
+  • Only round the FINAL answer appropriately
+
+▸ DOUBLE-CHECK EVERY ARITHMETIC OPERATION:
+  • Verify each multiplication and division
+  • Check signs carefully
+  • Look for common arithmetic errors
+  • Use approximation to check: Does 5 × 4² roughly equal 80? Yes, 5 × 16 = 80 ✓''',
+                    'worked_example': '''DETAILED CALCULATION FOR BALL PROBLEM:
+
+Given: v₀ = 20 m/s, a = -10 m/s² (gravity downward), s = 0 m (returns to start)
+Using: s = v₀t + ½at²
+
+SUBSTITUTION:
+0 = (20)(t) + ½(-10)(t²)
+
+SIMPLIFICATION:
+0 = 20t + (-5)t²
+0 = 20t - 5t²
+
+FACTORING:
+0 = 5t(4 - t)  [factored out 5t from both terms]
+Actually cleaner: 0 = t(20 - 5t)
+
+APPLYING ZERO PRODUCT RULE (if A·B = 0, then A = 0 or B = 0):
+Either: t = 0
+Or: 20 - 5t = 0
+
+SOLVING SECOND EQUATION:
+20 - 5t = 0
+20 = 5t
+t = 20/5
+t = 4 seconds
+
+UNITS CHECK:
+Displacement calculation: (20 m/s)(4 s) - (5 m/s²)(4 s)² = 80 m - 80 m = 0 m ✓'''
                 },
                 {
                     'step': 5,
-                    'title': 'Verify and Interpret Result',
-                    'detailed_explanation': '''After finding answer:
-1. Does it have correct units?
-2. Is the magnitude reasonable?
-3. Is the sign correct?
-4. Does it satisfy original equation/constraints?
-5. Can back-calculate to verify?
+                    'title': 'Verify Results and Communicate Your Answer',
+                    'detailed_explanation': '''STEP 5: VERIFY, INTERPRET, AND COMMUNICATE FINDINGS
 
-Interpret: What does this answer mean in context?''',
-                    'worked_example': 'Check answer makes sense and is reasonable'
+Never accept an answer without verification. This final step catches errors and builds confidence.
+
+▸ VERIFY THE ANSWER USING MULTIPLE METHODS:
+  • Method 1 - Substitution Back: Plug answer back into original formula
+    For t = 4: s = 20(4) - 5(16) = 80 - 80 = 0 ✓ Correct!
+  • Method 2 - Alternate Approach: Solve using completely different method
+    Could use symmetry: time to go up = time to come down = 4/2 = 2 s up + 2 s down
+  • Method 3 - Limiting Cases: Check special cases or known scenarios
+    At t = 2s (peak): v = 20 - 10(2) = 0 m/s ✓ velocity = 0 at peak, correct!
+
+▸ CHECK DIMENSIONAL ANALYSIS (UNITS):
+  • Verify final units match what was asked
+  • The answer should be in seconds (time), ours is: t = 4 s ✓
+  • All intermediate units should have canceled properly
+  • If units are wrong, entire calculation is wrong
+
+▸ ASSESS REASONABLENESS AND MAGNITUDE:
+  • Does answer make physical sense?
+  • Does magnitude match intuition?
+  • Is it too small, too large, or just right?
+  • For our answer: 4 seconds to throw ball up and catch it-yes, seems reasonable
+  • As reference: 20 m/s ≈ 45 mph (a moderate throwing speed)
+
+▸ CHECK SIGN AND DIRECTION:
+  • Positive vs. negative has meaning (direction, increase vs. decrease)
+  • Our answer is positive, which is correct (time can't be negative)
+  • Any negative signs in solution should be physically justified
+
+▸ VALIDATE AGAINST ORIGINAL CONSTRAINTS:
+  • Does answer satisfy original problem statement?
+  • Did we answer what was ASKED (not something else)?
+  • Are all conditions from problem satisfied?
+  • For our problem: Ball should return to ground-yes, happens at t = 4s
+
+▸ STATE ANSWER CLEARLY WITH INTERPRETATION:
+  • Write answer prominently: t = 4 seconds
+  • Explain what it means: "The ball takes 4 seconds to return to ground level"
+  • Note which of the multiple solutions is the answer: "We discard t = 0 as that's initial time"
+  • Add context if relevant: "This is typical for a human-thrown object"
+
+▸ DISCUSS IMPLICATIONS AND CONNECTIONS:
+  • What does this result tell us about the motion?
+  • At t = 2s, what is happening? (at peak, maximum height)
+  • What would happen if initial velocity were different?
+  • How does this connect to other related problems?''',
+                    'worked_example': '''VERIFICATION FOR BALL PROBLEM:
+
+✓ CHECK 1 - SUBSTITUTION BACK:
+  s = 20t - 5t² at t = 4
+  s = 20(4) - 5(16)
+  s = 80 - 80
+  s = 0 ✓ Correct! (ball back at ground level)
+
+✓ CHECK 2 - ALTERNATIVE METHOD (SYMMETRY):
+  Ball goes up then down
+  Time to reach peak: v = v₀ - gt → 0 = 20 - 10t_peak → t_peak = 2 s
+  Time down = Time up = 2 s
+  Total time = 2 + 2 = 4 s ✓ Same answer!
+
+✓ CHECK 3 - LIMITING CASE:
+  At t = 2s (should be at peak):
+  Height: s = 20(2) - 5(4) = 40 - 20 = 20 m (positive, above ground) ✓
+  Velocity: v = 20 - 10(2) = 0 m/s ✓ (zero at peak, correct)
+
+✓ CHECK 4 - UNITS:
+  Answer is in seconds ✓ (correct time units)
+
+✓ CHECK 5 - REASONABLENESS:
+  4 seconds for a 45 mph throw? Yes, very reasonable ✓
+  Peak height should be around 20 m? For 20 m/s throw, yes about right ✓
+
+FINAL ANSWER: t = 4 seconds
+INTERPRETATION: The ball takes 4 seconds to rise and fall back to ground level.'''
                 }
             ],
             'theories': [
@@ -1083,8 +1335,61 @@ Interpret: What does this answer mean in context?''',
                 'Unit analysis',
                 'Verification techniques'
             ],
-            'key_concepts': 'Systematic problem-solving applies to any domain',
-            'common_mistakes': 'Not reading carefully, skipping verification, algebraic errors'
+            'key_concepts': '''The universal 5-step problem-solving method:
+① UNDERSTAND: Read carefully, identify given/unknown, set up notation.
+② GATHER TOOLS: Find relevant formulas, understand theories, assess approaches.
+③ PLAN: Outline complete strategy, identify dependencies, check connections.
+④ EXECUTE: Show all work step-by-step, maintain units, check arithmetic.
+⑤ VERIFY: Substitute back, use alternative methods, assess reasonableness.
+
+This systematic methodology works across all domains-mathematics, physics, chemistry, engineering, and beyond. The key is being methodical and thorough at each step. Every problem is solvable using this framework.''',
+            'common_mistakes': '''1. NOT READING CAREFULLY ENOUGH
+   • Misunderstanding what's being asked for
+   • Missing important conditions or constraints
+   • Confusing given information with unknowns
+   → FIX: Read problem 3-4 times, highlight key phrases
+
+2. SKIPPING IMMEDIATE STEPS
+   • Jumping to formula without understanding
+   • Trying to do too much in one step
+   • Not showing work clearly
+   → FIX: Write out every substitution, one operation per line
+
+3. UNIT ERRORS
+   • Forgetting units in calculations
+   • Unit mismatch in formulas
+   • Not canceling/converting units properly
+   → FIX: Carry units through entire calculation, verify at end
+
+4. ROUNDING TOO EARLY
+   • Rounding intermediate results loses precision
+   • Final answer loses accuracy
+   • Calculation drift accumulates
+   → FIX: Keep full precision until final answer only
+
+5. SELECTING WRONG FORMULA
+   • Choosing formula that doesn't apply
+   • Missing that you need intermediate step first
+   • Not checking if you have all formula inputs
+   → FIX: List all options, verify you have inputs, trace formula requirements
+
+6. ALGEBRAIC MISTAKES
+   • Sign errors (+/- confusion)
+   • Incorrect factoring or cancellation
+   • Arithmetic errors in basic operations
+   → FIX: Verify each algebraic step, check with substitute values
+
+7. SKIPPING VERIFICATION
+   • Not checking if answer is reasonable
+   • Not substituting back to confirm
+   • Ignoring what answer means
+   → FIX: Always verify using multiple methods, assess reasonableness
+
+8. NOT IDENTIFYING PROBLEM TYPE
+   • Not recognizing which domain/method applies
+   • Missing similar problems already solved
+   • Not connecting to relevant theory
+   → FIX: Categorize problem first, recall similar examples, identify domain'''
         }
 
 
