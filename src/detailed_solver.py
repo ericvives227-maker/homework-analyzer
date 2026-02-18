@@ -557,7 +557,8 @@ The key to success: (1) Identify function type, (2) Choose correct rule, (3) App
 8. ASSUMING CHAIN RULE WHEN PRODUCT RULE APPLIES
    · sin(x)·x uses PRODUCT rule, not chain
    · sin(x²) uses CHAIN rule
-   · Know the difference!'''
+   · Know the difference!''',
+            'answer_location': 'Final answer is the derivative f\'(x) found in Step 4 (Simplify) - the final simplified expression after applying rules and simplification'
         }
     
     def _solve_integral(self, num, text, analysis=None):
@@ -732,7 +733,8 @@ SPECIAL CASES:
 5. Wrong order in subtraction: must be F(upper) - F(lower)
 6. Not fully evaluating at both bounds
 7. Using wrong integration technique for the function type
-8. Arithmetic errors in exponent or constant calculations'''
+8. Arithmetic errors in exponent or constant calculations''',
+            'answer_location': 'Final answer is the antiderivative or definite integral value found in Step 4 (Evaluate) - the computed result after integration and evaluation'
         }
     
     def _solve_limit(self, num, text, analysis=None):
@@ -788,7 +790,8 @@ SPECIAL CASES:
                 'One-sided Limits'
             ],
             'key_concepts': 'Limits describe what value a function approaches as x approaches some value.',
-            'common_mistakes': 'Not recognizing indeterminate forms, incorrect algebraic manipulation, not checking one-sided limits'
+            'common_mistakes': 'Not recognizing indeterminate forms, incorrect algebraic manipulation, not checking one-sided limits',
+            'answer_location': 'Final answer is the limit value found in Step 4 (Evaluate or Simplify) - the specific numerical value or infinity that the function approaches'
         }
     
     def _solve_physics(self, num, text, analysis=None):
@@ -929,7 +932,8 @@ Interpretation: Starting from rest, an object accelerating at 3 m/s² travels 24
 5. Not accounting for all forces in Fnet
 6. Mixing up position/velocity/acceleration
 7. Rounding too early in multi-step calculations
-8. Not considering vector directions (magnitude vs signed component)'''
+8. Not considering vector directions (magnitude vs signed component)''',
+            'answer_location': 'Final answer is the calculated value (force, acceleration, energy, etc.) found in Step 3 (Substitute Values and Calculate) - the computed quantity after substituting numerical values into the physics equation'
         }
     
     def _solve_chemistry(self, num, text, analysis=None):
@@ -1075,7 +1079,8 @@ Briefly state what the answer means:
 6. Not identifying limiting reactant
 7. Using wrong stoichiometric ratio
 8. Rounding too early (causes significant figure errors)
-9. Forgetting to match significant figures in final answer'''
+9. Forgetting to match significant figures in final answer''',
+            'answer_location': 'Final answer is the calculated quantity (moles, grams, concentration, etc.) found in Step 4 (Calculate Final Result) - the computed value after applying stoichiometric ratios and conversions'
         }
     
     def _solve_geometry(self, num, text, analysis=None):
@@ -1212,7 +1217,8 @@ The missing leg is 4 units.'''
 6. Negative lengths (not physically meaningful)
 7. Not checking if answer satisfies original geometric constraints
 8. Rounding errors in multi-step problems
-9. Using wrong formula (area vs. circumference confusion)'''
+9. Using wrong formula (area vs. circumference confusion)''',
+            'answer_location': 'Final answer is the calculated measurement (area, volume, perimeter, angle, etc.) found in Step 4 (Calculate and Verify) - the numerical value with appropriate units after applying geometric formulas'
         }
     
     def _solve_algebra(self, num, text, analysis=None):
@@ -1374,7 +1380,8 @@ Left = Right ✓ Solution is CORRECT!'''
 7. Dividing by zero (denominator can't be zero)
 8. Extraneous solutions from squaring both sides
 9. Rounding too early in multi-step problems
-10. Not distributing properly when removing parentheses'''
+10. Not distributing properly when removing parentheses''',
+            'answer_location': 'Final answer is the solution value(s) found in Step 4 (Solve) or Step 5 (Verify Solution) - the value(s) of the variable that satisfy the equation'
         }
     
     def _solve_general(self, num, text, analysis=None):
@@ -1783,7 +1790,8 @@ This systematic methodology works across all domains-mathematics, physics, chemi
    • Not recognizing which domain/method applies
    • Missing similar problems already solved
    • Not connecting to relevant theory
-   → FIX: Categorize problem first, recall similar examples, identify domain'''
+   → FIX: Categorize problem first, recall similar examples, identify domain''',
+            'answer_location': 'Final answer is in Step 5 (Verify and Interpret Result) - the computed value after all calculations and verification'
         }
 
 
