@@ -213,57 +213,90 @@ Example 4: f(x) = (2x + 1)/(x² - 3)
 Different functions require different rules. Choosing correctly prevents mistakes.
 
 ▸ POWER RULE - For terms like xⁿ:
-  Formula: d/dx[xⁿ] = n·xⁿ⁻¹
-  What it does: Multiply by the exponent, then decrease exponent by 1
+  ┌─────────────────────────────────────────┐
+  │  d/dx[xⁿ] = n·xⁿ⁻¹                      │
+  │  (bring down exponent, reduce by 1)     │
+  └─────────────────────────────────────────┘
   
-  Examples:
-  • d/dx[x⁴] = 4x³ [bring down 4, reduce power to 3]
-  • d/dx[x] = d/dx[x¹] = 1·x⁰ = 1
-  • d/dx[5] = d/dx[5x⁰] = 0 [constants disappear]
-  • d/dx[x^(1/2)] = (1/2)x^(-1/2) = 1/(2√x) [works with fractional exponents too]
+  EXAMPLES:
+  • d/dx[x⁴] = 4x³           [exponent 4→3, coefficient 1→4]
+  • d/dx[x²] = 2x            [exponent 2→1, coefficient 1→2]
+  • d/dx[x] = 1              [x is x¹, so 1·x⁰ = 1]
+  • d/dx[5] = 0              [constants have exponent 0, disappear]
+  • d/dx[√x] = 1/(2√x)       [rewrite as x^(1/2), apply rule]
   
-  Apply to: EVERY term of a polynomial
-  Step-by-step:
-    f(x) = 3x⁴ + 2x² + 5
-    f'(x) = 3·(4x³) + 2·(2x) + 0
-    f'(x) = 12x³ + 4x
+  STEP-BY-STEP FOR f(x) = 3x⁴ + 2x² + 5:
+  ├─ Term 1: 3x⁴ → 3·4·x³ = 12x³
+  ├─ Term 2: 2x² → 2·2·x = 4x
+  └─ Term 3: 5 → 0
+  
+  Result: f'(x) = 12x³ + 4x
 
 ▸ PRODUCT RULE - When two functions are MULTIPLIED:
-  Formula: d/dx[u·v] = u'·v + u·v'
-  What it does: (Derivative of first × second) + (first × derivative of second)
-  Pattern: "FIRST times derivative of SECOND plus SECOND times derivative of FIRST"
+  ┌──────────────────────────────────────────────────┐
+  │  d/dx[u·v] = u'·v + u·v'                         │
+  │  = (first')·(second) + (first)·(second')         │
+  └──────────────────────────────────────────────────┘
   
-  Example: f(x) = x² · sin(x)
-  Let u = x² (first function) and v = sin(x) (second function)
-  Then u' = 2x and v' = cos(x)
+  MEMORY AID: "First times derivative of Second 
+               plus Second times derivative of First"
   
-  f'(x) = (2x)·sin(x) + x²·cos(x)
-        = 2x·sin(x) + x²·cos(x) [this is the final answer]
+  VISUAL PATTERN:
+     (u · v)' = u' · v  +  u · v'
+      [product]  [this]    [plus this]
+  
+  EXAMPLE: f(x) = x² · sin(x)
+  ├─ u = x², u' = 2x
+  ├─ v = sin(x), v' = cos(x)
+  └─ f'(x) = (2x)·sin(x) + x²·cos(x)
 
 ▸ QUOTIENT RULE - When function is a FRACTION:
-  Formula: d/dx[u/v] = (u'·v - u·v')/v²
-  What it does: (Top's derivative × bottom) - (top × bottom's derivative) / (bottom squared)
-  Pattern: "LOW times derivative of HIGH minus HIGH times derivative of LOW, over LOW squared"
+  ┌─────────────────────────────────────────────────┐
+  │  d/dx[u/v] = (u'·v - u·v') / v²                 │
+  │                                                 │
+  │  = (top'·bottom - top·bottom') / (bottom)²      │
+  └─────────────────────────────────────────────────┘
   
-  Example: f(x) = (x³ + 2)/(x - 1)
-  Let u = x³ + 2 (top) and v = x - 1 (bottom)
-  Then u' = 3x² and v' = 1
+  MEMORY AID: "LOW d-HIGH minus HIGH d-LOW, 
+               over LOW LOW (squared)"
   
-  f'(x) = [(3x²)(x-1) - (x³+2)(1)] / (x-1)²
-        = [3x³ - 3x² - x³ - 2] / (x-1)²
-        = [2x³ - 3x² - 2] / (x-1)² [simplified]
+  VISUAL PATTERN:
+         u      u'·v - u·v'
+       ─── → ─────────────
+         v          v²
+  
+  ⚠️ ORDER MATTERS! Numerator is u'v MINUS uv', not reversed!
+  
+  EXAMPLE: f(x) = (x³ + 2) / (x - 1)
+  ├─ u = x³ + 2, u' = 3x²
+  ├─ v = x - 1, v' = 1
+  └─ f'(x) = [(3x²)(x-1) - (x³+2)(1)] / (x-1)²
+           = [3x³ - 3x² - x³ - 2] / (x-1)²
+           = [2x³ - 3x² - 2] / (x-1)²
 
 ▸ CHAIN RULE - When function is NESTED/COMPOSITE:
-  Formula: d/dx[f(g(x))] = f'(g(x)) · g'(x)
-  What it does: Derivative of outer function × derivative of inner function
-  Pattern: "Derivative of outside times derivative of inside"
+  ┌──────────────────────────────────────────────────┐
+  │  d/dx[f(g(x))] = f'(g(x)) · g'(x)                │
+  │  = (outer')·(inner') derivatives multiply        │
+  └──────────────────────────────────────────────────┘
   
-  Example: f(x) = (3x² + 2)⁵
-  Outside function: something raised to power 5 [call it u⁵]
-  Inside function: g(x) = 3x² + 2
+  MEMORY AID: "Derivative of outside times 
+               derivative of inside"
   
-  f'(x) = 5(3x² + 2)⁴ · (6x) [derivative of outside using power rule, times derivative of inside]
-        = 30x(3x² + 2)⁴ [simplified]''',
+  VISUAL PATTERN:
+     [outer([inner])]' = outer' · inner'
+  
+  EXAMPLE 1: f(x) = (3x² + 2)⁵
+  ├─ OUTSIDE: u⁵ where u = 3x² + 2
+  ├─ INSIDE: 3x² + 2
+  ├─ d/du[u⁵] = 5u⁴ (outside derivative)
+  ├─ d/dx[3x² + 2] = 6x (inside derivative)
+  └─ f'(x) = 5(3x² + 2)⁴ · 6x = 30x(3x² + 2)⁴
+  
+  EXAMPLE 2: f(x) = sin(x²)
+  ├─ OUTSIDE: sin(something) → cos(something)
+  ├─ INSIDE: x² → 2x
+  └─ f'(x) = cos(x²) · 2x''',
                     'worked_example': '''POWER RULE: f(x) = x⁴ → f'(x) = 4x³
 
 PRODUCT RULE: f(x) = 2x · e^x
