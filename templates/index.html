@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Homework Analyzer - Professional Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hero {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 80px 60px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .action-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+        
+        .action-section h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .btn {
+            padding: 18px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .deployment-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .deployment-section h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .deployment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .deployment-card {
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .deployment-card:hover {
+            background: #f8f9ff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .deployment-card h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+        
+        .deployment-card p {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-right: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>📚 AI Homework Analyzer</h1>
+            <p>Professional Step-by-Step Solutions</p>
+            <p style="font-size: 1em; color: #999;">Generate complete solutions with cliff notes summaries</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📖</div>
+                <h3>Complete Solutions</h3>
+                <p>Step-by-step explanations with full worked examples for every problem</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Cliff Notes</h3>
+                <p>Professional study guide with formulas, theories, and common mistakes</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Multiple Types</h3>
+                <p>Calculus, Algebra, Physics, Chemistry, Geometry, and more</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Professional Design</h3>
+                <p>Beautiful interface, print-friendly, shareable with friends</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast & Easy</h3>
+                <p>Upload PDF, get solutions instantly with no complicated setup</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Always Available</h3>
+                <p>Deploy as a real website accessible from anywhere on the internet</p>
+            </div>
+        </div>
+        
+        <div class="action-section">
+            <h2>🎯 Get Started Now</h2>
+            <div class="button-group">
+                <a href="/analyze" class="btn btn-primary">▶️ Start Analyzing PDFs</a>
+                <a href="#deployment" class="btn btn-secondary">🌐 Deploy Website</a>
+                <a href="#" class="btn btn-secondary" onclick="document.location='#deployment'; return false;">📖 Learn More</a>
+            </div>
+        </div>
+        
+        <div class="deployment-section" id="deployment">
+            <h2>🌐 Deploy as a Real Website</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Transform this into a live website accessible from anywhere
+            </p>
+            
+            <div class="deployment-options">
+                <div class="deployment-card">
+                    <h3>Render.com</h3>
+                    <p><span class="tag">FREE</span><span class="tag">5 min</span></p>
+                    <p>Easy 1-click deployment from GitHub. Perfect for getting started.</p>
+                    <ul style="text-align: left; color: #666; font-size: 0.9em; margin: 15px 0;">
+                        <li>✓ Free tier available</li>
+                        <li>✓ Auto-deploys on push</li>
+                        <li>✓ Live URL in minutes</li>
+                    </ul>
+                </div>
+                
+                <div class="deployment-card">
+                    <h3>Railway.app</h3>
+                    <p><span class="tag">FREE</span><span class="tag">2 min</span></p>
+                    <p>Simplest deployment. Auto-detects Python and deploys automatically.</p>
+                    <ul style="text-align: left; color: #666; font-size: 0.9em; margin: 15px 0;">
+                        <li>✓ Free tier included</li>
+                        <li>✓ Super fast setup</li>
+                        <li>✓ Great UI</li>
+                    </ul>
+                </div>
+                
+                <div class="deployment-card">
+                    <h3>PythonAnywhere</h3>
+                    <p><span class="tag">FREE</span><span class="tag">10 min</span></p>
+                    <p>Python hosting platform. Upload files and configure through web interface.</p>
+                    <ul style="text-align: left; color: #666; font-size: 0.9em; margin: 15px 0;">
+                        <li>✓ 100MB free storage</li>
+                        <li>✓ Web-based interface</li>
+                        <li>✓ Reliable hosting</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="color: #666; margin-bottom: 20px;">
+                    📖 For detailed deployment instructions, see <strong>DEPLOYMENT.md</strong>
+                </p>
+                <p style="color: #666; font-size: 0.95em;">
+                    All deployment options work with the code as-is. No changes needed!
+                </p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>🎓 AI Homework Analyzer - Professional Solutions System</p>
+            <p style="color: #ccc; font-size: 0.9em; margin-top: 10px;">
+                Upload PDFs | Generate Solutions | Share Results
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

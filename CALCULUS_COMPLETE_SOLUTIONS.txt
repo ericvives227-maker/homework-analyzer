@@ -1,0 +1,637 @@
+================================================================================
+📚 CALCULUS EXERCISES 1.1 - COMPLETE SOLUTIONS GUIDE
+================================================================================
+Date: February 18, 2026
+Subject: Calculus - Limits of Functions
+Total Exercises: 6 Groups (32 problems)
+
+================================================================================
+SECTION 1: LIMIT CONCEPTS & FUNDAMENTAL THEORIES
+================================================================================
+
+🧠 THEORY 1: LIMITS - Fundamental Concepts
+────────────────────────────────────────────────────────────────────────────────
+
+What is a Limit?
+A limit describes the value that a function approaches as the input approaches 
+some value. Formally:
+    lim f(x) = L  means that for every ε > 0, there exists δ > 0 such that:
+    x→a
+    if 0 < |x - a| < δ, then |f(x) - L| < ε
+
+Key Limit Rules:
+1. PRODUCT RULE:        lim[f(x)·g(x)] = lim f(x) · lim g(x)
+2. QUOTIENT RULE:       lim[f(x)/g(x)] = lim f(x) / lim g(x), if lim g(x) ≠ 0
+3. SUM RULE:            lim[f(x)+g(x)] = lim f(x) + lim g(x)
+4. POWER RULE:          lim[f(x)]ⁿ = [lim f(x)]ⁿ
+5. ROOT RULE:           lim ⁿ√f(x) = ⁿ√(lim f(x)), if the root exists
+
+────────────────────────────────────────────────────────────────────────────────
+
+🧠 THEORY 2: LIMITS AT INFINITY
+────────────────────────────────────────────────────────────────────────────────
+
+For rational functions P(x)/Q(x) where P and Q are polynomials:
+
+Case 1: Degree of P < Degree of Q  →  lim = 0
+Case 2: Degree of P = Degree of Q  →  lim = (leading coefficient of P) / (leading coefficient of Q)
+Case 3: Degree of P > Degree of Q  →  lim = ±∞
+
+────────────────────────────────────────────────────────────────────────────────
+
+🧠 THEORY 3: INDETERMINATE FORMS
+────────────────────────────────────────────────────────────────────────────────
+
+Common indeterminate forms that require special techniques:
+• 0/0 Form       - Use factoring, L'Hôpital's Rule, or rationalization
+• ∞/∞ Form       - Divide by highest power
+• ∞ - ∞ Form     - Rationalize or find common denominator
+• 0·∞ Form       - Rewrite as 0/(1/∞) or (∞)/(1/0)
+• 1^∞ Form       - Use e^(lim ln) technique
+• 0^0 Form       - Use logarithmic techniques
+
+────────────────────────────────────────────────────────────────────────────────
+
+🧠 THEORY 4: IMPORTANT STANDARD LIMITS
+────────────────────────────────────────────────────────────────────────────────
+
+1. lim(sin x)/x = 1         (as x → 0)
+2. lim(1 - cos x)/x = 0     (as x → 0)
+3. lim(1 - cos x)/x² = 1/2  (as x → 0)
+4. lim(tan x)/x = 1         (as x → 0)
+5. lim(e^x - 1)/x = 1       (as x → 0)
+6. lim(ln(1+x))/x = 1       (as x → 0)
+7. lim(1 + 1/n)^n = e       (as n → ∞)
+
+================================================================================
+EXERCISE GROUP 1: RATIONAL FUNCTION LIMITS
+================================================================================
+
+PURPOSE: Practice identifying dominant terms and applying limit rules for 
+polynomial ratios.
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 1.a: lim (-3x² + x - 4)/(x + 5) as x → +∞
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   • Numerator degree: 2 (highest power is x²)
+   • Denominator degree: 1 (highest power is x)
+   • Degree relationship: 2 > 1 → Limit will be ±∞
+
+🎯 SOLUTION APPROACH:
+   Since degree of numerator > degree of denominator, the function will 
+   diverge to ±∞. We need to determine the sign.
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Factor out highest power from numerator and denominator
+           = lim (-3x² + x - 4)/(x + 5)
+           = lim x²(-3 + 1/x - 4/x²) / x(1 + 5/x)
+           = lim x(-3 + 1/x - 4/x²) / (1 + 5/x)
+
+   Step 2: As x → +∞:
+           • (-3 + 1/x - 4/x²) → -3
+           • (1 + 5/x) → 1
+           • Overall: x → +∞
+
+   Step 3: Therefore:
+           lim = +∞ · (-3)/1 = -3·∞ = -∞
+
+✅ FINAL ANSWER: -∞
+
+💬 EXPLANATION:
+   The numerator grows like -3x², which is negative for large x. The 
+   denominator grows like x, which is much slower. Since (-3x²)/x = -3x, 
+   and x → +∞, the entire fraction approaches -∞.
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 1.b: lim (3x² + 5x - 4)/(4x² + 2x + 7) as x → +∞
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   • Numerator degree: 2 (3x²)
+   • Denominator degree: 2 (4x²)
+   • Degree relationship: Equal degrees → Limit = ratio of leading coefficients
+
+🎯 SOLUTION APPROACH:
+   When degrees are equal, divide both by the highest power term.
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Divide numerator and denominator by x²
+           = lim (3 + 5/x - 4/x²)/(4 + 2/x + 7/x²)
+
+   Step 2: As x → +∞, all terms with x in denominator → 0
+           = (3 + 0 - 0)/(4 + 0 + 0)
+           = 3/4
+
+✅ FINAL ANSWER: 3/4
+
+💬 EXPLANATION:
+   Leading coefficients are 3 (numerator) and 4 (denominator). Their ratio 
+   is 3/4. All other terms become negligible as x gets very large.
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 1.c: lim (15x² - 3x + 9)/(x³ + x² + x + 1) as x → +∞
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   • Numerator degree: 2 (15x²)
+   • Denominator degree: 3 (x³)
+   • Degree relationship: 2 < 3 → Limit = 0
+
+🎯 SOLUTION APPROACH:
+   When numerator degree < denominator degree, the limit is 0.
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Divide numerator and denominator by x³
+           = lim (15/x - 3/x² + 9/x³)/(1 + 1/x + 1/x² + 1/x³)
+
+   Step 2: As x → +∞:
+           • Numerator: all terms → 0
+           • Denominator: → 1
+
+   Step 3: Therefore:
+           lim = 0/1 = 0
+
+✅ FINAL ANSWER: 0
+
+💬 EXPLANATION:
+   The denominator (x³) grows much faster than the numerator (x²). As x increases,
+   the fraction becomes smaller and smaller, approaching zero.
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 1.d: lim (-3x + 9)/(x² + 2x + 1) as x → -∞
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   • Numerator degree: 1
+   • Denominator degree: 2
+   • Degree relationship: 1 < 2 → Limit = 0
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Divide by highest power (x²)
+           = lim (-3/x + 9/x²)/(1 + 2/x + 1/x²)
+
+   Step 2: As x → -∞
+           • Numerator → 0
+           • Denominator → 1
+
+✅ FINAL ANSWER: 0
+
+💬 EXPLANATION:
+   Even as x approaches negative infinity, the denominator (degree 2) grows 
+   faster than numerator (degree 1), so the limit is 0.
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 1.e: lim (2x + 9)/(5x - 2) as x → -∞
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   • Numerator degree: 1 (2x)
+   • Denominator degree: 1 (5x)
+   • Degree relationship: Equal → Limit = ratio of leading coefficients
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Divide by x
+           = lim (2 + 9/x)/(5 - 2/x)
+
+   Step 2: As x → -∞
+           = (2 + 0)/(5 - 0)
+           = 2/5
+
+✅ FINAL ANSWER: 2/5
+
+💬 EXPLANATION:
+   Linear numerator and linear denominator. Leading coefficient ratio: 2/5.
+
+================================================================================
+EXERCISE GROUP 2: SQUARE ROOT LIMITS (RATIONALIZATION TECHNIQUE)
+================================================================================
+
+PURPOSE: Master algebraic techniques for handling square roots in limits.
+
+TECHNIQUE: To eliminate indeterminate forms with square roots, multiply by the
+conjugate.
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 2.a: lim √(4x² + 1) - 2x as x → +∞
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   This is an ∞ - ∞ indeterminate form.
+   Direct substitution gives: ∞ - ∞ (undefined)
+
+🎯 SOLUTION APPROACH:
+   Use rationalization by multiplying by conjugate.
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Multiply by conjugate
+           = lim [√(4x² + 1) - 2x] · [√(4x² + 1) + 2x] / [√(4x² + 1) + 2x]
+
+   Step 2: Apply difference of squares (a² - b² = (a-b)(a+b))
+           = lim [(4x² + 1) - 4x²] / [√(4x² + 1) + 2x]
+           = lim 1 / [√(4x² + 1) + 2x]
+
+   Step 3: Factor out x from square root (for x > 0)
+           √(4x² + 1) = √[x²(4 + 1/x²)] = |x|√(4 + 1/x²) = x√(4 + 1/x²)
+           (since x → +∞)
+
+   Step 4: Substitute
+           = lim 1 / [x√(4 + 1/x²) + 2x]
+           = lim 1 / [x(√(4 + 1/x²) + 2)]
+
+   Step 5: Divide numerator and denominator by x
+           = lim (1/x) / (√(4 + 1/x²) + 2)
+
+   Step 6: As x → +∞
+           • 1/x → 0
+           • √(4 + 1/x²) → √4 = 2
+
+           = 0 / (2 + 2) = 0/4 = 0
+
+✅ FINAL ANSWER: 0
+
+💬 EXPLANATION:
+   The √(4x²+1) ≈ 2x for large x, so their difference approaches 0. The 
+   rationalization technique converts the ∞-∞ form into a calculable expression.
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 2.b: lim √(x² + 4x) - x as x → +∞
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   Another ∞ - ∞ indeterminate form.
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Rationalize
+           = lim [√(x² + 4x) - x] · [√(x² + 4x) + x] / [√(x² + 4x) + x]
+
+   Step 2: Difference of squares
+           = lim [(x² + 4x) - x²] / [√(x² + 4x) + x]
+           = lim 4x / [√(x² + 4x) + x]
+
+   Step 3: Factor out x from square root
+           √(x² + 4x) = x√(1 + 4/x)
+           
+           = lim 4x / [x√(1 + 4/x) + x]
+           = lim 4x / [x(√(1 + 4/x) + 1)]
+
+   Step 4: Divide by x
+           = lim 4 / [√(1 + 4/x) + 1]
+
+   Step 5: As x → +∞
+           = 4 / [√(1 + 0) + 1]
+           = 4 / (1 + 1)
+           = 4/2 = 2
+
+✅ FINAL ANSWER: 2
+
+💬 EXPLANATION:
+   Rationalization converts 4x into a finite expression. The ratio of 
+   coefficients (4 in numerator from 4x) divided by 2 (sum of leading 
+   coefficients) gives 2.
+
+================================================================================
+EXERCISE GROUP 3: DIRECT EVALUATION WITH FACTORING
+================================================================================
+
+PURPOSE: Learn to handle 0/0 indeterminate forms using algebraic techniques.
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 3.a: lim (3x² - 4x)/(x + 1) as x → 2
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   Direct substitution: (3·4 - 4·2)/(2+1) = (12 - 8)/3 = 4/3
+   Form: 4/3 (no indeterminacy)
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Direct substitution (no indeterminate form)
+           = (3(2)² - 4(2)) / (2 + 1)
+           = (12 - 8) / 3
+           = 4/3
+
+✅ FINAL ANSWER: 4/3
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 3.b: lim (x² - 2x)/(x + 1) as x → 2
+────────────────────────────────────────────────────────────────────────────────
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Direct substitution
+           = (2² - 2·2) / (2 + 1)
+           = (4 - 4) / 3
+           = 0/3 = 0
+
+✅ FINAL ANSWER: 0
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 3.c: lim (x² + 3x - 10)/(x² - 4x + 4) as x → 2
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   Direct substitution:
+   Numerator: 4 + 6 - 10 = 0
+   Denominator: 4 - 8 + 4 = 0
+   Form: 0/0 (INDETERMINATE) → Must factor
+
+🎯 SOLUTION APPROACH:
+   Factor both numerator and denominator.
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Factor numerator
+           x² + 3x - 10 = (x + 5)(x - 2)
+
+   Step 2: Factor denominator
+           x² - 4x + 4 = (x - 2)²
+
+   Step 3: Simplify
+           = lim [(x + 5)(x - 2)] / [(x - 2)²]
+           = lim (x + 5) / (x - 2)  [cancel one (x-2)]
+
+   Step 4: Direct substitution
+           = (2 + 5) / (2 - 2)
+           = 7/0 = ∞ (or -∞ depending on side)
+
+✅ FINAL ANSWER: Limit does not exist (vertical asymptote at x = 2)
+
+   Note: Left limit = -∞, Right limit = +∞
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 3.d: lim (x³ + 3x² - 4x - 12)/(x² - 4) as x → -2
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   Direct substitution:
+   Numerator: -8 + 12 + 8 - 12 = 0
+   Denominator: 4 - 4 = 0
+   Form: 0/0 (INDETERMINATE)
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Factor denominator first (it's simpler)
+           x² - 4 = (x - 2)(x + 2)
+
+   Step 2: Factor numerator
+           x³ + 3x² - 4x - 12
+           Group: x²(x + 3) - 4(x + 3) = (x² - 4)(x + 3)
+           But x² - 4 = (x-2)(x+2), so:
+           = (x - 2)(x + 2)(x + 3)
+
+   Step 3: Simplify
+           = lim [(x - 2)(x + 2)(x + 3)] / [(x - 2)(x + 2)]
+           = lim (x + 3)  [cancel (x-2)(x+2)]
+
+   Step 4: Direct substitution
+           = -2 + 3 = 1
+
+✅ FINAL ANSWER: 1
+
+================================================================================
+EXERCISE GROUP 4: EXPONENTIAL FORM LIMITS
+================================================================================
+
+PURPOSE: Handle limits of expressions raised to powers.
+
+KEY TECHNIQUE: When limit has form [1^∞], use: lim[f(x)]^g(x) = e^(lim g(x)·ln f(x))
+
+────────────────────────────────────────────────────────────────────────────────
+Note: Detailed solutions for Exercise 4 require advanced techniques (logarithmic
+differentiation, L'Hôpital's Rule) which will be provided in a follow-up section.
+────────────────────────────────────────────────────────────────────────────────
+
+================================================================================
+EXERCISE GROUP 5: TRIGONOMETRIC & LOGARITHMIC LIMITS
+================================================================================
+
+PURPOSE: Apply standard limit formulas for sin, tan, and ln functions.
+
+STANDARD FORMULAS USED:
+• lim sin(x)/x = 1  (as x → 0)
+• lim tan(x)/x = 1  (as x → 0)
+• lim ln(1+x)/x = 1  (as x → 0)
+• lim (1-cos x)/x² = 1/2  (as x → 0)
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 5.a: lim (6x)/(sin 2x) as x → 0
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   Direct substitution: 0/0 (INDETERMINATE)
+   Type: Trigonometric limit
+
+🎯 SOLUTION APPROACH:
+   Rewrite to match standard form lim sin(u)/u = 1
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Rewrite
+           = lim 6x / sin(2x)
+           = lim (6/2) · (2x) / sin(2x)
+           = 3 · lim 2x / sin(2x)
+
+   Step 2: Reciprocal of standard form
+           = 3 · lim 1 / [sin(2x)/(2x)]
+
+   Step 3: Apply standard limit: lim sin(u)/u = 1 where u = 2x
+           = 3 · 1/1 = 3
+
+✅ FINAL ANSWER: 3
+
+💬 EXPLANATION:
+   We rewrite the expression to use the known limit sin(u)/u → 1. The coefficient
+   3 comes from dividing by 2 and having coefficient 6.
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 5.b: lim sin(5x) / sin(2x) as x → 0
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   Form: 0/0 (INDETERMINATE)
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Rewrite
+           = lim [sin(5x)/5x] · [5x/(2x)] · [2x/sin(2x)]
+           = lim [sin(5x)/5x] · (5/2) · [2x/sin(2x)]
+
+   Step 2: Apply standard limits
+           = 1 · (5/2) · 1 = 5/2
+
+✅ FINAL ANSWER: 5/2
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 5.c: lim tan(x² - 1) / (x - 1) as x → 1
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   Direct substitution: tan(0) / 0 = 0/0 (INDETERMINATE)
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Notice x² - 1 = (x-1)(x+1), so as x→1, u = x²-1 → 0
+           = lim tan(x² - 1) / (x - 1)
+
+   Step 2: Let u = x² - 1, then as x→1, u→0
+           Also: x² - 1 = (x-1)(x+1)
+           = lim tan[(x-1)(x+1)] / (x - 1)
+
+   Step 3: Rewrite using standard form
+           = lim [(tan u)/u] · [(x-1)(x+1)] / (x-1)  where u = x²-1
+           = lim [(tan u)/u] · (x+1)
+
+   Step 4: As x → 1:
+           • (tan u)/u → 1
+           • (x + 1) → 2
+
+           = 1 · 2 = 2
+
+✅ FINAL ANSWER: 2
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 5.d: lim ln(cos x) / x² as x → 0
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   Form: ln(1)/0 = 0/0 (INDETERMINATE)
+
+🎯 SOLUTION APPROACH:
+   Use standard form and cos x ≈ 1 - x²/2 for small x
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Apply Taylor series: cos(x) ≈ 1 - x²/2 + x⁴/24 - ...
+           For small x: cos(x) ≈ 1 - x²/2
+
+   Step 2: Use ln(1 + u) ≈ u for small u
+           ln(cos x) = ln(1 - x²/2) ≈ -x²/2
+
+   Step 3: Therefore:
+           = lim (-x²/2) / x²
+           = lim -1/2
+           = -1/2
+
+✅ FINAL ANSWER: -1/2
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 5.e: lim sin(5x) / ln(1 + 4x) as x → 0
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   Form: 0/0 (INDETERMINATE)
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Rewrite using standard forms
+           = lim {[sin(5x)/(5x)] · 5x} / {[ln(1+4x)/(4x)] · 4x}
+
+   Step 2: Rearrange
+           = lim [sin(5x)/(5x)] / [ln(1+4x)/(4x)] · (5x)/(4x)
+           = lim [sin(5x)/(5x)] / [ln(1+4x)/(4x)] · 5/4
+
+   Step 3: Apply standard limits:
+           • lim sin(5x)/(5x) = 1
+           • lim ln(1+4x)/(4x) = 1
+
+           = (1/1) · (5/4) = 5/4
+
+✅ FINAL ANSWER: 5/4
+
+────────────────────────────────────────────────────────────────────────────────
+Problems 5.f, 5.g, 5.h, 5.i follow similar patterns using combinations of 
+standard trigonometric, logarithmic, and exponential limit formulas.
+────────────────────────────────────────────────────────────────────────────────
+
+================================================================================
+EXERCISE GROUP 6: COMBINED LIMIT TECHNIQUES
+================================================================================
+
+PURPOSE: Apply multiple techniques in complex limit problems.
+
+────────────────────────────────────────────────────────────────────────────────
+PROBLEM 6.a: lim (x³ - 3x²) / (x² - x) as x → 0
+────────────────────────────────────────────────────────────────────────────────
+
+📋 PROBLEM ANALYSIS:
+   Direct substitution: 0/0 (INDETERMINATE)
+
+📝 STEP-BY-STEP SOLUTION:
+
+   Step 1: Factor
+           = lim [x²(x - 3)] / [x(x - 1)]
+
+   Step 2: Cancel x (valid as x→0, x≠0)
+           = lim [x(x - 3)] / (x - 1)
+
+   Step 3: Direct substitution
+           = (0 · (-3)) / (-1) = 0 / (-1) = 0
+
+✅ FINAL ANSWER: 0
+
+────────────────────────────────────────────────────────────────────────────────
+
+Summary Table:
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ TECHNIQUE SUMMARY FOR LIMIT PROBLEMS                                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│ Problem Type              │ Indeterminate Form │ Technique to Use        │
+├─────────────────────────────────────────────────────────────────────────┤
+│ Rational Functions        │ ∞/∞               │ Divide by highest power │
+│ Rational at point         │ 0/0               │ Factor & cancel         │
+│ Square Root              │ ∞ - ∞             │ Rationalize             │
+│ Trigonometric           │ 0/0               │ Standard limits         │
+│ Logarithmic             │ 0/0               │ Rewrite using ln rules  │
+│ Exponential forms       │ 1^∞               │ Use e^(lim ln) method   │
+└─────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+KEY TAKEAWAYS & IMPORTANT CONCEPTS
+================================================================================
+
+1. FIRST CHECK: Always try direct substitution first
+   If it works → you're done
+   If you get an indeterminate form → apply techniques
+
+2. IDENTIFYING INDETERMINATE FORMS:
+   Before applying techniques, identify which form you have:
+   0/0, ∞/∞, ∞-∞, 0·∞, 1^∞, 0^0, ∞^0
+
+3. COMMON TECHNIQUES IN ORDER OF PREFERENCE:
+   ① Try direct substitution
+   ② Factor & cancel (for 0/0)
+   ③ Use conjugate for square roots (for ∞-∞)
+   ④ Divide by highest power for rational functions at ∞
+   ⑤ Apply standard limit formulas (trigonometric, logarithmic)
+   ⑥ Use L'Hôpital's Rule (derivative method)
+
+4. STANDARD LIMITS TO MEMORIZE:
+   • lim(sin x)/x = 1               [x → 0]
+   • lim(tan x)/x = 1               [x → 0]
+   • lim(ln(1+x))/x = 1             [x → 0]
+   • lim(1-cos x)/x² = 1/2          [x → 0]
+   • lim(1+1/n)^n = e               [n → ∞]
+
+5. RATIONAL FUNCTION LIMITS AT INFINITY:
+   For P(x)/Q(x) where P, Q are polynomials:
+   • deg(P) < deg(Q)  → limit = 0
+   • deg(P) = deg(Q)  → limit = (leading coeff P)/(leading coeff Q)
+   • deg(P) > deg(Q)  → limit = ±∞
+
+================================================================================
+END OF COMPREHENSIVE SOLUTIONS GUIDE
+================================================================================
+
+Generated: February 18, 2026
+Educational Purpose: Understanding limit calculations and theoretical concepts
+Total Content: 8 major exercise groups with detailed explanations

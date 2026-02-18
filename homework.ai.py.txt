@@ -1,0 +1,32 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\EricV\homework.ai.py> print("Hello, your AI homework system is running!")
+Unable to initialize device PRN
+PS C:\Users\EricV\homework.ai.py> print("Hello, your AI homework system is running!")
+Unable to initialize device PRN
+PS C:\Users\EricV\homework.ai.py> homework_ai.py
+homework_ai.py : The term 'homework_ai.py' is not recognized as the name of a cmdlet,
+function, script file, or operable program. Check the spelling of the name, or if a
+path was included, verify that the path is correct and try again.
+At line:1 char:1
++ homework_ai.py
++ ~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (homework_ai.py:String) [], CommandNotF
+   oundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\EricV\homework.ai.py> test.py
+test.py : The term 'test.py' is not recognized as the name of a cmdlet, function,
+script file, or operable program. Check the spelling of the name, or if a path was
+included, verify that the path is correct and try again.
+At line:1 char:1
++ test.py
++ ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (test.py:String) [], CommandNotFoundExc
+   eption
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\EricV\homework.ai.py>

@@ -1,0 +1,491 @@
+
+📚 TEST HOMEWORK ANALYSIS REPORT
+====================================================================================================
+SAMPLE DATA FROM: samples/sample_homework.txt
+Total Problems Parsed: 11
+====================================================================================================
+
+
+====================================================================================================
+PROBLEM 1 - [OTHER]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+SAMPLE HOMEWORK PROBLEMS
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  [Theories for other would be inserted here]
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+
+
+====================================================================================================
+PROBLEM 2 - [CALCULUS]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+PROBLEM 1: CALCULUS
+Find the derivative of f(x) = 3x⁴ + 2x² - 5x + 7 using the power rule.
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  • DERIVATIVE:
+    Rate of change of a function at a specific point
+
+  • INTEGRAL:
+    Area under a curve; inverse of derivative
+
+  • CHAIN RULE:
+    Used to find derivative of composite functions: d/dx[f(g(x))] = f'(g(x)) * g'(x)
+
+  • PRODUCT RULE:
+    Used for product of two functions: d/dx[f*g] = f'*g + f*g'
+
+  • QUOTIENT RULE:
+    Used for division: d/dx[f/g] = (f'*g - f*g')/g²
+
+  • PARTIAL DERIVATIVES:
+    Derivatives with respect to multiple variables
+
+  • MULTIVARIABLE CALCULUS:
+    Optimization in multiple dimensions
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+
+
+====================================================================================================
+PROBLEM 3 - [GEOMETRY]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+PROBLEM 2: MECHANICS OF MATERIALS
+A steel rod with length L = 1.5 m, cross-sectional area A = 50 mm², and Young's modulus E = 200 GPa is subjected to a tensile force F = 50 kN. 
+Calculate:
+a) The stress in the rod
+b) The strain in the rod
+c) The elongation of the rod
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  • PYTHAGOREAN THEOREM:
+    a² + b² = c²
+
+  • TRIANGLE AREA:
+    Area = (base × height) / 2
+
+  • CIRCLE AREA:
+    Area = π × r²
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+
+
+====================================================================================================
+PROBLEM 4 - [PHYSICS]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+PROBLEM 3: CIRCUIT ANALYSIS
+In a simple DC circuit with a battery voltage of V = 12V and total resistance R = 4Ω, calculate:
+a) The current flowing through the circuit using Ohm's Law
+b) The power dissipated in the circuit
+c) The energy consumed if the circuit runs for 2 hours
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  • KINEMATICS:
+    v=u+at, s=ut+½at², v²=u²+2as
+
+  • NEWTONS SECOND LAW:
+    F = ma
+
+  • ENERGY CONSERVATION:
+    E = KE + PE
+
+  • MOMENTUM:
+    p = m×v; conserved in isolated systems
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+
+
+====================================================================================================
+PROBLEM 5 - [ALGEBRA]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+PROBLEM 4: FLUID MECHANICS
+Water flows through a pipe with diameter D₁ = 100 mm at velocity V₁ = 2 m/s. The pipe narrows to diameter D₂ = 50 mm.
+Using the continuity equation, find the velocity V₂ in the narrower section.
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  • QUADRATIC FORMULA:
+    x = (-b ± √(b²-4ac)) / 2a
+
+  • FACTORING:
+    Breaking down expressions into simpler factors
+
+  • LINEAR EQUATIONS:
+    Equations of degree 1
+
+  • MATRIX OPERATIONS:
+    Addition, multiplication, inversion of matrices
+
+  • EIGENVALUES:
+    λ values where (A-λI)v=0; used in stability analysis
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+
+
+====================================================================================================
+PROBLEM 6 - [THERMODYNAMICS]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+PROBLEM 5: THERMODYNAMICS
+Air enters a compressor at temperature T₁ = 25°C with pressure P₁ = 101.3 kPa. After compression, the exit conditions are T₂ = 125°C and P₂ = 405.2 kPa.
+Calculate the change in enthalpy if the specific heat at constant pressure c_p = 1.005 kJ/(kg·K).
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  • FIRST LAW:
+    ΔU = Q - W (Energy conservation for closed systems)
+
+  • SECOND LAW:
+    ΔS ≥ Q/T (Entropy always increases in universe)
+
+  • IDEAL GAS LAW:
+    PV = nRT (P=pressure, V=volume, T=temperature)
+
+  • HEAT CAPACITY:
+    Q = m×c×ΔT (Heat required to change temperature)
+
+  • SPECIFIC HEAT:
+    c_p = (∂h/∂T)_p (Heat capacity at constant pressure)
+
+  • ENTROPY:
+    S = k_B×ln(Ω) (Measure of disorder/unavailable energy)
+
+  • ENTHALPY:
+    H = U + PV (Total heat content)
+
+  • EFFICIENCY THERMAL:
+    η = W_out/Q_in (Fraction of heat converted to work)
+
+  • CARNOT EFFICIENCY:
+    η_c = 1 - T_c/T_h (Maximum possible efficiency)
+
+  • RANKINE CYCLE:
+    Power cycle for steam turbines
+
+  • OTTO CYCLE:
+    Gasoline engine cycle (P-V behavior)
+
+  • DIESEL CYCLE:
+    Diesel engine cycle with controlled combustion
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+
+
+====================================================================================================
+PROBLEM 7 - [CHEMISTRY]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+PROBLEM 6: STRUCTURAL ANALYSIS
+A simply supported beam with length L = 5 m carries a point load P = 20 kN at the center.
+Calculate:
+a) The reactions at both supports
+b) The maximum bending moment
+c) The deflection at the center (EI = constant)
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  [Theories for chemistry would be inserted here]
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+
+
+====================================================================================================
+PROBLEM 8 - [PHYSICS]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+PROBLEM 7: ELECTROMAGNETICS
+Two point charges Q₁ = 3 μC and Q₂ = -2 μC are separated by distance r = 0.5 m.
+Using Coulomb's Law, calculate the magnitude of the electric force between them.
+Take k = 8.99 × 10⁹ N·m²/C²
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  • KINEMATICS:
+    v=u+at, s=ut+½at², v²=u²+2as
+
+  • NEWTONS SECOND LAW:
+    F = ma
+
+  • ENERGY CONSERVATION:
+    E = KE + PE
+
+  • MOMENTUM:
+    p = m×v; conserved in isolated systems
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+
+
+====================================================================================================
+PROBLEM 9 - [CHEMISTRY]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+PROBLEM 8: MASS BALANCE
+In a steady-state chemical reactor, stream A enters with flowrate = 100 kg/min and composition 40% solute. 
+Stream B enters with composition 70% solute at unknown flowrate.
+The exit stream has composition 55% solute at flowrate = 150 kg/min.
+Calculate the flowrate of stream B using mass balance.
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  [Theories for chemistry would be inserted here]
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+
+
+====================================================================================================
+PROBLEM 10 - [HEAT_TRANSFER]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+PROBLEM 9: HEAT TRANSFER
+Heat is conducted through a composite wall consisting of two materials:
+- Layer 1: Thickness L₁ = 50 mm, thermal conductivity k₁ = 0.5 W/(m·K)
+- Layer 2: Thickness L₂ = 100 mm, thermal conductivity k₂ = 0.2 W/(m·K)
+Surface temperatures are T_hot = 80°C and T_cold = 20°C.
+Calculate the heat flux through the wall (assume steady-state, 1D conduction).
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  • CONDUCTION:
+    q = -k(dT/dx) (Fourier's law; heat flow through solids)
+
+  • CONVECTION:
+    q = h(T_s - T_∞) (Heat transfer to/from fluid)
+
+  • RADIATION:
+    q = ε×σ×(T⁴ - T_amb⁴) (Stefan-Boltzmann law)
+
+  • THERMAL RESISTANCE:
+    R = L/(k×A) (Analogy to electrical resistance)
+
+  • FOURIER NUMBER:
+    Fo = α×t/L² (Dimensionless time for transient conduction)
+
+  • BIOT NUMBER:
+    Bi = h×L/k (Comparing internal vs external resistance)
+
+  • NUSSELT NUMBER:
+    Nu = h×L/k (Ratio of convective to conductive heat transfer)
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+
+
+====================================================================================================
+PROBLEM 11 - [CALCULUS]
+====================================================================================================
+
+📋 PROBLEM STATEMENT:
+----------------------------------------------------------------------------------------------------
+PROBLEM 10: CONTROL SYSTEMS
+A proportional-integral (PI) controller has gains K_p = 2 and K_i = 0.5.
+For a unit step input error e(t), calculate the controller output u(t) at t = 1 second.
+u(t) = K_p·e(t) + K_i·∫e(t)dt
+
+🧠 RELEVANT THEORIES & CONCEPTS:
+----------------------------------------------------------------------------------------------------
+  • DERIVATIVE:
+    Rate of change of a function at a specific point
+
+  • INTEGRAL:
+    Area under a curve; inverse of derivative
+
+  • CHAIN RULE:
+    Used to find derivative of composite functions: d/dx[f(g(x))] = f'(g(x)) * g'(x)
+
+  • PRODUCT RULE:
+    Used for product of two functions: d/dx[f*g] = f'*g + f*g'
+
+  • QUOTIENT RULE:
+    Used for division: d/dx[f/g] = (f'*g - f*g')/g²
+
+  • PARTIAL DERIVATIVES:
+    Derivatives with respect to multiple variables
+
+  • MULTIVARIABLE CALCULUS:
+    Optimization in multiple dimensions
+
+📝 SOLUTION STEPS:
+----------------------------------------------------------------------------------------------------
+  Step 1: Identify exactly what the problem is asking
+  Step 2: Write down all given information and units
+  Step 3: Determine which theory/formula/principle applies
+  Step 4: Set up the equation or calculation framework
+  Step 5: Solve step-by-step with clear algebra
+  Step 6: Check units and verify the answer makes sense
+
+💬 DETAILED VERBAL WALKTHROUGH:
+----------------------------------------------------------------------------------------------------
+  [Step-by-step verbal explanation of why each equation or principle applies]
+  [Connection between the given information and required theory]
+  [Physical or mathematical intuition behind the calculation]
+  [Units verification and order-of-magnitude reasonableness check]
+

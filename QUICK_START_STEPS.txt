@@ -1,0 +1,145 @@
+║            https://git-scm.com/download/win                              ║
+║            Then come back and follow the steps below                      ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+STEP 1: Open PowerShell
+════════════════════════════════════════════════════════════════════════════
+Press Windows Key + X, then select "PowerShell (Admin)" or just "PowerShell"
+
+
+STEP 2: Verify Git Installation
+════════════════════════════════════════════════════════════════════════════
+Type this command:
+
+    git --version
+
+You should see: "git version X.XX.X"
+
+If it says "git is not recognized", Git isn't installed yet.
+
+
+STEP 3: Configure Git (Run ONCE)
+════════════════════════════════════════════════════════════════════════════
+Type these commands (replace with your info):
+
+    git config --global user.email "your-email@gmail.com"
+    git config --global user.name "Your Name"
+
+
+STEP 4: Navigate to Project Folder
+════════════════════════════════════════════════════════════════════════════
+Type:
+
+    cd d:\homework.ai.py
+
+
+STEP 5: Initialize Git Repository
+════════════════════════════════════════════════════════════════════════════
+Type:
+
+    git init
+
+You should see: "Initialized empty Git repository in d:\homework.ai.py\.git"
+
+
+STEP 6: Add All Files
+════════════════════════════════════════════════════════════════════════════
+Type:
+
+    git add .
+
+This stages all your files for the first commit.
+
+
+STEP 7: Commit Files
+════════════════════════════════════════════════════════════════════════════
+Type:
+
+    git commit -m "Initial commit - AI Homework Analyzer"
+
+You'll see output showing all files being added.
+
+
+STEP 8: Create GitHub Repository
+════════════════════════════════════════════════════════════════════════════
+✅ Open your browser and go to: https://github.com/new
+
+Do this:
+1. Click "Create a new repository"
+2. Repository name: homework-analyzer
+3. Description (optional): "AI-powered homework solution analyzer"
+4. Select: Public
+5. Click "Create repository"
+
+GitHub will show you a page with commands.
+
+
+STEP 9: Connect to GitHub (Copy from Step 8 Instructions)
+════════════════════════════════════════════════════════════════════════════
+GitHub showed something like:
+
+    git remote add origin https://github.com/YOUR_USERNAME/homework-analyzer.git
+    git branch -M main
+    git push -u origin main
+
+⚠️ REPLACE "YOUR_USERNAME" with your actual GitHub username!
+
+Copy all 3 lines and paste in PowerShell.
+
+You'll see:
+    Enumerating objects...
+    Writing objects: 100%
+    Total X (delta Y)...
+
+This means your code is now on GitHub! ✅
+
+
+STEP 10: Deploy on Railway.app
+════════════════════════════════════════════════════════════════════════════
+✅ Open browser and go to: https://railway.app
+
+1. Click "Start a New Project"
+2. Select "Deploy from GitHub Repo"
+3. Click "Authenticate GitHub Account"
+4. Grant Railway access to your repos
+5. Select "homework-analyzer" from the list
+6. Click "Deploy"
+
+⏳ Wait 2-5 minutes...
+
+You'll get a live URL like:
+    https://homework-analyzer-xxxx.up.railway.app
+
+COPY THIS URL and share with friends! 🎉
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+✅ SUMMARY:
+1. Install Git (https://git-scm.com/download/win)
+2. Run git commands above in PowerShell
+3. Create GitHub repo (https://github.com/new)
+4. Push code to GitHub
+5. Deploy on Railway (https://railway.app)
+6. Share your live website!
+
+═══════════════════════════════════════════════════════════════════════════
+
+💡 QUICK REFERENCE: All Commands at Once
+
+Open PowerShell and paste this (works after GitHub repo is created):
+
+cd d:\homework.ai.py
+git init
+git config --global user.email "your-email@gmail.com"
+git config --global user.name "Your Name"
+git add .
+git commit -m "Initial commit - AI Homework Analyzer"
+git remote add origin https://github.com/YOUR_USERNAME/homework-analyzer.git
+git branch -M main
+git push -u origin main
+
+Then go to Railway.app and deploy from GitHub!
+
+═══════════════════════════════════════════════════════════════════════════

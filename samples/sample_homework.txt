@@ -1,0 +1,55 @@
+SAMPLE HOMEWORK PROBLEMS
+
+PROBLEM 1: CALCULUS
+Find the derivative of f(x) = 3x⁴ + 2x² - 5x + 7 using the power rule.
+
+PROBLEM 2: MECHANICS OF MATERIALS
+A steel rod with length L = 1.5 m, cross-sectional area A = 50 mm², and Young's modulus E = 200 GPa is subjected to a tensile force F = 50 kN. 
+Calculate:
+a) The stress in the rod
+b) The strain in the rod
+c) The elongation of the rod
+
+PROBLEM 3: CIRCUIT ANALYSIS
+In a simple DC circuit with a battery voltage of V = 12V and total resistance R = 4Ω, calculate:
+a) The current flowing through the circuit using Ohm's Law
+b) The power dissipated in the circuit
+c) The energy consumed if the circuit runs for 2 hours
+
+PROBLEM 4: FLUID MECHANICS
+Water flows through a pipe with diameter D₁ = 100 mm at velocity V₁ = 2 m/s. The pipe narrows to diameter D₂ = 50 mm.
+Using the continuity equation, find the velocity V₂ in the narrower section.
+
+PROBLEM 5: THERMODYNAMICS
+Air enters a compressor at temperature T₁ = 25°C with pressure P₁ = 101.3 kPa. After compression, the exit conditions are T₂ = 125°C and P₂ = 405.2 kPa.
+Calculate the change in enthalpy if the specific heat at constant pressure c_p = 1.005 kJ/(kg·K).
+
+PROBLEM 6: STRUCTURAL ANALYSIS
+A simply supported beam with length L = 5 m carries a point load P = 20 kN at the center.
+Calculate:
+a) The reactions at both supports
+b) The maximum bending moment
+c) The deflection at the center (EI = constant)
+
+PROBLEM 7: ELECTROMAGNETICS
+Two point charges Q₁ = 3 μC and Q₂ = -2 μC are separated by distance r = 0.5 m.
+Using Coulomb's Law, calculate the magnitude of the electric force between them.
+Take k = 8.99 × 10⁹ N·m²/C²
+
+PROBLEM 8: MASS BALANCE
+In a steady-state chemical reactor, stream A enters with flowrate = 100 kg/min and composition 40% solute. 
+Stream B enters with composition 70% solute at unknown flowrate.
+The exit stream has composition 55% solute at flowrate = 150 kg/min.
+Calculate the flowrate of stream B using mass balance.
+
+PROBLEM 9: HEAT TRANSFER
+Heat is conducted through a composite wall consisting of two materials:
+- Layer 1: Thickness L₁ = 50 mm, thermal conductivity k₁ = 0.5 W/(m·K)
+- Layer 2: Thickness L₂ = 100 mm, thermal conductivity k₂ = 0.2 W/(m·K)
+Surface temperatures are T_hot = 80°C and T_cold = 20°C.
+Calculate the heat flux through the wall (assume steady-state, 1D conduction).
+
+PROBLEM 10: CONTROL SYSTEMS
+A proportional-integral (PI) controller has gains K_p = 2 and K_i = 0.5.
+For a unit step input error e(t), calculate the controller output u(t) at t = 1 second.
+u(t) = K_p·e(t) + K_i·∫e(t)dt
