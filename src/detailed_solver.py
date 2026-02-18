@@ -23,6 +23,69 @@ class DetailedSolutionGenerator:
             'algebra': r'(quadratic|linear|factor|solve)'
         }
     
+    def analyze_problem_requirements(self, text):
+        """Deep analysis of what the problem is asking for"""
+        analysis = {
+            'exact_question': '',
+            'given_info': [],
+            'unknowns': [],
+            'problem_objectives': [],
+            'key_constraints': []
+        }
+        
+        text_lower = text.lower()
+        
+        # Extract the exact question (usually what comes after "find", "solve", "calculate", etc.)
+        question_patterns = [
+            r'(?:find|calculate|determine|solve for|compute)\s+([^.\n?,]+)',
+            r'([^.]*?)(?:find|calculate|determine|solve|is|are|given)[^.]*',
+        ]
+        
+        for pattern in question_patterns:
+            match = re.search(pattern, text_lower)
+            if match:
+                analysis['exact_question'] = match.group(1).strip()
+                break
+        
+        # Look for "given" statements
+        if 'given' in text_lower:
+            parts = text_lower.split('given')
+            if len(parts) > 1:
+                given_text = parts[1].split('find')[0] if 'find' in parts[1] else parts[1]
+                # Extract numerical values and variables
+                numbers = re.findall(r'[A-Za-z_]\s*=\s*[0-9.]+|[0-9.]+\s+[A-Za-z]+', given_text)
+                analysis['given_info'] = numbers[:5]  # Top 5 given pieces
+        
+        # Identify what's unknown (what we're solving for)
+        unknown_patterns = [
+            r'find\s+([A-Za-z_]\w*)',
+            r'solve\s+for\s+([A-Za-z_]\w*)',
+            r'calculate\s+([A-Za-z_]\w*)',
+            r'(?:what|where|when)\s+(?:is|are|does)\s+(?:the\s+)?([A-Za-z_]\w*)',
+        ]
+        
+        for pattern in unknown_patterns:
+            matches = re.findall(pattern, text_lower)
+            analysis['unknowns'] = matches[:3]
+            if matches:
+                break
+        
+        # Identify objectives
+        if any(word in text_lower for word in ['maximize', 'minimize']):
+            analysis['problem_objectives'].append('Optimization (max/min)')
+        if any(word in text_lower for word in ['prove', 'show', 'verify', 'demonstrate']):
+            analysis['problem_objectives'].append('Proof/Verification')
+        if any(word in text_lower for word in ['compare', 'contrast', 'difference']):
+            analysis['problem_objectives'].append('Comparison')
+        if any(word in text_lower for word in ['error', 'approximate', 'estimate']):
+            analysis['problem_objectives'].append('Approximation/Error Analysis')
+        
+        # Extract constraints (numbers with operators, inequalities, ranges)
+        constraints = re.findall(r'(?:where|assuming|condition|constraint|such that)[^.]*', text_lower)
+        analysis['key_constraints'] = constraints[:3]
+        
+        return analysis
+    
     def detect_problem_type(self, text):
         """Detect problem type from text"""
         text_lower = text.lower()
@@ -35,69 +98,434 @@ class DetailedSolutionGenerator:
         """Generate comprehensive solution for a problem"""
         
         detected_type = self.detect_problem_type(problem_text)
+        analysis = self.analyze_problem_requirements(problem_text)
         
         # Map to specific solvers
         if 'derivative' in detected_type or 'calculus' in problem_type.lower():
-            return self._solve_derivative(problem_num, problem_text)
+            return self._solve_derivative(problem_num, problem_text, analysis)
         elif 'integral' in detected_type:
-            return self._solve_integral(problem_num, problem_text)
+            return self._solve_integral(problem_num, problem_text, analysis)
         elif 'limit' in detected_type:
-            return self._solve_limit(problem_num, problem_text)
+            return self._solve_limit(problem_num, problem_text, analysis)
         elif any(x in detected_type for x in ['force', 'energy', 'acceleration']):
-            return self._solve_physics(problem_num, problem_text)
+            return self._solve_physics(problem_num, problem_text, analysis)
         elif 'chemistry' in detected_type or 'stoich' in detected_type:
-            return self._solve_chemistry(problem_num, problem_text)
+            return self._solve_chemistry(problem_num, problem_text, analysis)
         elif any(x in detected_type for x in ['geometry', 'area', 'volume']):
-            return self._solve_geometry(problem_num, problem_text)
+            return self._solve_geometry(problem_num, problem_text, analysis)
         elif 'algebra' in problem_type.lower() or 'equation' in detected_type:
-            return self._solve_algebra(problem_num, problem_text)
+            return self._solve_algebra(problem_num, problem_text, analysis)
         else:
-            return self._solve_general(problem_num, problem_text)
+            return self._solve_general(problem_num, problem_text, analysis)
     
-    def _solve_derivative(self, num, text):
+    def _solve_derivative(self, num, text, analysis=None):
         """Detailed derivative solution"""
+        if analysis is None:
+            analysis = self.analyze_problem_requirements(text)
+        
         return {
             'number': num,
             'type': 'CALCULUS - DERIVATIVES',
             'problem': text,
+            'problem_analysis': {
+                'what_is_asked': 'Find the derivative (rate of change) of the given function',
+                'exact_target': 'The derivative function f\'(x) that describes the instantaneous rate of change',
+                'given_information': analysis.get('given_info', ['Function f(x) to be differentiated']),
+                'what_to_find': analysis.get('unknowns', ['f\'(x) - the derivative']) or ['The derivative function or slope'],
+                'key_steps_overview': [
+                    '1. Identify the function form (polynomial, trigonometric, exponential, etc.)',
+                    '2. Determine which differentiation rule(s) apply',
+                    '3. Apply the rule(s) carefully to each term',
+                    '4. Simplify the resulting derivative',
+                    '5. Verify and interpret the result in context'
+                ]
+            },
             'steps': [
                 {
                     'step': 1,
                     'title': 'Identify the Function and Its Form',
-                    'detailed_explanation': '''Read the problem carefully to identify:
-• The function f(x) that needs to be differentiated
-• Whether it's polynomial, trigonometric, exponential, logarithmic, or a combination
-• If it's a quotient (use quotient rule) or product (use product rule)
-• If it contains a function inside another function (chain rule needed)
+                    'detailed_explanation': '''STEP 1: DETERMINE WHAT YOU'RE DIFFERENTIATING
 
-Keyword indicators:
-- "Find the derivative" → Need to find f'(x)
-- "Find the slope" → Finding derivative at a point
-- "Rate of change" → First derivative interpreted in context
-- "Find the tangent line" → Need derivative to get slope
-- "Concavity" → Need second derivative f''(x)''',
-                    'worked_example': 'For f(x) = 3x⁴ + 2x² - 5: Identify polynomial form with multiple terms'
+The derivative measures how quickly a function changes. Before you can find it, you must clearly identify the function.
+
+▸ READ THE PROBLEM CAREFULLY:
+  • What is the function you need to differentiate?
+  • Look for: "f(x) = ", "y = ", "the function ", or just a mathematical expression
+  • The function could be buried in a word problem (e.g., "A ball is thrown..." derives a position function)
+
+▸ IDENTIFY THE FUNCTION FORM:
+  This determines which rule(s) you'll use:
+  
+  POLYNOMIAL: f(x) = 3x⁴ + 2x² + 5
+  - Highest power terms like x⁴, x³, etc.
+  - Use POWER RULE on each term
+  
+  PRODUCT: f(x) = x² · sin(x) or f(x) = (x² + 1)(3x - 2)
+  - TWO separate functions being MULTIPLIED together
+  - Requires PRODUCT RULE: (u·v)' = u'·v + u·v'
+  
+  QUOTIENT: f(x) = (x² + 1)/(x - 1) or f(x) = sin(x)/x
+  - Function is a FRACTION (top/bottom)
+  - Requires QUOTIENT RULE: (u/v)' = (u'v - uv')/v²
+  
+  COMPOSITION: f(x) = (3x² + 2)⁵ or f(x) = sin(x²) or f(x) = e^(2x)
+  - Function INSIDE another function (nested)
+  - Requires CHAIN RULE: [f(g(x))]' = f'(g(x)) · g'(x)
+  
+  TRIGONOMETRIC: f(x) = sin(x), cos(x), tan(x), etc.
+  - Memorized derivatives needed
+  - d/dx[sin(x)] = cos(x), d/dx[cos(x)] = -sin(x)
+  
+  EXPONENTIAL/LOGARITHMIC: f(x) = e^x, a^x, ln(x), log(x)
+  - Memorized derivatives or chain rule
+  - d/dx[e^x] = e^x, d/dx[ln(x)] = 1/x
+
+▸ IDENTIFY COMPLEX COMBINATIONS:
+  • Does the function have MULTIPLE terms added/subtracted?
+  • Does it have products, quotients, or nested functions?
+  • You'll apply rules term-by-term or rule-within-rule
+  
+▸ REWRITE IN STANDARD FORM IF NEEDED:
+  • √x = x^(1/2) [easier to use power rule]
+  • 1/x = x^(-1) [power rule applies]
+  • Fractional exponents become easier with power rule''',
+                    'worked_example': '''Example 1: f(x) = 3x⁴ + 2x² + 5
+  → This is a POLYNOMIAL (multiple terms with powers of x)
+  → Apply POWER RULE to each term separately
+
+Example 2: f(x) = x² · cos(x)
+  → This is a PRODUCT (two functions multiplied)
+  → Must use PRODUCT RULE
+
+Example 3: f(x) = sin(x³)
+  → This is COMPOSITION (sin function contains x³ inside)
+  → Must use CHAIN RULE
+  
+Example 4: f(x) = (2x + 1)/(x² - 3)
+  → This is a QUOTIENT (fraction form)
+  → Must use QUOTIENT RULE'''
                 },
                 {
                     'step': 2,
                     'title': 'Select the Appropriate Differentiation Rule(s)',
-                    'detailed_explanation': '''Choose the correct rule(s):
+                    'detailed_explanation': '''STEP 2: CHOOSE THE RIGHT TOOL
 
-POWER RULE: d/dx[xⁿ] = n·xⁿ⁻¹
-- Apply to each term of polynomials
-- Example: d/dx[x⁴] = 4x³, d/dx[x] = 1, d/dx[5] = 0
+Different functions require different rules. Choosing correctly prevents mistakes.
 
-PRODUCT RULE: d/dx[u·v] = u'·v + u·v'
-- When TWO functions are multiplied
-- First·(derivative of second) + Second·(derivative of first)
-- Example: f(x) = x² · sin(x) needs product rule
+▸ POWER RULE - For terms like xⁿ:
+  Formula: d/dx[xⁿ] = n·xⁿ⁻¹
+  What it does: Multiply by the exponent, then decrease exponent by 1
+  
+  Examples:
+  • d/dx[x⁴] = 4x³ [bring down 4, reduce power to 3]
+  • d/dx[x] = d/dx[x¹] = 1·x⁰ = 1
+  • d/dx[5] = d/dx[5x⁰] = 0 [constants disappear]
+  • d/dx[x^(1/2)] = (1/2)x^(-1/2) = 1/(2√x) [works with fractional exponents too]
+  
+  Apply to: EVERY term of a polynomial
+  Step-by-step:
+    f(x) = 3x⁴ + 2x² + 5
+    f'(x) = 3·(4x³) + 2·(2x) + 0
+    f'(x) = 12x³ + 4x
 
-QUOTIENT RULE: d/dx[u/v] = (u'·v - u·v')/v²
-- When function is a fraction
-- (Top's derivative · Bottom) - (Top · Bottom's derivative) / (Bottom)²
-- Example: f(x) = (x² + 1)/(x - 1) needs quotient rule
+▸ PRODUCT RULE - When two functions are MULTIPLIED:
+  Formula: d/dx[u·v] = u'·v + u·v'
+  What it does: (Derivative of first × second) + (first × derivative of second)
+  Pattern: "FIRST times derivative of SECOND plus SECOND times derivative of FIRST"
+  
+  Example: f(x) = x² · sin(x)
+  Let u = x² (first function) and v = sin(x) (second function)
+  Then u' = 2x and v' = cos(x)
+  
+  f'(x) = (2x)·sin(x) + x²·cos(x)
+        = 2x·sin(x) + x²·cos(x) [this is the final answer]
 
-CHAIN RULE: d/dx[f(g(x))] = f'(g(x)) · g'(x)
+▸ QUOTIENT RULE - When function is a FRACTION:
+  Formula: d/dx[u/v] = (u'·v - u·v')/v²
+  What it does: (Top's derivative × bottom) - (top × bottom's derivative) / (bottom squared)
+  Pattern: "LOW times derivative of HIGH minus HIGH times derivative of LOW, over LOW squared"
+  
+  Example: f(x) = (x³ + 2)/(x - 1)
+  Let u = x³ + 2 (top) and v = x - 1 (bottom)
+  Then u' = 3x² and v' = 1
+  
+  f'(x) = [(3x²)(x-1) - (x³+2)(1)] / (x-1)²
+        = [3x³ - 3x² - x³ - 2] / (x-1)²
+        = [2x³ - 3x² - 2] / (x-1)² [simplified]
+
+▸ CHAIN RULE - When function is NESTED/COMPOSITE:
+  Formula: d/dx[f(g(x))] = f'(g(x)) · g'(x)
+  What it does: Derivative of outer function × derivative of inner function
+  Pattern: "Derivative of outside times derivative of inside"
+  
+  Example: f(x) = (3x² + 2)⁵
+  Outside function: something raised to power 5 [call it u⁵]
+  Inside function: g(x) = 3x² + 2
+  
+  f'(x) = 5(3x² + 2)⁴ · (6x) [derivative of outside using power rule, times derivative of inside]
+        = 30x(3x² + 2)⁴ [simplified]'''',
+                    'worked_example': '''POWER RULE: f(x) = x⁴ → f'(x) = 4x³
+
+PRODUCT RULE: f(x) = 2x · e^x
+  u = 2x, u' = 2
+  v = e^x, v' = e^x
+  f'(x) = 2·e^x + 2x·e^x = 2e^x(1 + x)
+
+QUOTIENT RULE: f(x) = x/(x² + 1)
+  f'(x) = [(1)(x² + 1) - (x)(2x)] / (x² + 1)²
+        = (x² + 1 - 2x²) / (x² + 1)²
+        = (1 - x²) / (x² + 1)²
+
+CHAIN RULE: f(x) = sin(2x)
+  f'(x) = cos(2x) · 2 = 2cos(2x)'''
+                },
+                {
+                    'step': 3,
+                    'title': 'Apply the Rule(s) Step-by-Step',
+                    'detailed_explanation': '''STEP 3: EXECUTE THE DIFFERENTIATION
+
+Now apply your chosen rule(s) carefully and methodically.
+
+▸ WRITE OUT YOUR STARTING FORMULA:
+  Write f(x) = [complete original function]
+  Make sure you've got everything
+
+▸ FOR POLYNOMIALS - Apply power rule to each term:
+  Example: f(x) = 5x³ + 2x² - 3x + 7
+  
+  Line 1: f'(x) = ?
+  Line 2: Take first term: 5x³ → applies power rule → 5·3·x² = 15x²
+  Line 3: Take second term: 2x² → applies power rule → 2·2·x = 4x
+  Line 4: Take third term: -3x → applies power rule → -3·1 = -3
+  Line 5: Take fourth term: 7 → constant → 0
+  Line 6: f'(x) = 15x² + 4x - 3
+
+▸ FOR PRODUCT RULE - Show both parts:
+  f(x) = u·v where u and v are functions
+  Step A: Find u' and v' separately
+  Step B: Write f'(x) = u'·v + u·v'
+  Step C: Substitute your u', u, v', v values
+  Step D: Simplify and combine like terms
+
+▸ FOR QUOTIENT RULE - Careful with order:
+  f(x) = u/v
+  Top = u, Bottom = v
+  Step A: Calculate u' and v'
+  Step B: Write (u'·v - u·v') / v²
+  IMPORTANT: Numerator is u' TIMES v, MINUS u TIMES v'
+  Order matters! Don't mix it up.
+  Step C: Simplify numerator, keep v² in denominator
+  Step D: Factor if possible to simplify further
+
+▸ FOR CHAIN RULE - Work from outside to inside:
+  f(x) = [outer function]([inner function])
+  Step A: Identify the inner and outer functions clearly
+  Step B: Take derivative of outer function, leave inner intact
+  Step C: Multiply by derivative of inner function
+  Step D: Simplify and evaluate inner function if simple
+
+▸ FOR MIXED/COMPLEX FUNCTIONS:
+  • May need to apply TWO rules together (product + chain, for instance)
+  • Apply rules in logical order (usually outside to inside)
+  • Keep careful track of what you're substituting where''',
+                    'worked_example': '''Example Application for f(x) = (2x + 1)³:
+
+Setup: This is COMPOSITE (chain rule)
+  Outer: something cubed [u³]
+  Inner: 2x + 1
+
+Solution:
+  f'(x) = 3(2x + 1)² · (2)  [derivative of outer × derivative of inner]
+        = 6(2x + 1)²  [multiply the constants]
+
+This is the derivative - already simplified!
+
+Alternative Example: f(x) = x·e^(-x²)
+
+Setup: This is PRODUCT (product rule with chain rule inside)
+  u = x, u' = 1
+  v = e^(-x²), v' = e^(-x²) · (-2x) [chain rule for the exponent]
+
+Solution:
+  f'(x) = (1)·e^(-x²) + x·[e^(-x²)·(-2x)]
+        = e^(-x²) - 2x²·e^(-x²)
+        = e^(-x²)(1 - 2x²)  [factored common e^(-x²)]'''
+                },
+                {
+                    'step': 4,
+                    'title': 'Simplify the Derivative Expression',
+                    'detailed_explanation': '''STEP 4: CLEAN UP YOUR ANSWER
+
+After applying rules, simplify to make the derivative cleaner and easier to use.
+
+▸ COMBINE LIKE TERMS:
+  If you have similar terms, add them:
+  Example: f'(x) = 6x² + 3x² - 2x = 9x² - 2x [combined the x² terms]
+
+▸ FACTOR OUT COMMON TERMS IF POSSIBLE:
+  Look for factors that appear in multiple terms:
+  Example: f'(x) = 12x³ + 4x = 4x(3x² + 1) [factored out 4x]
+  
+  Why factor? 
+  - Shows structure better
+  - Useful for finding where derivative = 0
+  - Often simpler to work with
+
+▸ CONVERT TO STANDARD FORM:
+  - Write using positive exponents when possible
+  - No fractions in exponents (unless necessary)
+  - Clear, readable expression
+
+▸ DOUBLE-CHECK ALL SIGNS:
+  - Are there minus signs that should be plus?
+  - Did negatives propagate correctly through rules?
+  - Verify signs make sense
+
+▸ VERIFY USING DIMENSIONAL ANALYSIS:
+  - If f(x) has degree n, f'(x) should have degree n-1
+  - Example: f(x) is cubic (degree 3), f'(x) should be quadratic (degree 2)
+  - Exponents should decrease by exactly 1 from power rule
+
+▸ NUMERICAL CHECKS:
+  - If possible, plug in a test value (x=1, x=0) and verify calculations
+  - Does the derivative value make sense at that point?
+  - Is there abrupt weirdness (like infinity where shouldn't be)?''',
+                    'worked_example': '''Simplification Example:
+
+Raw result: f'(x) = 3x² + 4x + 2x + 5 - 5
+Combine like terms: f'(x) = 3x² + 6x
+
+Factoring Example:
+Raw result: f'(x) = 2x · sin(x) + x² · cos(x)
+Could factor: f'(x) = x(2sin(x) + x·cos(x))
+
+Sign Check Example:
+If answer is f'(x) = -6x + 4, verify the minus sign:
+  Original f(x) had −3x² term → contributes −6x to derivative ✓
+  Original f(x) had +2x term → contributes +4 to derivative ✓'''
+                },
+                {
+                    'step': 5,
+                    'title': 'Verify Result and Interpret in Context',
+                    'detailed_explanation': '''STEP 5: VERIFY CORRECTNESS AND EXPLAIN MEANING
+
+Always verify your answer before submitting. This catches errors and builds understanding.
+
+▸ VERIFICATION METHOD 1 - Dimensional Analysis:
+  Check that exponent pattern is correct
+  • If f(x) = x⁴, then f'(x) should have x³ ✓
+  • Each term's exponent should decrease by exactly 1
+  • Constant terms → become 0 ✓
+
+▸ VERIFICATION METHOD 2 - Substitute Back (Limiting Cases):
+  Plug in a simple value like x = 0 or x = 1:
+  • Example: f(x) = 3x² + 1, so f'(x) = 6x
+  • At x = 0: f'(0) = 0 makes sense (flat at origin)
+  • At x = 1: f'(1) = 6 means steep slope ✓
+  
+▸ VERIFICATION METHOD 3 - Alternative Method:
+  If time permits, solve using different rule order or method
+  Compare results - they should match
+  
+▸ CHECK FOR COMMON MISTAKES:
+  □ Did I apply power rule correctly? (exponent comes down and decreases)
+  □ Did I include all terms from original function?
+  □ Did I use correct rule for function type?
+  □ Are signs (+ and -) correct?
+  □ Did I simplify fully?
+
+▸ INTERPRET THE RESULT:
+  What does f'(x) actually represent?
+  
+  • f'(x) = instantaneous rate of change of f at point x
+  • f'(x) = slope of tangent line to curve at x
+  • f'(x) > 0 means f is increasing at that x
+  • f'(x) < 0 means f is decreasing at that x
+  • f'(x) = 0 means critical point (potential max/min)
+
+▸ IF PROBLEM ASKS FOR SPECIFIC VALUE:
+  "Find f'(2)" → substitute x = 2 into f'(x)
+  "Find slope at x = -1" → evaluate f'(-1)
+  "Find tangent line at point (a, f(a))" 
+    → Use m = f'(a) in point-slope form: y - f(a) = f'(a)(x - a)
+
+▸ FINAL ANSWER FORMAT:
+  State clearly: "The derivative is f'(x) = [your answer]"
+  If asked for specific value: "f'(2) = [calculated value]"
+  Include interpretation if context provided''',
+                    'worked_example': '''Verification for f(x) = 3x⁴ + 2x, finding f'(x):
+
+Raw calculation: f'(x) = 12x³ + 2
+
+✓ Check 1: Dimensional Analysis
+  • 3x⁴ → differentiates to 12x³ (exponent 4→3, decreased by 1) ✓
+  • 2x → differentiates to 2 (exponent 1→0) ✓
+
+✓ Check 2: Limiting Case (x=1)
+  • f'(1) = 12(1)³ + 2 = 12 + 2 = 14 ✓ (reasonable slope)
+
+✓ Check 3: Sign Verification
+  • All coefficients positive, result positive ✓
+
+If asked "Find f'(3)":
+  f'(3) = 12(3)³ + 2 = 12(27) + 2 = 324 + 2 = 326
+  Answer: The slope of tangent line at x=3 is 326 (very steep!)'''
+                }
+            ],
+            'theories': [
+                'Derivative Definition: f\'(x) = lim[h→0] (f(x+h) - f(x))/h',
+                'Power Rule: d/dx[xⁿ] = n·xⁿ⁻¹',
+                'Product Rule: d/dx[u·v] = u\'v + uv\'',
+                'Quotient Rule: d/dx[u/v] = (u\'v - uv\')/v²',
+                'Chain Rule: d/dx[f(g(x))] = f\'(g(x))·g\'(x)',
+                'Trigonometric Derivatives',
+                'Exponential and Logarithmic Derivatives',
+                'Higher Order Derivatives: f\'\'(x), f\'\'\'(x), etc.'
+            ],
+            'key_concepts': '''Derivatives measure instantaneous rate of change. 
+- First derivative f'(x) gives slope of tangent line at any point
+- f'(x) > 0 → function is INCREASING (going up)
+- f'(x) < 0 → function is DECREASING (going down)
+- f'(x) = 0 → critical points where maxima/minima can occur
+- Multiple derivative rules exist for different function types:
+  • Power rule for polynomials
+  • Product rule for products
+  • Quotient rule for fractions
+  • Chain rule for nested functions
+  
+The key to success: (1) Identify function type, (2) Choose correct rule, (3) Apply carefully, (4) Simplify completely''',
+            'common_mistakes': '''
+1. FORGETTING CHAIN RULE for composite functions
+   · Example error: d/dx[(2x+1)³] = 3(2x+1)² ✗ [missing the ·2!]
+   · Correct: d/dx[(2x+1)³] = 3(2x+1)² · 2 = 6(2x+1)² ✓
+
+2. SIGN ERRORS with negative terms
+   · Example error: d/dx[-x²] = 2x ✗ [lost the negative!]
+   · Correct: d/dx[-x²] = -2x ✓
+
+3. MIXING UP product rule with distribution
+   · You cannot distribute when multiplying - must use proper rule
+   
+4. WRONG EXPONENT LOGIC (exponent doesn't just multiply coefficient)
+   · Example error: d/dx[x⁵] = 5x⁵ ✗ [forgot to reduce exponent]
+   · Correct: d/dx[x⁵] = 5x⁴ ✓
+
+5. NOT SIMPLIFYING final answer
+   · Leave it in factored form when possible: 4x(3x² + 1) better than 12x³ + 4x
+
+6. FORGETTING TO INCLUDE ALL TERMS
+   · Example error: f(x) = 3x² + 2x - 5, but only differentiating first term
+   · Must differentiate EVERY term
+
+7. QUOTIENT RULE WRONG ORDER (numerator matters)
+   · Order: (top' × bottom) - (top × bottom') / (bottom)²
+   · Not: (top × bottom') - (top' × bottom) / (bottom)² [wrong!]
+
+8. ASSUMING CHAIN RULE WHEN PRODUCT RULE APPLIES
+   · sin(x)·x uses PRODUCT rule, not chain
+   · sin(x²) uses CHAIN rule
+   · Know the difference!'''
+        }
 - When one function is inside another (composition)
 - Differentiate outer function (keeping inner the same), multiply by derivative of inner
 - Example: d/dx[sin(x²)] = cos(x²) · 2x
@@ -197,8 +625,10 @@ COMMON QUESTIONS:
 7. Incorrectly applying quotient rule signs (numerator derivation order matters)'''
         }
     
-    def _solve_integral(self, num, text):
+    def _solve_integral(self, num, text, analysis=None):
         """Detailed integral solution"""
+        if analysis is None:
+            analysis = self.analyze_problem_requirements(text)
         return {
             'number': num,
             'type': 'CALCULUS - INTEGRALS',
@@ -370,8 +800,10 @@ SPECIAL CASES:
 8. Arithmetic errors in exponent or constant calculations'''
         }
     
-    def _solve_limit(self, num, text):
+    def _solve_limit(self, num, text, analysis=None):
         """Detailed limit solution"""
+        if analysis is None:
+            analysis = self.analyze_problem_requirements(text)
         return {
             'number': num,
             'type': 'CALCULUS - LIMITS',
@@ -424,8 +856,10 @@ SPECIAL CASES:
             'common_mistakes': 'Not recognizing indeterminate forms, incorrect algebraic manipulation, not checking one-sided limits'
         }
     
-    def _solve_physics(self, num, text):
+    def _solve_physics(self, num, text, analysis=None):
         """Detailed physics solution"""
+        if analysis is None:
+            analysis = self.analyze_problem_requirements(text)
         return {
             'number': num,
             'type': 'PHYSICS',
@@ -563,8 +997,10 @@ Interpretation: Starting from rest, an object accelerating at 3 m/s² travels 24
 8. Not considering vector directions (magnitude vs signed component)'''
         }
     
-    def _solve_chemistry(self, num, text):
+    def _solve_chemistry(self, num, text, analysis=None):
         """Detailed chemistry solution"""
+        if analysis is None:
+            analysis = self.analyze_problem_requirements(text)
         return {
             'number': num,
             'type': 'CHEMISTRY',
@@ -707,8 +1143,10 @@ Briefly state what the answer means:
 9. Forgetting to match significant figures in final answer'''
         }
     
-    def _solve_geometry(self, num, text):
+    def _solve_geometry(self, num, text, analysis=None):
         """Detailed geometry solution"""
+        if analysis is None:
+            analysis = self.analyze_problem_requirements(text)
         return {
             'number': num,
             'type': 'GEOMETRY',
@@ -842,8 +1280,10 @@ The missing leg is 4 units.'''
 9. Using wrong formula (area vs. circumference confusion)'''
         }
     
-    def _solve_algebra(self, num, text):
+    def _solve_algebra(self, num, text, analysis=None):
         """Detailed algebra solution"""
+        if analysis is None:
+            analysis = self.analyze_problem_requirements(text)
         return {
             'number': num,
             'type': 'ALGEBRA',
@@ -1002,12 +1442,31 @@ Left = Right ✓ Solution is CORRECT!'''
 10. Not distributing properly when removing parentheses'''
         }
     
-    def _solve_general(self, num, text):
+    def _solve_general(self, num, text, analysis=None):
         """General purpose solver for any problem"""
+        if analysis is None:
+            analysis = self.analyze_problem_requirements(text)
+        
         return {
             'number': num,
             'type': 'GENERAL PROBLEM',
             'problem': text,
+            'problem_analysis': {
+                'what_is_asked': analysis.get('exact_question', 'Solve the problem'),
+                'exact_target': 'Identify and solve what\'s being asked',
+                'given_information': analysis.get('given_info', ['Information from problem']),
+                'what_to_find': analysis.get('unknowns', ['The target unknown']),
+                'problem_type': analysis.get('problem_objectives', ['General problem']),
+                'key_constraints': analysis.get('key_constraints', []),
+                'key_steps_overview': [
+                    '1. Carefully read and understand what is being asked',
+                    '2. Identify and organize all given information',
+                    '3. Determine what needs to be found (your target)',
+                    '4. Select the appropriate method or formula',
+                    '5. Execute the solution step-by-step',
+                    '6. Verify the answer makes sense in context'
+                ]
+            },
             'steps': [
                 {
                     'step': 1,
