@@ -600,7 +600,20 @@
             
             // Build theories display HTML as bullet list
             const theoriesList = Array.from(theoriesUsed).sort().map(theory => {
-                const definition = theoryDefinitions[theory] || 'Core concept used in solving this type of problem.';
+                // Try exact match first, then try without punctuation, then fallback
+                let definition = theoryDefinitions[theory];
+                if (!definition) {
+                    // Try removing apostrophes and special chars for matching
+                    const normalizedTheory = theory.replace(/['\-]/g, '').toLowerCase();
+                    const matchKey = Object.keys(theoryDefinitions).find(key => 
+                        key.replace(/['\-]/g, '').toLowerCase() === normalizedTheory
+                    );
+                    definition = matchKey ? theoryDefinitions[matchKey] : null;
+                }
+                // If still no match, provide informative fallback instead of generic text
+                if (!definition) {
+                    definition = `This ${theory} concept is a fundamental principle used in solving this type of problem. The theory provides the mathematical or scientific foundation needed to analyze and solve problems in this domain. Understanding this concept is essential for properly applying the solution methodology and interpreting results correctly.`;
+                }
                 const displayName = theory.split(' ').map(word => 
                     word.charAt(0).toUpperCase() + word.slice(1)
                 ).join(' ');
