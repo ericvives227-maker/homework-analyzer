@@ -169,8 +169,9 @@ def analyze():
                         images[key] = encoded
                 logger.info(f"✅ Generated {len(graph_paths)} graphs")
                 
-                # Generate individual problem visualizations
+                # Generate individual problem visualizations for ALL problems (not just first 10)
                 logger.info("🎨 Generating individual problem visualizations...")
+                problems_with_viz = 0
                 for idx, problem in enumerate(problems):
                     try:
                         viz_path = visualizer.generate_problem_visualization(problem, idx)
@@ -179,11 +180,12 @@ def analyze():
                             encoded = image_to_base64(viz_path)
                             if encoded:
                                 problems[idx]['visualization'] = encoded
+                                problems_with_viz += 1
                                 # Schedule deletion of individual viz
                                 delete_after_delay(viz_path, delay_seconds=3600)
                     except Exception as viz_error:
                         logger.warning(f"⚠️ Skipped visualization for problem {idx}: {str(viz_error)}")
-                logger.info(f"✅ Generated {sum(1 for p in problems if 'visualization' in p)} problem visualizations")
+                logger.info(f"✅ Generated visualizations for {problems_with_viz}/{len(problems)} problems")
             except Exception as e:
                 logger.warning(f"⚠️ Graph generation skipped: {str(e)}")
             
