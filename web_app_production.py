@@ -3,7 +3,7 @@ Production-Ready Web Application
 AI Homework Analyzer with Step-by-Step Solutions
 """
 
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, send_file
 import base64
 import os
 import sys
@@ -89,6 +89,28 @@ def analyzer():
     return render_template('detailed_solution.html', local_ip=local_ip)
 
 
+@app.route('/api/image/<filename>')
+def serve_image(filename):
+    """Serve visualization images"""
+    try:
+        # Security: only allow serving specific problem visualization files
+        if not filename.startswith('problem_') or not filename.endswith('.png'):
+            return jsonify({'error': 'Invalid image'}), 400
+        
+        filepath = os.path.join('reports', 'graphs', f'{filename}.png')
+        
+        # Ensure the file exists and is in the expected directory
+        if not os.path.exists(filepath):
+            logger.warning(f"⚠️ Image not found: {filepath}")
+            return jsonify({'error': 'Image not found'}), 404
+        
+        # Serve the image file
+        return send_file(filepath, mimetype='image/png', cache_timeout=3600)
+    except Exception as e:
+        logger.error(f"❌ Error serving image: {str(e)}")
+        return jsonify({'error': 'Failed to serve image'}), 500
+
+
 @app.route('/api/status')
 def status():
     """API status endpoint"""
@@ -157,42 +179,35 @@ def analyze():
             
             # Generate graphs (optional)
             graph_paths = {}
-            images = {}
             try:
                 from visualizer import ReportVisualizer
                 logger.info("📊 Generating visualizations...")
                 visualizer = ReportVisualizer()
                 graph_paths = visualizer.generate_all_visualizations(problems, theories)
-                for key, path in graph_paths.items():
-                    encoded = image_to_base64(path)
-                    if encoded:
-                        images[key] = encoded
                 logger.info(f"✅ Generated {len(graph_paths)} graphs")
                 
-                # Generate individual problem visualizations and add to solutions
+                # Generate individual problem visualizations
                 logger.info("🎨 Generating individual problem visualizations...")
                 problems_with_viz = 0
                 for idx, problem in enumerate(problems):
                     try:
                         viz_path = visualizer.generate_problem_visualization(problem, idx)
                         if viz_path and os.path.exists(viz_path):
-                            # Convert to base64 for frontend
-                            encoded = image_to_base64(viz_path)
-                            if encoded:
-                                # Add visualization to both problems and solutions
-                                problems[idx]['visualization'] = encoded
-                                if idx < len(report['problems_analyzed']):
-                                    report['problems_analyzed'][idx]['visualization'] = encoded
-                                problems_with_viz += 1
-                                # Schedule deletion of individual viz
-                                delete_after_delay(viz_path, delay_seconds=3600)
+                            # Store file path (not base64) for frontend to request
+                            viz_url = f"/api/image/problem_{idx}"
+                            problems[idx]['visualization'] = viz_url
+                            if idx < len(report['problems_analyzed']):
+                                report['problems_analyzed'][idx]['visualization'] = viz_url
+                            problems_with_viz += 1
+                            # Schedule deletion of individual viz
+                            delete_after_delay(viz_path, delay_seconds=3600)
                     except Exception as viz_error:
                         logger.warning(f"⚠️ Skipped visualization for problem {idx}: {str(viz_error)}")
                 logger.info(f"✅ Generated visualizations for {problems_with_viz}/{len(problems)} problems")
             except Exception as e:
                 logger.warning(f"⚠️ Graph generation skipped: {str(e)}")
             
-            # Build response
+            # Build response (much smaller now - no base64 images)
             response = {
                 'success': True,
                 'filename': file.filename,
@@ -206,8 +221,7 @@ def analyze():
                     'total_domains': len(theories),
                     'problems_solved': len(problems)
                 },
-                'graphs': list(graph_paths.keys()),
-                'images': images
+                'graphs': list(graph_paths.keys())
             }
             
             # Schedule automatic deletion after 1 hour for privacy
