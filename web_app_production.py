@@ -93,8 +93,10 @@ def analyzer():
 def serve_image(filename):
     """Serve visualization images"""
     try:
-        # Security: only allow serving specific problem visualization files
-        if not filename.startswith('problem_') or not filename.endswith('.png'):
+        # Security: only allow serving problem_N format (N = digit index)
+        import re
+        if not re.match(r'^problem_\d+$', filename):
+            logger.warning(f"⚠️ Invalid image request: {filename}")
             return jsonify({'error': 'Invalid image'}), 400
         
         # Try progression visualization first, then basic visualization
@@ -103,10 +105,12 @@ def serve_image(filename):
         
         if os.path.exists(filepath_progression):
             filepath = filepath_progression
+            logger.info(f"✅ Serving progression visualization: {filename}")
         elif os.path.exists(filepath_basic):
             filepath = filepath_basic
+            logger.info(f"✅ Serving basic visualization: {filename}")
         else:
-            logger.warning(f"⚠️ Image not found: {filepath_basic} or {filepath_progression}")
+            logger.warning(f"⚠️ Image not found: {filepath_progression} or {filepath_basic}")
             return jsonify({'error': 'Image not found'}), 404
         
         # Serve the image file

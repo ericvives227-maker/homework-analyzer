@@ -610,227 +610,232 @@ Coverage:
             return None
     
     def generate_progression_visualization(self, problem, problem_index, solution_steps=None):
-        """Generate step-by-step progression visualization showing problem solution"""
+        """Generate problem-specific progression visualization"""
         import numpy as np
         import re
         
         problem_type = problem.get('type', '').lower()
         problem_text = problem.get('problem', '')
-        solution_text = problem.get('solution', '')
         
         try:
-            # Extract problem-specific data
-            numbers = re.findall(r'-?\d+\.?\d*', problem_text)
+            # Extract numbers
+            numbers = [float(x) for x in re.findall(r'-?\d+\.?\d*', problem_text) if x]
             
-            # Create a figure with subplots for progression
+            # Route to specific visualizer
             if 'algebra' in problem_type or 'equation' in problem_type:
-                return self._create_algebra_progression(problem, problem_index, numbers)
-            elif 'calculus' in problem_type or 'derivative' in problem_type:
-                return self._create_calculus_progression(problem, problem_index, numbers)
-            elif 'physics' in problem_type or 'motion' in problem_type or 'kinematics' in problem_type:
-                return self._create_physics_progression(problem, problem_index, numbers)
+                return self._create_simple_progression_visualization(problem, problem_index, 'algebra', numbers)
+            elif 'calculus' in problem_type or 'derivative' in problem_type or 'integral' in problem_type:
+                return self._create_simple_progression_visualization(problem, problem_index, 'calculus', numbers)
+            elif 'physics' in problem_type or 'motion' in problem_type:
+                return self._create_simple_progression_visualization(problem, problem_index, 'physics', numbers)
             elif 'geometry' in problem_type:
-                return self._create_geometry_progression(problem, problem_index, numbers)
+                return self._create_simple_progression_visualization(problem, problem_index, 'geometry', numbers)
             else:
-                return self._create_generic_progression(problem, problem_index, numbers)
+                return self._create_simple_progression_visualization(problem, problem_index, 'generic', numbers)
                 
         except Exception as e:
-            print(f"⚠️ Failed to generate progression visualization: {e}")
-            return None
+            print(f"⚠️ Progression visualization error: {e}")
+            # Fallback to basic visualization
+            return self.generate_problem_visualization(problem, problem_index)
     
-    def _create_algebra_progression(self, problem, problem_index, numbers):
-        """Create step-by-step progression for algebra problems"""
+    def _create_simple_progression_visualization(self, problem, problem_index, viz_type, numbers):
+        """Create simple 4-step progression visualization"""
         import numpy as np
         
         try:
-            if len(numbers) < 2:
-                return None
-            
-            # Parse numbers from problem
-            a, b = float(numbers[0]), float(numbers[1])
-            x = np.linspace(-10, 10, 200)
-            
-            # Create 2x2 subplot showing progression
             fig, axes = plt.subplots(2, 2, figsize=(6, 6))
-            fig.suptitle('Algebraic Solution Progression', fontsize=12, weight='bold', y=0.98)
+            fig.suptitle(f'{viz_type.title()} Problem Progression', fontsize=11, weight='bold', y=0.98)
             
-            # Step 1: Original equation
-            ax = axes[0, 0]
-            y1 = a * x + b
-            ax.plot(x, y1, 'b-', linewidth=2.5, label=f'y = {a}x + {b}')
-            ax.axhline(y=0, color='k', linewidth=0.5)
-            ax.axvline(x=0, color='k', linewidth=0.5)
-            ax.grid(True, alpha=0.3)
-            ax.set_title('Step 1: Graph Equation', fontsize=10, weight='bold')
-            ax.legend(fontsize=8)
-            
-            # Step 2: Find roots
-            ax = axes[0, 1]
-            if a != 0:
-                root = -b / a
-                ax.plot(x, y1, 'b-', linewidth=2.5, label='Original')
-                ax.plot(root, 0, 'ro', markersize=10, label=f'Root: x={root:.2f}')
+            if viz_type == 'algebra':
+                val1 = numbers[0] if len(numbers) > 0 else 2
+                val2 = numbers[1] if len(numbers) > 1 else 3
+                x = np.linspace(-5, 5, 100)
+                y = val1 * x + val2
+                
+                # Step 1
+                ax = axes[0, 0]
+                ax.plot(x, y, 'b-', linewidth=2.5)
+                ax.axhline(y=0, color='k', linewidth=0.5)
+                ax.axvline(x=0, color='k', linewidth=0.5)
+                ax.grid(True, alpha=0.3)
+                ax.set_title('Step 1: Equation', fontsize=10, weight='bold')
+                
+                # Step 2
+                ax = axes[0, 1]
+                ax.plot(x, y, 'b-', linewidth=2.5)
+                if val1 != 0:
+                    root = -val2 / val1
+                    ax.plot(root, 0, 'ro', markersize=10, label=f'Root')
+                    ax.axvline(x=root, color='r', linestyle='--', alpha=0.5)
                 ax.axhline(y=0, color='k', linewidth=0.5)
                 ax.axvline(x=0, color='k', linewidth=0.5)
                 ax.grid(True, alpha=0.3)
                 ax.set_title('Step 2: Find Root', fontsize=10, weight='bold')
+                
+                # Step 3
+                ax = axes[1, 0]
+                ax.fill_between(x, 0, y, where=(y>=0), color='green', alpha=0.3, label='Positive')
+                ax.fill_between(x, 0, y, where=(y<0), color='red', alpha=0.3, label='Negative')
+                ax.plot(x, y, 'b-', linewidth=2.5)
+                ax.axhline(y=0, color='k', linewidth=0.5)
+                ax.axvline(x=0, color='k', linewidth=0.5)
+                ax.grid(True, alpha=0.3)
+                ax.set_title('Step 3: Regions', fontsize=10, weight='bold')
                 ax.legend(fontsize=8)
-            
-            # Step 3: Solution region
-            ax = axes[1, 0]
-            y2 = a * x
-            ax.fill_between(x, y2, 0, where=(y2>=0), alpha=0.3, color='green', label='Positive region')
-            ax.fill_between(x, y2, 0, where=(y2<0), alpha=0.3, color='red', label='Negative region')
-            ax.plot(x, y1, 'b-', linewidth=2.5)
-            ax.axhline(y=0, color='k', linewidth=0.5)
-            ax.axvline(x=0, color='k', linewidth=0.5)
-            ax.grid(True, alpha=0.3)
-            ax.set_title('Step 3: Solution Regions', fontsize=10, weight='bold')
-            ax.legend(fontsize=8)
-            
-            # Step 4: Final answer
-            ax = axes[1, 1]
-            ax.axis('off')
-            if a != 0:
-                solution_text = f"Solution:\nx = {root:.3f}\n\nAlgebraic Form:\nx = -{b}/{a}"
-            else:
-                solution_text = "Linear equation\nwith slope = 0"
-            ax.text(0.5, 0.5, solution_text, fontsize=11, weight='bold', 
-                   ha='center', va='center', family='monospace',
-                   bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='orange', linewidth=2))
-            ax.set_title('Step 4: Solution', fontsize=10, weight='bold')
-            
-            plt.tight_layout()
-            graphs_dir = os.path.join(self.output_dir, 'graphs')
-            os.makedirs(graphs_dir, exist_ok=True)
-            filepath = os.path.join(graphs_dir, f'problem_{problem_index}_progression.png')
-            plt.savefig(filepath, dpi=150, bbox_inches='tight')
-            plt.close()
-            return filepath
-        except:
-            return None
-    
-    def _create_calculus_progression(self, problem, problem_index, numbers):
-        """Create step-by-step progression for calculus problems"""
-        import numpy as np
-        
-        try:
-            x = np.linspace(-3, 3, 200)
-            
-            fig, axes = plt.subplots(2, 2, figsize=(6, 6))
-            fig.suptitle('Calculus Solution Progression', fontsize=12, weight='bold', y=0.98)
-            
-            # Step 1: Original function
-            ax = axes[0, 0]
-            y = x**2
-            ax.plot(x, y, 'b-', linewidth=2.5, label='f(x) = x²')
-            ax.grid(True, alpha=0.3)
-            ax.axhline(y=0, color='k', linewidth=0.5)
-            ax.axvline(x=0, color='k', linewidth=0.5)
-            ax.set_title('Step 1: Original Function', fontsize=10, weight='bold')
-            ax.legend(fontsize=8)
-            
-            # Step 2: Draw tangent lines
-            ax = axes[0, 1]
-            ax.plot(x, y, 'b-', linewidth=2.5, label='f(x) = x²')
-            for xi in [-1, 0, 1]:
-                yi = xi**2
-                slope = 2*xi
-                y_tan = slope * (x - xi) + yi
-                ax.plot(x, y_tan, 'r--', alpha=0.5, linewidth=1.5)
-                ax.plot(xi, yi, 'ro', markersize=6)
-            ax.grid(True, alpha=0.3)
-            ax.axhline(y=0, color='k', linewidth=0.5)
-            ax.axvline(x=0, color='k', linewidth=0.5)
-            ax.set_title("Step 2: Tangent Lines (Derivative)", fontsize=10, weight='bold')
-            ax.legend(fontsize=8)
-            
-            # Step 3: Derivative
-            ax = axes[1, 0]
-            y_prime = 2*x
-            ax.plot(x, y, 'b-', linewidth=2, label='f(x) = x²', alpha=0.5)
-            ax.plot(x, y_prime, 'g-', linewidth=2.5, label="f'(x) = 2x")
-            ax.fill_between(x, 0, y_prime, where=(y_prime>=0), alpha=0.2, color='green')
-            ax.fill_between(x, 0, y_prime, where=(y_prime<0), alpha=0.2, color='red')
-            ax.grid(True, alpha=0.3)
-            ax.axhline(y=0, color='k', linewidth=0.5)
-            ax.axvline(x=0, color='k', linewidth=0.5)
-            ax.set_title('Step 3: Derivative Function', fontsize=10, weight='bold')
-            ax.legend(fontsize=8)
-            
-            # Step 4: Summary
-            ax = axes[1, 1]
-            ax.axis('off')
-            summary = "Calculus Solution:\n\nGiven: f(x) = x²\nDerivative: f'(x) = 2x\n\nCritical Point: x = 0\nType: Minimum"
-            ax.text(0.5, 0.5, summary, fontsize=10, weight='bold',
-                   ha='center', va='center', family='monospace',
-                   bbox=dict(boxstyle='round', facecolor='lightblue', edgecolor='blue', linewidth=2))
-            ax.set_title('Step 4: Analysis', fontsize=10, weight='bold')
-            
-            plt.tight_layout()
-            graphs_dir = os.path.join(self.output_dir, 'graphs')
-            os.makedirs(graphs_dir, exist_ok=True)
-            filepath = os.path.join(graphs_dir, f'problem_{problem_index}_progression.png')
-            plt.savefig(filepath, dpi=150, bbox_inches='tight')
-            plt.close()
-            return filepath
-        except:
-            return None
-    
-    def _create_physics_progression(self, problem, problem_index, numbers):
-        """Create step-by-step progression for physics problems"""
-        import numpy as np
-        
-        try:
-            fig, axes = plt.subplots(2, 2, figsize=(6, 6))
-            fig.suptitle('Physics Problem Progression', fontsize=12, weight='bold', y=0.98)
-            
-            # Extract values or use defaults
-            if len(numbers) >= 3:
-                v0, a, t_max = float(numbers[0]), float(numbers[1]), float(numbers[2])
-            else:
-                v0, a, t_max = 10, 2, 5
-            
-            t = np.linspace(0, t_max, 100)
-            
-            # Step 1: Position
-            ax = axes[0, 0]
-            s = v0 * t + 0.5 * a * t**2
-            ax.plot(t, s, 'b-', linewidth=2.5, label='s(t) = v₀t + ½at²')
-            ax.fill_between(t, 0, s, alpha=0.2, color='blue')
-            ax.grid(True, alpha=0.3)
-            ax.set_xlabel('Time (t)', fontsize=9)
-            ax.set_ylabel('Position (m)', fontsize=9)
-            ax.set_title('Step 1: Position vs Time', fontsize=10, weight='bold')
-            ax.legend(fontsize=8)
-            
-            # Step 2: Velocity
-            ax = axes[0, 1]
-            v = v0 + a * t
-            ax.plot(t, v, 'g-', linewidth=2.5, label='v(t) = v₀ + at')
-            ax.fill_between(t, 0, v, alpha=0.2, color='green')
-            ax.grid(True, alpha=0.3)
-            ax.set_xlabel('Time (t)', fontsize=9)
-            ax.set_ylabel('Velocity (m/s)', fontsize=9)
-            ax.set_title('Step 2: Velocity vs Time', fontsize=10, weight='bold')
-            ax.legend(fontsize=8)
-            
-            # Step 3: Acceleration
-            ax = axes[1, 0]
-            ax.barh(['Acceleration'], [a], color='red', alpha=0.7, edgecolor='darkred', linewidth=2)
-            ax.set_xlabel('Acceleration (m/s²)', fontsize=9)
-            ax.set_title('Step 3: Constant Acceleration', fontsize=10, weight='bold')
-            ax.grid(True, alpha=0.3, axis='x')
-            ax.text(a/2, 0, f'{a} m/s²', ha='center', va='center', fontsize=11, weight='bold', color='white')
-            
-            # Step 4: Summary
-            ax = axes[1, 1]
-            ax.axis('off')
-            summary = f"Kinematics Summary:\n\nv₀ = {v0} m/s\na = {a} m/s²\nt_final = {t_max} s\n\nFinal Velocity: {v[-1]:.2f} m/s\nFinal Position: {s[-1]:.2f} m"
-            ax.text(0.5, 0.5, summary, fontsize=9, weight='bold',
-                   ha='center', va='center', family='monospace',
-                   bbox=dict(boxstyle='round', facecolor='lightcoral', edgecolor='red', linewidth=2))
-            ax.set_title('Step 4: Results', fontsize=10, weight='bold')
+                
+                # Step 4
+                ax = axes[1, 1]
+                ax.axis('off')
+                if val1 != 0:
+                    text = f'Solution:\nx = {-val2/val1:.2f}\n\nForm: {val1}x + {val2} = 0'
+                else:
+                    text = f'Linear equation\ny = {val2}'
+                ax.text(0.5, 0.5, text, fontsize=10, weight='bold', ha='center', va='center',
+                       transform=ax.transAxes, bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='orange', linewidth=2))
+                ax.set_title('Step 4: Solution', fontsize=10, weight='bold')
+                
+            elif viz_type == 'calculus':
+                x = np.linspace(-3, 3, 100)
+                y = x**2
+                
+                # Step 1: Function
+                ax = axes[0, 0]
+                ax.plot(x, y, 'b-', linewidth=2.5)
+                ax.grid(True, alpha=0.3)
+                ax.axhline(y=0, color='k', linewidth=0.5)
+                ax.axvline(x=0, color='k', linewidth=0.5)
+                ax.set_title('Step 1: Function f(x)', fontsize=10, weight='bold')
+                
+                # Step 2: Tangent lines
+                ax = axes[0, 1]
+                ax.plot(x, y, 'b-', linewidth=2.5)
+                for xi in [-1, 0, 1]:
+                    yi = xi**2
+                    slope = 2*xi
+                    y_tan = slope * (x - xi) + yi
+                    ax.plot(x, y_tan, 'r--', alpha=0.5, linewidth=1.5)
+                    ax.plot(xi, yi, 'ro', markersize=5)
+                ax.grid(True, alpha=0.3)
+                ax.axhline(y=0, color='k', linewidth=0.5)
+                ax.axvline(x=0, color='k', linewidth=0.5)
+                ax.set_title('Step 2: Tangent Lines', fontsize=10, weight='bold')
+                
+                # Step 3: Derivative
+                ax = axes[1, 0]
+                y_prime = 2*x
+                ax.plot(x, y, 'b-', linewidth=2, alpha=0.5, label='f(x)')
+                ax.plot(x, y_prime, 'g-', linewidth=2.5, label="f'(x)")
+                ax.fill_between(x, 0, y_prime, where=(y_prime>=0), color='green', alpha=0.2)
+                ax.fill_between(x, 0, y_prime, where=(y_prime<0), color='red', alpha=0.2)
+                ax.grid(True, alpha=0.3)
+                ax.axhline(y=0, color='k', linewidth=0.5)
+                ax.axvline(x=0, color='k', linewidth=0.5)
+                ax.set_title('Step 3: Derivative', fontsize=10, weight='bold')
+                ax.legend(fontsize=8)
+                
+                # Step 4: Summary
+                ax = axes[1, 1]
+                ax.axis('off')
+                ax.text(0.5, 0.5, "f(x) = x^2\nf'(x) = 2x\n\nCritical: x=0\nMin at (0,0)", 
+                       fontsize=10, weight='bold', ha='center', va='center',
+                       transform=ax.transAxes, family='monospace',
+                       bbox=dict(boxstyle='round', facecolor='lightblue', edgecolor='blue', linewidth=2))
+                ax.set_title('Step 4: Analysis', fontsize=10, weight='bold')
+                
+            elif viz_type == 'physics':
+                v0 = numbers[0] if len(numbers) > 0 else 10
+                a = numbers[1] if len(numbers) > 1 else 2
+                t_max = min(numbers[2] if len(numbers) > 2 else 5, 10)
+                t = np.linspace(0, t_max, 50)
+                
+                # Step 1: Position
+                ax = axes[0, 0]
+                s = v0 * t + 0.5 * a * t**2
+                ax.plot(t, s, 'b-', linewidth=2.5)
+                ax.fill_between(t, 0, s, color='blue', alpha=0.2)
+                ax.grid(True, alpha=0.3)
+                ax.set_xlabel('Time', fontsize=9)
+                ax.set_ylabel('Position', fontsize=9)
+                ax.set_title('Step 1: Position', fontsize=10, weight='bold')
+                
+                # Step 2: Velocity
+                ax = axes[0, 1]
+                v = v0 + a * t
+                ax.plot(t, v, 'g-', linewidth=2.5)
+                ax.fill_between(t, 0, v, color='green', alpha=0.2)
+                ax.grid(True, alpha=0.3)
+                ax.set_xlabel('Time', fontsize=9)
+                ax.set_ylabel('Velocity', fontsize=9)
+                ax.set_title('Step 2: Velocity', fontsize=10, weight='bold')
+                
+                # Step 3: Acceleration
+                ax = axes[1, 0]
+                ax.barh(['a'], [a], color='red', alpha=0.7, edgecolor='darkred', linewidth=2)
+                ax.set_xlabel('Acceleration', fontsize=9)
+                ax.text(a/2, 0, f'{a}', ha='center', va='center', fontsize=10, weight='bold', color='white')
+                ax.set_title('Step 3: Acceleration', fontsize=10, weight='bold')
+                ax.grid(True, alpha=0.3, axis='x')
+                
+                # Step 4: Results
+                ax = axes[1, 1]
+                ax.axis('off')
+                ax.text(0.5, 0.5, f'v0={v0}, a={a}, t={t_max}\n\nv_final={v[-1]:.1f}\ns_final={s[-1]:.1f}',
+                       fontsize=9, weight='bold', ha='center', va='center',
+                       transform=ax.transAxes, family='monospace',
+                       bbox=dict(boxstyle='round', facecolor='lightcoral', edgecolor='red', linewidth=2))
+                ax.set_title('Step 4: Results', fontsize=10, weight='bold')
+                
+            elif viz_type == 'geometry':
+                # Step 1: Shape
+                ax = axes[0, 0]
+                triangle = plt.Polygon([(0, 0), (4, 0), (2, 3)], fill=False, edgecolor='blue', linewidth=2)
+                ax.add_patch(triangle)
+                ax.plot([2, 2], [0, 3], 'r--', linewidth=1.5)
+                ax.set_xlim(-1, 5)
+                ax.set_ylim(-1, 4)
+                ax.set_aspect('equal')
+                ax.set_title('Step 1: Triangle', fontsize=10, weight='bold')
+                ax.axis('off')
+                
+                # Step 2: Area
+                ax = axes[0, 1]
+                ax.axis('off')
+                ax.text(0.5, 0.5, 'Area = 1/2 * base * height\nA = 1/2 * 4 * 3\nA = 6', 
+                       fontsize=10, weight='bold', ha='center', va='center',
+                       transform=ax.transAxes, family='monospace',
+                       bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='orange', linewidth=2))
+                ax.set_title('Step 2: Area', fontsize=10, weight='bold')
+                
+                # Step 3: Perimeter
+                ax = axes[1, 0]
+                ax.axis('off')
+                ax.text(0.5, 0.5, 'Perimeter = a + b + c\nP = 3 + 4 + 5\nP = 12',
+                       fontsize=10, weight='bold', ha='center', va='center',
+                       transform=ax.transAxes, family='monospace',
+                       bbox=dict(boxstyle='round', facecolor='lightgreen', edgecolor='green', linewidth=2))
+                ax.set_title('Step 3: Perimeter', fontsize=10, weight='bold')
+                
+                # Step 4: Properties
+                ax = axes[1, 1]
+                ax.axis('off')
+                ax.text(0.5, 0.5, 'Area = 6\nPerimeter = 12\nRectangle = 3x4',
+                       fontsize=9, weight='bold', ha='center', va='center',
+                       transform=ax.transAxes, family='monospace',
+                       bbox=dict(boxstyle='round', facecolor='lightcyan', edgecolor='teal', linewidth=2))
+                ax.set_title('Step 4: Summary', fontsize=10, weight='bold')
+                
+            else:  # Generic
+                titles = ['UNDERSTAND\nProblem', 'PLAN\nApproach', 'EXECUTE\nSolve', 'VERIFY\nCheck']
+                colors = ['lightblue', 'lightyellow', 'lightgreen', 'lightcoral']
+                emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣']
+                
+                for i, ax in enumerate(axes.flat):
+                    ax.axis('off')
+                    ax.text(0.5, 0.5, f'{emojis[i]}\n{titles[i]}',
+                           fontsize=11, weight='bold', ha='center', va='center',
+                           transform=ax.transAxes,
+                           bbox=dict(boxstyle='round', facecolor=colors[i], edgecolor='black', linewidth=2))
+                    ax.set_title(f'Step {i+1}', fontsize=10, weight='bold')
             
             plt.tight_layout()
             graphs_dir = os.path.join(self.output_dir, 'graphs')
@@ -839,124 +844,12 @@ Coverage:
             plt.savefig(filepath, dpi=150, bbox_inches='tight')
             plt.close()
             return filepath
-        except:
-            return None
-    
-    def _create_geometry_progression(self, problem, problem_index, numbers):
-        """Create step-by-step progression for geometry problems"""
-        import numpy as np
-        from matplotlib.patches import Polygon
-        
-        try:
-            fig, axes = plt.subplots(2, 2, figsize=(6, 6))
-            fig.suptitle('Geometry Problem Progression', fontsize=12, weight='bold', y=0.98)
             
-            # Extract triangle dimensions or use defaults
-            if len(numbers) >= 3:
-                a, b, c = float(numbers[0]), float(numbers[1]), float(numbers[2])
-            else:
-                a, b, c = 3, 4, 5
-            
-            # Step 1: Triangle with labels
-            ax = axes[0, 0]
-            triangle = Polygon([(0, 0), (b, 0), (b/2, a)], fill=False, edgecolor='blue', linewidth=2.5)
-            ax.add_patch(triangle)
-            ax.text(b/2, -0.5, f'Base = {b}', fontsize=9, weight='bold', ha='center')
-            ax.text(-0.5, a/2, f'Height = {a}', fontsize=9, weight='bold', rotation=90, va='center')
-            ax.plot([b/2, b/2], [0, a], 'r--', linewidth=1.5, label='Height')
-            ax.set_xlim(-1, b+1)
-            ax.set_ylim(-1, a+1)
-            ax.set_aspect('equal')
-            ax.set_title('Step 1: Triangle Definition', fontsize=10, weight='bold')
-            ax.axis('off')
-            
-            # Step 2: Area calculation
-            ax = axes[0, 1]
-            area = 0.5 * b * a
-            ax.text(0.5, 0.7, 'Area Formula:', fontsize=10, weight='bold', ha='center', transform=ax.transAxes)
-            ax.text(0.5, 0.5, f'A = ½ × base × height', fontsize=11, ha='center', transform=ax.transAxes, family='monospace')
-            ax.text(0.5, 0.3, f'A = ½ × {b} × {a}', fontsize=11, ha='center', transform=ax.transAxes, family='monospace')
-            ax.text(0.5, 0.1, f'A = {area:.2f}', fontsize=12, weight='bold', ha='center', transform=ax.transAxes, color='red',
-                   bbox=dict(boxstyle='round', facecolor='yellow', edgecolor='red', linewidth=2))
-            ax.set_title('Step 2: Calculate Area', fontsize=10, weight='bold')
-            ax.axis('off')
-            
-            # Step 3: Perimeter
-            ax = axes[1, 0]
-            perimeter = a + b + c
-            ax.text(0.5, 0.7, 'Perimeter Formula:', fontsize=10, weight='bold', ha='center', transform=ax.transAxes)
-            ax.text(0.5, 0.5, f'P = a + b + c', fontsize=11, ha='center', transform=ax.transAxes, family='monospace')
-            ax.text(0.5, 0.3, f'P = {a} + {b} + {c}', fontsize=11, ha='center', transform=ax.transAxes, family='monospace')
-            ax.text(0.5, 0.1, f'P = {perimeter:.2f}', fontsize=12, weight='bold', ha='center', transform=ax.transAxes, color='red',
-                   bbox=dict(boxstyle='round', facecolor='lightgreen', edgecolor='green', linewidth=2))
-            ax.set_title('Step 3: Calculate Perimeter', fontsize=10, weight='bold')
-            ax.axis('off')
-            
-            # Step 4: Summary
-            ax = axes[1, 1]
-            ax.axis('off')
-            summary = f"Geometry Results:\n\nArea = {area:.3f} sq units\nPerimeter = {perimeter:.3f} units\n\nSides: {a}, {b}, {c}"
-            ax.text(0.5, 0.5, summary, fontsize=9, weight='bold',
-                   ha='center', va='center', family='monospace',
-                   bbox=dict(boxstyle='round', facecolor='lightcyan', edgecolor='teal', linewidth=2))
-            ax.set_title('Step 4: Summary', fontsize=10, weight='bold')
-            
-            plt.tight_layout()
-            graphs_dir = os.path.join(self.output_dir, 'graphs')
-            os.makedirs(graphs_dir, exist_ok=True)
-            filepath = os.path.join(graphs_dir, f'problem_{problem_index}_progression.png')
-            plt.savefig(filepath, dpi=150, bbox_inches='tight')
+        except Exception as e:
+            print(f"❌ Progression visualization error for {problem_index}: {e}")
+            import traceback
+            traceback.print_exc()
             plt.close()
-            return filepath
-        except:
-            return None
-    
-    def _create_generic_progression(self, problem, problem_index, numbers):
-        """Create generic step-by-step progression for unknown problem types"""
-        try:
-            fig, axes = plt.subplots(2, 2, figsize=(6, 6))
-            fig.suptitle('Problem Solving Progression', fontsize=12, weight='bold', y=0.98)
-            
-            # Step 1: Understand
-            ax = axes[0, 0]
-            ax.axis('off')
-            ax.text(0.5, 0.5, '1️⃣ UNDERSTAND\n\nRead and analyze\nthe problem', 
-                   fontsize=10, weight='bold', ha='center', va='center', transform=ax.transAxes,
-                   bbox=dict(boxstyle='round', facecolor='lightblue', edgecolor='blue', linewidth=2))
-            ax.set_title('Step 1: Understanding', fontsize=10, weight='bold')
-            
-            # Step 2: Plan
-            ax = axes[0, 1]
-            ax.axis('off')
-            ax.text(0.5, 0.5, '2️⃣ PLAN\n\nIdentify approach\nand methodology', 
-                   fontsize=10, weight='bold', ha='center', va='center', transform=ax.transAxes,
-                   bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='orange', linewidth=2))
-            ax.set_title('Step 2: Planning', fontsize=10, weight='bold')
-            
-            # Step 3: Execute
-            ax = axes[1, 0]
-            ax.axis('off')
-            ax.text(0.5, 0.5, '3️⃣ EXECUTE\n\nApply calculations\nand techniques', 
-                   fontsize=10, weight='bold', ha='center', va='center', transform=ax.transAxes,
-                   bbox=dict(boxstyle='round', facecolor='lightgreen', edgecolor='green', linewidth=2))
-            ax.set_title('Step 3: Execution', fontsize=10, weight='bold')
-            
-            # Step 4: Verify
-            ax = axes[1, 1]
-            ax.axis('off')
-            ax.text(0.5, 0.5, '4️⃣ VERIFY\n\nCheck answer\nfor correctness', 
-                   fontsize=10, weight='bold', ha='center', va='center', transform=ax.transAxes,
-                   bbox=dict(boxstyle='round', facecolor='lightcoral', edgecolor='red', linewidth=2))
-            ax.set_title('Step 4: Verification', fontsize=10, weight='bold')
-            
-            plt.tight_layout()
-            graphs_dir = os.path.join(self.output_dir, 'graphs')
-            os.makedirs(graphs_dir, exist_ok=True)
-            filepath = os.path.join(graphs_dir, f'problem_{problem_index}_progression.png')
-            plt.savefig(filepath, dpi=150, bbox_inches='tight')
-            plt.close()
-            return filepath
-        except:
             return None
     
     def generate_all_visualizations(self, problems, theories_dict):
