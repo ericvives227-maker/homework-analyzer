@@ -186,21 +186,21 @@ class ProblemAnalyzer:
 		text_lower = text.lower()
 
 		keyword_map = [
-			("calculus", ["derivative", "integral", "limit", "d/d", "differentiate", "∫"]),
-			("circuit_analysis", ["kirchhoff", "ohm", "voltage", "current", "circuit", "resistance"]),
-			("thermodynamics", ["entropy", "enthalpy", "thermo", "heat", "cycle"]),
-			("mechanics_of_materials", ["stress", "strain", "young", "beam", "torsion", "bending"]),
-			("fluid_mechanics", ["fluid", "flow", "bernoulli", "continuity", "viscosity"]),
-			("heat_transfer", ["conduction", "convection", "radiation", "heat transfer"]),
-			("electromagnetics", ["coulomb", "electric", "magnetic", "charge", "field"]),
-			("mass_balance", ["mass balance", "stream", "composition", "reactor", "flowrate"]),
-			("structural_analysis", ["deflection", "shear", "moment", "support", "truss"]),
-			("control_systems", ["controller", "transfer function", "feedback", "pid", "pi controller"]),
-			("chemistry", ["stoichiometry", "mole", "reaction", "equilibrium", "acid", "base"]),
-			("physics", ["force", "newton", "acceleration", "energy", "momentum", "work"]),
-			("algebra", ["quadratic", "linear", "factor", "solve", "polynomial", "equation"]),
-			("geometry", ["triangle", "circle", "area", "volume", "perimeter", "angle"]),
-			("aerodynamics", ["airfoil", "lift", "drag", "mach", "aero"]),
+			("calculus", ["derivative", "integral", "limit", "d/d", "differentiate", "∫", "derivada", "integral", "limite", "límite"]),
+			("circuit_analysis", ["kirchhoff", "ohm", "voltage", "current", "circuit", "resistance", "voltaje", "corriente", "resistencia", "circuito"]),
+			("thermodynamics", ["entropy", "enthalpy", "thermo", "heat", "cycle", "entropia", "entalpia", "calor", "ciclo"]),
+			("mechanics_of_materials", ["stress", "strain", "young", "beam", "torsion", "bending", "esfuerzo", "deformacion", "viga", "torsion", "flexion"]),
+			("fluid_mechanics", ["fluid", "flow", "bernoulli", "continuity", "viscosity", "fluido", "flujo", "continuidad", "viscosidad"]),
+			("heat_transfer", ["conduction", "convection", "radiation", "heat transfer", "conduccion", "conveccion", "radiacion", "transferencia de calor"]),
+			("electromagnetics", ["coulomb", "electric", "magnetic", "charge", "field", "electrico", "magnetico", "carga", "campo"]),
+			("mass_balance", ["mass balance", "stream", "composition", "reactor", "flowrate", "balance de masa", "corriente", "composicion", "reactor", "caudal"]),
+			("structural_analysis", ["deflection", "shear", "moment", "support", "truss", "deflexion", "cortante", "momento", "soporte", "cercha"]),
+			("control_systems", ["controller", "transfer function", "feedback", "pid", "pi controller", "controlador", "funcion de transferencia", "realimentacion"]),
+			("chemistry", ["stoichiometry", "mole", "reaction", "equilibrium", "acid", "base", "estequiometria", "mol", "reaccion", "equilibrio", "acido", "base"]),
+			("physics", ["force", "newton", "acceleration", "energy", "momentum", "work", "fuerza", "aceleracion", "energia", "momento", "trabajo"]),
+			("algebra", ["quadratic", "linear", "factor", "solve", "polynomial", "equation", "algebra", "polinomio", "ecuacion"]),
+			("geometry", ["triangle", "circle", "area", "volume", "perimeter", "angle", "triangulo", "circulo", "area", "volumen", "perimetro", "angulo"]),
+			("aerodynamics", ["airfoil", "lift", "drag", "mach", "aero", "aerodinamica", "sustentacion", "arrastre", "mach"]),
 		]
 
 		for category, keywords in keyword_map:
@@ -218,9 +218,9 @@ class ProblemAnalyzer:
 		text = self.raw_text.replace("\r\n", "\n")
 
 		patterns = [
-			r"(?:^|\n)\s*(?:Problem|Prob\.?|Question|Q|Exercise|Ex\.?|E|Pr\.?)[\s#]*([0-9]+)\s*[:.\-]*\s*",
+			r"(?:^|\n)\s*(?:Problem|Prob\.?|Question|Q|Exercise|Ex\.?|E|Pr\.?|Problema|Pregunta|Ejercicio|Ej\.?)\s*[#]*([0-9]+)\s*[:.\-]*\s*",
 			r"(?:^|\n)\s*([0-9]+)\s*[.)\-]\s+",
-			r"(?:^|\n)\s*(?:Section|Part)\s*([0-9]+)\s*[:.\-]*\s*",
+			r"(?:^|\n)\s*(?:Section|Part|Seccion|Sección|Parte)\s*([0-9]+)\s*[:.\-]*\s*",
 			r"(?:^|\n)\s*(?:Pagina|Página|Page)\s*([0-9]+)\s*[:.\-]*\s*",
 		]
 

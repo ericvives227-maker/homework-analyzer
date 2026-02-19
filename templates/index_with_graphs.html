@@ -173,31 +173,38 @@
         
         .graph-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px;
             margin-bottom: 30px;
         }
         
-        .graph-card {
-            background: #f8f9ff;
+        .theory-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
             border-radius: 10px;
-            padding: 15px;
-            border: 1px solid #e0e0ff;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+            padding: 20px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         
-        .graph-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
+        .theory-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.25);
         }
         
-        .graph-title {
-            font-size: 1.1em;
+        .theory-name {
+            font-size: 1.15em;
             font-weight: bold;
             color: #667eea;
-            margin-bottom: 10px;
-            text-align: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e0ff;
+        }
+        
+        .theory-definition {
+            color: #444;
+            line-height: 1.7;
+            font-size: 0.95em;
         }
         
         .problems-section {
@@ -321,9 +328,9 @@
                 <!-- Statistics Cards -->
                 <div class="stats-grid" id="stats-grid"></div>
                 
-                <!-- Graphs Section -->
+                <!-- Theories Section -->
                 <div class="graphs-section" id="graphs-section">
-                    <h2 class="section-title">📈 Analysis Visualizations</h2>
+                    <h2 class="section-title">📚 Theories & Theorems Found in Your PDF</h2>
                     <div class="graph-grid" id="graph-grid"></div>
                 </div>
                 
@@ -382,6 +389,47 @@
                 successBox.style.display = 'none';
             }, 3000);
         }
+
+        function getLabels(lang) {
+            const isEs = lang === 'es';
+            return {
+                file: isEs ? '📁 Archivo:' : '📁 File:',
+                totalProblemsFound: isEs ? '📊 Total de problemas encontrados:' : '📊 Total Problems Found:',
+                problemTypes: isEs ? '🏷️ Tipos de problema:' : '🏷️ Problem Types:',
+                problemsFound: isEs ? 'Problemas encontrados' : 'Problems Found',
+                problemTypesShort: isEs ? 'Tipos de problema' : 'Problem Types',
+                availableTheories: isEs ? 'Teorias disponibles' : 'Available Theories',
+                engineeringDomains: isEs ? 'Dominios de ingenieria' : 'Engineering Domains',
+                problemStatement: isEs ? '📝 Enunciado del problema:' : '📝 Problem Statement:',
+                problemAnalysis: isEs ? '🔍 Analisis del problema - Que se pide:' : '🔍 Problem Analysis - What\'s Being Asked:',
+                exactQuestion: isEs ? 'Pregunta exacta:' : 'Exact Question:',
+                givenInfo: isEs ? 'Datos dados:' : 'Given Information:',
+                whatToFind: isEs ? 'Que hay que encontrar:' : 'What To Find:',
+                keyConstraints: isEs ? 'Restricciones clave:' : 'Key Constraints:',
+                solutionPath: isEs ? 'Resumen del camino de solucion:' : 'Solution Path Overview:',
+                theories: isEs ? '📚 Teorias y conceptos relevantes:' : '📚 Relevant Theories & Concepts:',
+                theoryApplication: isEs ? 'Aplicacion de la teoria:' : 'Theory Application:',
+                theoryApplicationText: isEs
+                    ? 'Estas teorias se aplican directamente al analisis y la resolucion de este problema. Proporcionan el marco matematico necesario para identificar el metodo y ejecutar los calculos con precision.'
+                    : 'These theories directly apply to analyzing and solving this problem. They provide the mathematical framework needed to identify the solution method and execute the calculations accurately.',
+                detailedSteps: isEs ? '🎯 Solucion paso a paso detallada:' : '🎯 Detailed Step-by-Step Solution:',
+                keyConcept: isEs ? '✅ Concepto clave e idea principal:' : '✅ Key Concept & Main Idea:',
+                keyConceptDefault: isEs ? 'Aplica un enfoque sistematico para resolver el problema.' : 'Apply systematic problem-solving approach.',
+                whyThisMatters: isEs ? 'Por que importa:' : 'Why This Matters:',
+                whyThisMattersText: isEs
+                    ? 'Entender este concepto te ayuda a resolver problemas similares y construir una base para temas mas avanzados.'
+                    : 'Understanding this concept helps you solve similar problems and builds foundational knowledge for advanced topics in this domain.',
+                commonMistakes: isEs ? '⚠️ Errores comunes a evitar:' : '⚠️ Common Mistakes to Avoid:',
+                commonMistakesDefault: isEs ? 'No verificar los resultados.' : 'Not verifying results.',
+                proTip: isEs ? 'Consejo:' : 'Pro Tip:',
+                proTipText: isEs
+                    ? 'Verifica siempre tus resultados y presta atencion a signos, unidades y consistencia dimensional. Revisar dos veces evita errores.'
+                    : 'Always verify your results and pay attention to signs, units, and dimensional consistency. Double-checking prevents careless errors.',
+                example: isEs ? 'Ejemplo:' : 'Example:',
+                answerLocation: isEs ? '🎯 DONDE ENCONTRAR LA RESPUESTA:' : '🎯 WHERE TO FIND THE ANSWER:',
+                successMessage: isEs ? 'Analisis completo. Mira las visualizaciones abajo.' : 'Analysis complete! Check out the visualizations below.'
+            };
+        }
         
         function handleFile(file) {
             // Validate
@@ -420,60 +468,149 @@
         }
         
         function displayResults(data, filename) {
+            const primaryLang = (data.solutions && data.solutions[0] && data.solutions[0].language) || 'en';
+            const uiLabels = getLabels(primaryLang);
             // File info
             document.getElementById('file-info').innerHTML = `
-                <strong>📁 File:</strong> ${filename}<br>
-                <strong>📊 Total Problems Found:</strong> ${data.total_problems}<br>
-                <strong>🏷️ Problem Types:</strong> ${data.problem_types.join(', ')}
+                <strong>${uiLabels.file}</strong> ${filename}<br>
+                <strong>${uiLabels.totalProblemsFound}</strong> ${data.total_problems}<br>
+                <strong>${uiLabels.problemTypes}</strong> ${data.problem_types.join(', ')}
             `;
             
             // Statistics cards
             const statsHtml = `
                 <div class="stat-card">
                     <div class="stat-value">${data.total_problems}</div>
-                    <div class="stat-label">Problems Found</div>
+                    <div class="stat-label">${uiLabels.problemsFound}</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">${data.problem_types.length}</div>
-                    <div class="stat-label">Problem Types</div>
+                    <div class="stat-label">${uiLabels.problemTypesShort}</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">${data.statistics.total_theories}</div>
-                    <div class="stat-label">Available Theories</div>
+                    <div class="stat-label">${uiLabels.availableTheories}</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">${data.statistics.total_domains}</div>
-                    <div class="stat-label">Engineering Domains</div>
+                    <div class="stat-label">${uiLabels.engineeringDomains}</div>
                 </div>
             `;
             document.getElementById('stats-grid').innerHTML = statsHtml;
             
-            // Graphs
-            const graphsHtml = [
-                { key: 'distribution', title: '🥧 Problem Type Distribution' },
-                { key: 'count_bar', title: '📊 Problem Count by Type' },
-                { key: 'theory_coverage', title: '🧠 Theory Database Coverage' },
-                { key: 'dashboard', title: '📈 Analysis Dashboard' },
-                { key: 'function_example', title: '📐 Function Plot Example' }
-            ].map(graph => {
-                if (data.images[graph.key]) {
-                    return `
-                        <div class="graph-card">
-                            <div class="graph-title">${graph.title}</div>
-                            <img src="data:image/png;base64,${data.images[graph.key]}" alt="${graph.title}">
-                        </div>
-                    `;
-                }
-                return '';
+            // Theory Definitions - Actual Theorems Found in PDF
+            const theoryDefinitions = {
+                'derivative': 'The derivative f\'(x) measures the instantaneous rate of change of f(x). Definition: f\'(x) = lim[h→0] (f(x+h) - f(x))/h',
+                'integral': 'The integral ∫f(x)dx represents the antiderivative or area under the curve. Fundamental Theorem: d/dx[∫f(x)dx] = f(x)',
+                'limit': 'lim[x→a] f(x) = L means f(x) approaches L as x approaches a. Used to define continuity and derivatives.',
+                'chain rule': 'Chain Rule: If y = f(g(x)), then dy/dx = f\'(g(x)) · g\'(x). Used for composite functions.',
+                'product rule': 'Product Rule: d/dx[f(x)·g(x)] = f\'(x)·g(x) + f(x)·g\'(x). Used when differentiating products.',
+                'quotient rule': 'Quotient Rule: d/dx[f(x)/g(x)] = [f\'(x)·g(x) - f(x)·g\'(x)]/[g(x)]². Used for quotients.',
+                'fundamental theorem of calculus': 'Part 1: d/dx[∫ᵃˣf(t)dt] = f(x). Part 2: ∫ᵃᵇf(x)dx = F(b) - F(a) where F\'(x) = f(x).',
+                'l\'hopital\'s rule': 'L\'Hôpital\'s Rule: If lim f(x)/g(x) gives 0/0 or ∞/∞, then lim f(x)/g(x) = lim f\'(x)/g\'(x).',
+                'linear equations': 'Form: ax + b = c. Solution: x = (c-b)/a. Represents straight lines.',
+                'quadratic formula': 'For ax² + bx + c = 0, solutions are x = [-b ± √(b²-4ac)]/(2a). Discriminant b²-4ac determines real/complex roots.',
+                'factoring techniques': 'Methods to factor polynomials: common factors, difference of squares (a²-b²=(a+b)(a-b)), trinomials, grouping.',
+                'polynomial operations': 'Addition, subtraction, multiplication, division of polynomials. Remainder Theorem: P(a) equals remainder when P(x) is divided by (x-a).',
+                'systems of equations': 'Multiple equations solved together. Methods: substitution, elimination, matrices. Solution is (x,y) satisfying all equations.',
+                'area formulas': 'Rectangle: A=lw, Triangle: A=½bh, Circle: A=πr², Trapezoid: A=½(b₁+b₂)h',
+                'volume formulas': 'Cube: V=s³, Rectangular prism: V=lwh, Cylinder: V=πr²h, Sphere: V=(4/3)πr³, Cone: V=(1/3)πr²h',
+                'pythagorean theorem': 'In right triangles: a² + b² = c² where c is the hypotenuse. Used for distance calculations.',
+                'trigonometric identities': 'sin²θ + cos²θ = 1, tan θ = sin θ/cos θ, sin(A±B) = sinA·cosB ± cosA·sinB, cos(A±B) = cosA·cosB ∓ sinA·sinB',
+                'coordinate geometry': 'Distance: d = √[(x₂-x₁)² + (y₂-y₁)²], Midpoint: M = ((x₁+x₂)/2, (y₁+y₂)/2), Slope: m = (y₂-y₁)/(x₂-x₁)',
+                'newton\'s laws': '1st: Object at rest stays at rest unless acted upon. 2nd: F=ma (force equals mass times acceleration). 3rd: Every action has equal opposite reaction.',
+                'kinematics': 'Motion equations: v = v₀ + at, x = x₀ + v₀t + ½at², v² = v₀² + 2a(x-x₀), x = x₀ + ½(v₀+v)t',
+                'work-energy theorem': 'Work done equals change in kinetic energy: W = ΔKE = ½m(v²-v₀²). Work: W = F·d·cos(θ)',
+                'momentum conservation': 'In isolated system, total momentum stays constant: Σpᵢ = Σpf. Momentum: p = mv. Used in collisions.',
+                'power relationships': 'Power = Work/time = Energy/time. P = W/t = Fv. Measured in Watts (J/s).',
+                'stoichiometry': 'Quantitative relationships in reactions using mole ratios from balanced equations. n = m/M (moles = mass/molar mass).',
+                'chemical equilibrium': 'Forward rate = reverse rate. K = [products]/[reactants]. Le Chatelier: system shifts to oppose stress.',
+                'gas laws': 'PV = nRT (Ideal Gas Law), Boyle: P₁V₁=P₂V₂, Charles: V₁/T₁=V₂/T₂, Combined: (P₁V₁)/T₁=(P₂V₂)/T₂',
+                'thermochemistry': 'Study of heat in reactions. ΔH = H_products - H_reactants. Exothermic: ΔH<0 (releases heat), Endothermic: ΔH>0 (absorbs heat).',
+                'acid-base reactions': 'Acid + Base → Salt + Water. pH = -log[H⁺]. pH<7 acidic, pH=7 neutral, pH>7 basic. Strong acids/bases dissociate completely.',
+                'stress': 'σ = F/A (stress = force/area). Normal stress: perpendicular to surface. Shear stress: parallel to surface. Units: Pa or psi.',
+                'strain': 'ε = ΔL/L₀ (strain = change in length/original length). Dimensionless. Describes deformation.',
+                'hooke\'s law': 'F = kx (spring force proportional to displacement). For materials: σ = Eε (stress = Young\'s modulus × strain).',
+                'young\'s modulus': 'E = σ/ε. Measures stiffness of material. Higher E means stiffer. Units: Pa or psi.',
+                'beam bending': 'M/I = σ/y = E/R. Bending stress: σ = My/I where M=moment, I=moment of inertia, y=distance from neutral axis.',
+                'kinematic equations': 'Describe motion: v=v₀+at, x=x₀+v₀t+½at², v²=v₀²+2a(x-x₀). Valid for constant acceleration.',
+                'free-body diagrams': 'Shows all forces acting on isolated object. Used to apply Newton\'s 2nd Law: ΣF = ma.',
+                'impulse-momentum': 'Impulse = Δp = FΔt = m(v-v₀). Impulse equals change in momentum.',
+                'work-energy': 'W = ΔKE. Work done by net force equals change in kinetic energy.',
+                'first law of thermodynamics': 'ΔU = Q - W (change in internal energy = heat added - work done by system). Energy conservation.',
+                'entropy': 'S measures disorder. ΔS ≥ 0 for isolated systems (2nd Law). ΔS = Q/T for reversible processes.',
+                'enthalpy': 'H = U + PV. ΔH = heat transfer at constant pressure. Used for reaction heats.',
+                'ideal gas law': 'PV = nRT where P=pressure, V=volume, n=moles, R=gas constant (8.314 J/mol·K), T=temperature in Kelvin.',
+                'thermodynamic cycles': 'Cyclic processes (Carnot, Otto, Rankine). Efficiency: η = W_out/Q_in = 1 - Q_out/Q_in.',
+                'continuity equation': 'Mass conservation in fluid flow: ρ₁A₁v₁ = ρ₂A₂v₂. For incompressible: A₁v₁ = A₂v₂.',
+                'bernoulli\'s equation': 'P + ½ρv² + ρgh = constant along streamline. Energy conservation for fluid flow.',
+                'laminar vs turbulent flow': 'Laminar: smooth layers (Re<2300). Turbulent: chaotic mixing (Re>4000). Reynolds number: Re = ρvD/μ.',
+                'pressure head': 'h = P/(ρg). Height of fluid column producing given pressure. Used in hydraulics.',
+                'conduction': 'Heat transfer through material: Q/t = kA(T₁-T₂)/L. Fourier\'s Law. k=thermal conductivity.',
+                'convection': 'Heat transfer by fluid motion: Q = hAΔT where h=convection coefficient. Natural or forced.',
+                'radiation': 'Heat transfer by EM waves: Q = εσAT⁴ (Stefan-Boltzmann). All bodies emit radiation.',
+                'fourier\'s law': 'Heat conduction rate: q = -kA(dT/dx). Negative sign shows heat flows from hot to cold.',
+                'ohm\'s law': 'V = IR (voltage = current × resistance). Power: P = VI = I²R = V²/R.',
+                'kirchhoff\'s current law': 'KCL: Sum of currents entering node = sum leaving. Σ I_in = Σ I_out. Charge conservation.',
+                'kirchhoff\'s voltage law': 'KVL: Sum of voltages around closed loop = 0. Σ V = 0. Energy conservation.',
+                'power in circuits': 'P = VI = I²R = V²/R. Energy rate. Measured in Watts.',
+                'coulomb\'s law': 'F = k(q₁q₂)/r² where k = 8.99×10⁹ N·m²/C². Force between charges.',
+                'electric field': 'E = F/q = kQ/r². Force per unit charge. Direction: away from + charge, toward - charge.',
+                'magnetic field': 'F = qvB sin θ (force on moving charge). F = BIL (force on current-carrying wire).',
+                'gauss\'s law': '∮E·dA = Q_enclosed/ε₀. Electric flux through closed surface equals enclosed charge divided by ε₀.',
+                'conservation of mass': 'Mass in - mass out = accumulation. For steady state: mass in = mass out.',
+                'process streams': 'Material flows in chemical processes. Characterized by flow rate, composition, temperature, pressure.',
+                'overall balance': 'Total mass balance: Input = Output + Accumulation. Basis: 100 kg, 1 hour, etc.',
+                'component balance': 'Balance on specific component: Component in = Component out + Accumulation.',
+                'lift and drag': 'Lift: L = ½ρv²SC_L (perpendicular to flow). Drag: D = ½ρv²SC_D (parallel to flow).',
+                'pressure distribution': 'Pressure varies over airfoil surface. Low pressure on top creates lift.',
+                'boundary layer': 'Thin region near surface where velocity changes from 0 to free stream. Laminar or turbulent.',
+                'mach number': 'M = v/c (velocity/speed of sound). M<1 subsonic, M=1 sonic, M>1 supersonic.',
+                'support reactions': 'Forces/moments at supports that maintain equilibrium. ΣF=0, ΣM=0.',
+                'shear and moment': 'Shear force V(x) and bending moment M(x) along beam. dM/dx = V, dV/dx = -w(x).',
+                'deflection': 'Beam displacement: d²y/dx² = M/(EI). Integration gives slope and deflection.',
+                'superposition': 'For linear systems, total response = sum of individual responses. Used for multiple loads.',
+                'transfer function': 'G(s) = Y(s)/X(s) = output/input in Laplace domain. Characterizes system dynamics.',
+                'feedback': 'Output fed back to input. Negative feedback: stabilizes. Positive feedback: amplifies.',
+                'pid control': 'PID Controller: u(t) = K_p·e + K_i·∫e·dt + K_d·de/dt. Proportional + Integral + Derivative.',
+                'stability': 'System is stable if bounded input produces bounded output. Check poles of transfer function.',
+                'problem analysis': 'Read carefully, identify given info, determine unknowns, recognize problem type, select method.',
+                'unit consistency': 'All terms in equation must have same units. Convert units before calculating.',
+                'algebraic manipulation': 'Use inverse operations, combine like terms, factor, expand. Maintain equation balance.',
+                'reasonableness check': 'Verify answer makes physical sense: correct magnitude, sign, units. Check limiting cases.'
+            };
+            
+            // Collect all unique theories from solutions
+            const theoriesUsed = new Set();
+            (data.solutions || []).forEach(solution => {
+                (solution.theories || []).forEach(theory => {
+                    theoriesUsed.add(theory.toLowerCase());
+                });
+            });
+            
+            // Build theories display HTML
+            const theoriesHtml = Array.from(theoriesUsed).sort().map(theory => {
+                const definition = theoryDefinitions[theory] || 'Core concept used in solving this type of problem.';
+                const displayName = theory.split(' ').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1)
+                ).join(' ');
+                
+                return `
+                    <div class="theory-card">
+                        <div class="theory-name">📘 ${displayName}</div>
+                        <div class="theory-definition">${definition}</div>
+                    </div>
+                `;
             }).join('');
             
-            document.getElementById('graph-grid').innerHTML = graphsHtml;
+            document.getElementById('graph-grid').innerHTML = theoriesHtml || '<p style="text-align:center;color:#666;">No theories detected in this PDF.</p>';
             
             // Problems with detailed step-by-step solutions
             const problemsHtml = (data.solutions || []).map((solution, idx) => {
+                const labels = getLabels(solution.language || primaryLang);
                 const theories = (solution.theories || []).map(t => `• ${t}`).join('<br>');
-                const keyConc = solution.key_concepts || 'Apply systematic problem-solving approach.';
-                const mistakes = solution.common_mistakes || 'Not verifying results.';
+                const keyConc = solution.key_concepts || labels.keyConceptDefault;
+                const mistakes = solution.common_mistakes || labels.commonMistakesDefault;
                 
                 // Build comprehensive steps HTML with theory context
                 const stepsHtml = (solution.steps || []).map((step, stepIdx) => {
@@ -496,7 +633,7 @@
                         
                         ${example ? `
                         <div style="margin: 10px 0; padding: 10px; background: #f9f9f9; border-left: 2px solid #4caf50; font-size: 0.9em; color: #333; white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', monospace;">
-                            <strong style="color: #2e7d32;">Example:</strong><br>
+                            <strong style="color: #2e7d32;">${labels.example}</strong><br>
                             <code style="color: #1976d2; font-size: 0.85em;">${example}</code>
                         </div>
                         ` : ''}
@@ -512,7 +649,7 @@
                         </div>
                         
                         <div style="margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
-                            <strong style="color: #333; display: block; margin-bottom: 10px;">📝 Problem Statement:</strong>
+                            <strong style="color: #333; display: block; margin-bottom: 10px;">${labels.problemStatement}</strong>
                             <p style="color: #555; line-height: 1.6; margin: 0;">
                                 ${solution.problem.substring(0, 600)}${solution.problem.length > 600 ? '...' : ''}
                             </p>
@@ -520,24 +657,24 @@
                         
                         ${solution.problem_analysis ? `
                         <div style="margin-bottom: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #1976d2;">
-                            <strong style="color: #0d47a1; display: block; margin-bottom: 12px; font-size: 1.05em;">🔍 Problem Analysis - What's Being Asked:</strong>
+                            <strong style="color: #0d47a1; display: block; margin-bottom: 12px; font-size: 1.05em;">${labels.problemAnalysis}</strong>
                             
                             <div style="margin-bottom: 12px;">
-                                <strong style="color: #1565c0; font-size: 0.95em;">Exact Question:</strong>
+                                <strong style="color: #1565c0; font-size: 0.95em;">${labels.exactQuestion}</strong>
                                 <div style="color: #555; margin-top: 5px; padding: 8px; background: white; border-radius: 4px; border-left: 3px solid #1976d2;">
                                     ${solution.problem_analysis.exact_target || 'Solving the given problem'}
                                 </div>
                             </div>
                             
                             <div style="margin-bottom: 12px;">
-                                <strong style="color: #1565c0; font-size: 0.95em;">Given Information:</strong>
+                                <strong style="color: #1565c0; font-size: 0.95em;">${labels.givenInfo}</strong>
                                 <div style="color: #555; margin-top: 5px; padding: 8px; background: white; border-radius: 4px; font-size: 0.9em;">
                                     ${(solution.problem_analysis.given_information || []).map(g => `• ${g}`).join('<br>')}
                                 </div>
                             </div>
                             
                             <div style="margin-bottom: 12px;">
-                                <strong style="color: #1565c0; font-size: 0.95em;">What To Find:</strong>
+                                <strong style="color: #1565c0; font-size: 0.95em;">${labels.whatToFind}</strong>
                                 <div style="color: #555; margin-top: 5px; padding: 8px; background: white; border-radius: 4px; font-size: 0.9em;">
                                     ${(solution.problem_analysis.what_to_find || []).map(w => `• ${w}`).join('<br>')}
                                 </div>
@@ -545,7 +682,7 @@
                             
                             ${solution.problem_analysis.key_constraints && solution.problem_analysis.key_constraints.length > 0 ? `
                             <div style="margin-bottom: 12px;">
-                                <strong style="color: #1565c0; font-size: 0.95em;">Key Constraints:</strong>
+                                <strong style="color: #1565c0; font-size: 0.95em;">${labels.keyConstraints}</strong>
                                 <div style="color: #555; margin-top: 5px; padding: 8px; background: white; border-radius: 4px; font-size: 0.9em;">
                                     ${(solution.problem_analysis.key_constraints || []).map(c => `• ${c}`).join('<br>')}
                                 </div>
@@ -553,7 +690,7 @@
                             ` : ''}
                             
                             <div style="margin-top: 12px; padding: 10px; background: #fff3e0; border-radius: 4px; border-left: 3px solid #ff9800;">
-                                <strong style="color: #e65100; font-size: 0.9em;">Solution Path Overview:</strong>
+                                <strong style="color: #e65100; font-size: 0.9em;">${labels.solutionPath}</strong>
                                 <div style="color: #555; font-size: 0.9em; margin-top: 5px;">
                                     ${(solution.problem_analysis.key_steps_overview || []).map(s => `${s}`).join('<br>')}
                                 </div>
@@ -562,38 +699,38 @@
                         ` : ''}
                         
                         <div style="margin: 15px 0; padding: 12px; background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%); border-left: 4px solid #ffc107; border-radius: 6px;">
-                            <strong style="color: #f57f17; display: block; margin-bottom: 10px;">📚 Relevant Theories & Concepts:</strong>
+                            <strong style="color: #f57f17; display: block; margin-bottom: 10px;">${labels.theories}</strong>
                             <div style="color: #555; font-size: 0.95em;">${theories || 'Core mathematical and scientific principles.'}</div>
                             <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 4px; font-size: 0.9em; color: #555;">
-                                <strong>Theory Application:</strong> These theories directly apply to analyzing and solving this problem. They provide the mathematical framework needed to identify the solution method and execute the calculations accurately.
+                                <strong>${labels.theoryApplication}</strong> ${labels.theoryApplicationText}
                             </div>
                         </div>
                         
                         <div style="margin: 15px 0;">
-                            <strong style="color: #667eea; display: block; margin-bottom: 12px; font-size: 1.05em;">🎯 Detailed Step-by-Step Solution:</strong>
+                            <strong style="color: #667eea; display: block; margin-bottom: 12px; font-size: 1.05em;">${labels.detailedSteps}</strong>
                             ${stepsHtml}
                         </div>
                         
                         ${solution.answer_location ? `
                         <div style="margin: 15px 0; padding: 15px; background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); border-left: 5px solid #009688; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,150,136,0.2);">
-                            <strong style="color: #00695c; display: block; margin-bottom: 8px; font-size: 1.05em;">🎯 WHERE TO FIND THE ANSWER:</strong>
+                            <strong style="color: #00695c; display: block; margin-bottom: 8px; font-size: 1.05em;">${labels.answerLocation}</strong>
                             <p style="color: #333; margin: 0; line-height: 1.6; font-size: 0.95em; font-weight: 500;">${solution.answer_location}</p>
                         </div>
                         ` : ''}
                         
                         <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%); border-left: 4px solid #4caf50; border-radius: 6px;">
-                            <strong style="color: #2e7d32; display: block; margin-bottom: 8px;">✅ Key Concept & Main Idea:</strong>
+                            <strong style="color: #2e7d32; display: block; margin-bottom: 8px;">${labels.keyConcept}</strong>
                             <p style="color: #555; margin: 0; line-height: 1.6;">${keyConc}</p>
                             <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 4px; font-size: 0.9em; color: #555;">
-                                <strong>Why This Matters:</strong> Understanding this concept helps you solve similar problems and builds foundational knowledge for advanced topics in this domain.
+                                <strong>${labels.whyThisMatters}</strong> ${labels.whyThisMattersText}
                             </div>
                         </div>
                         
                         <div style="margin-top: 12px; padding: 12px; background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); border-left: 4px solid #f44336; border-radius: 6px;">
-                            <strong style="color: #c62828; display: block; margin-bottom: 8px;">⚠️ Common Mistakes to Avoid:</strong>
+                            <strong style="color: #c62828; display: block; margin-bottom: 8px;">${labels.commonMistakes}</strong>
                             <p style="color: #555; margin: 0; line-height: 1.6;">${mistakes}</p>
                             <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 4px; font-size: 0.9em; color: #555;">
-                                <strong>Pro Tip:</strong> Always verify your results and pay attention to signs, units, and dimensional consistency. Double-checking prevents careless errors.
+                                <strong>${labels.proTip}</strong> ${labels.proTipText}
                             </div>
                         </div>
                     </div>
@@ -605,7 +742,7 @@
             
             // Show results
             resultsDiv.style.display = 'block';
-            showSuccess('Analysis complete! Check out the visualizations below.');
+            showSuccess(uiLabels.successMessage);
         }
     </script>
 </body>

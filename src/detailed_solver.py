@@ -5,23 +5,99 @@ Provides comprehensive solutions with full reasoning and worked examples
 
 import re
 
+try:
+  from googletrans import Translator
+except Exception:  # pragma: no cover - optional dependency
+  Translator = None
+
+try:
+  from langdetect import detect, LangDetectException
+except Exception:  # pragma: no cover - optional dependency
+  detect = None
+  LangDetectException = Exception
+
 
 class DetailedSolutionGenerator:
     """Generates detailed, comprehensive step-by-step solutions"""
     
     def __init__(self):
         self.problem_patterns = {
-            'derivative': r'(deriv|d/d|prime|slope)',
-            'integral': r'(integr|∫|sum)',
-            'limit': r'(limit|lim|approaches|→)',
-            'equation': r'(solve|find|equation|=)',
-            'simplify': r'(simplify|reduce|factor)',
-            'geometry': r'(area|volume|perimeter|angle|triangle|circle)',
-            'force': r'(force|newton|acceleration|F=ma)',
-            'energy': r'(energy|work|kinetic|potential)',
-            'chemistry': r'(stoich|balance|react|mole)',
-            'algebra': r'(quadratic|linear|factor|solve)'
+          'derivative': r'(deriv|d/d|prime|slope|derivada|derivar)',
+          'integral': r'(integr|∫|sum|integral)',
+          'limit': r'(limit|lim|approaches|→|limite|l[íi]mite|tiende)',
+          'equation': r'(solve|find|equation|=|resolver|resuelve|ecuaci[óo]n)',
+          'simplify': r'(simplify|reduce|factor|simplificar|reducir|factorizar)',
+          'geometry': r'(area|[áa]rea|volume|volumen|perimeter|per[ií]metro|angle|[áa]ngulo|triangle|tri[aá]ngulo|circle|c[ií]rculo)',
+          'force': r'(force|newton|acceleration|aceleraci[óo]n|F=ma|fuerza)',
+          'energy': r'(energy|work|kinetic|potential|energ[ií]a|trabajo|cin[eé]tica|potencial)',
+          'chemistry': r'(stoich|balance|react|mole|qu[ií]mica|reacci[óo]n|mol)',
+          'algebra': r'(quadratic|linear|factor|solve|[aá]lgebra|polynomial|polinomio|ecuaci[óo]n)'
         }
+
+
+    class _LanguageSupport:
+      """Lightweight language detection and translation wrapper."""
+
+      _SPANISH_MARKERS = {
+        'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'y', 'o', 'pero',
+        'porque', 'para', 'con', 'sin', 'sobre', 'entre', 'dado', 'dada', 'dados',
+        'dadas', 'encuentra', 'calcula', 'determina', 'resuelve', 'resolver',
+        'hallar', 'problema', 'ejercicio', 'pregunta', 'si', 'entonces', 'donde'
+      }
+
+      def __init__(self):
+        self._translator = Translator() if Translator else None
+        self._cache = {}
+
+      def detect_language(self, text):
+        if not text:
+          return 'es'
+        if detect is not None:
+          try:
+            detected = detect(text)
+            if detected:
+              return detected
+          except LangDetectException:
+            return 'es'
+        text_lower = text.lower()
+        if re.search(r'[áéíóúñ¿¡]', text_lower):
+          return 'es'
+        hits = sum(1 for marker in self._SPANISH_MARKERS if marker in text_lower)
+        return 'es' if hits >= 2 else 'en'
+
+      def translate_text(self, text, target_lang):
+        if not text or target_lang == 'en':
+          return text
+        if not self._translator:
+          return text
+        cache_key = (target_lang, text)
+        if cache_key in self._cache:
+          return self._cache[cache_key]
+        try:
+          result = self._translator.translate(text, dest=target_lang)
+          translated = result.text if result else text
+        except Exception:
+          translated = text
+        self._cache[cache_key] = translated
+        return translated
+
+
+    def _translate_value(value, translator, target_lang, skip_keys=None):
+      if skip_keys is None:
+        skip_keys = set()
+      if isinstance(value, str):
+        return translator.translate_text(value, target_lang)
+      if isinstance(value, list):
+        return [_translate_value(item, translator, target_lang, skip_keys=skip_keys) for item in value]
+      if isinstance(value, dict):
+        translated = {}
+        for key, item in value.items():
+          if key in skip_keys:
+            translated[key] = item
+          else:
+            translated[key] = _translate_value(item, translator, target_lang, skip_keys=skip_keys)
+        return translated
+      return value
     
     def analyze_problem_requirements(self, text):
         """Deep analysis of what the problem is asking for"""
@@ -37,8 +113,10 @@ class DetailedSolutionGenerator:
         
         # Extract the exact question (usually what comes after "find", "solve", "calculate", etc.)
         question_patterns = [
-            r'(?:find|calculate|determine|solve for|compute)\s+([^.\n?,]+)',
-            r'([^.]*?)(?:find|calculate|determine|solve|is|are|given)[^.]*',
+          r'(?:find|calculate|determine|solve for|compute)\s+([^\.\n?,]+)',
+          r'(?:encuentra|hallar|calcular|determinar|resuelve|resolver)\s+([^\.\n?,]+)',
+          r'([^.]*?)(?:find|calculate|determine|solve|is|are|given)[^.]*',
+          r'([^.]*?)(?:encuentra|calcula|determina|resuelve|es|son|dado|dada|dados|dadas)[^.]*',
         ]
         
         for pattern in question_patterns:
@@ -48,8 +126,11 @@ class DetailedSolutionGenerator:
                 break
         
         # Look for "given" statements
-        if 'given' in text_lower:
+        if 'given' in text_lower or any(token in text_lower for token in ['dado', 'dada', 'dados', 'dadas']):
+          if 'given' in text_lower:
             parts = text_lower.split('given')
+          else:
+            parts = re.split(r'dado|dada|dados|dadas', text_lower, maxsplit=1)
             if len(parts) > 1:
                 given_text = parts[1].split('find')[0] if 'find' in parts[1] else parts[1]
                 # Extract numerical values and variables
@@ -58,10 +139,13 @@ class DetailedSolutionGenerator:
         
         # Identify what's unknown (what we're solving for)
         unknown_patterns = [
-            r'find\s+([A-Za-z_]\w*)',
-            r'solve\s+for\s+([A-Za-z_]\w*)',
-            r'calculate\s+([A-Za-z_]\w*)',
-            r'(?:what|where|when)\s+(?:is|are|does)\s+(?:the\s+)?([A-Za-z_]\w*)',
+          r'find\s+([A-Za-z_]\w*)',
+          r'solve\s+for\s+([A-Za-z_]\w*)',
+          r'calculate\s+([A-Za-z_]\w*)',
+          r'(?:what|where|when)\s+(?:is|are|does)\s+(?:the\s+)?([A-Za-z_]\w*)',
+          r'(?:encuentra|hallar|calcular|determina)\s+([A-Za-z_]\w*)',
+          r'(?:resuelve|resolver)\s+para\s+([A-Za-z_]\w*)',
+          r'(?:cual|cu[aá]l|cuanto|cu[aá]nto)\s+(?:es|son)\s+(?:el|la|los|las)?\s*([A-Za-z_]\w*)',
         ]
         
         for pattern in unknown_patterns:
@@ -81,7 +165,7 @@ class DetailedSolutionGenerator:
             analysis['problem_objectives'].append('Approximation/Error Analysis')
         
         # Extract constraints (numbers with operators, inequalities, ranges)
-        constraints = re.findall(r'(?:where|assuming|condition|constraint|such that)[^.]*', text_lower)
+        constraints = re.findall(r'(?:where|assuming|condition|constraint|such that|donde|suponiendo|condici[óo]n|tal que)[^.]*', text_lower)
         analysis['key_constraints'] = constraints[:3]
         
         return analysis
@@ -1808,17 +1892,39 @@ def generate_detailed_report(problems, theories_dict):
     }
     
     solver = DetailedSolutionGenerator()
+    language_support = _LanguageSupport()
+    language_counts = {'en': 0, 'es': 0}
     
     for idx, problem in enumerate(problems, 1):
-        solution = solver.generate_detailed_solution(
+      problem_text = problem.get('text', 'No description')
+      detected_lang = language_support.detect_language(problem_text)
+      if detected_lang not in language_counts:
+        language_counts[detected_lang] = 0
+      language_counts[detected_lang] += 1
+
+      solution = solver.generate_detailed_solution(
             idx,
-            problem.get('text', 'No description'),
+        problem_text,
             problem.get('type', 'math')
         )
+      solution['language'] = detected_lang
+      if detected_lang != 'en':
+        translated_solution = _translate_value(
+          solution,
+          language_support,
+          detected_lang,
+          skip_keys={'problem'}
+        )
+        translated_solution['problem'] = problem_text
+        translated_solution['language'] = detected_lang
+        report['problems_analyzed'].append(translated_solution)
+      else:
         report['problems_analyzed'].append(solution)
     
     # Generate cliff notes summary
     report['cliff_notes'] = generate_cliff_notes(report['problems_analyzed'], theories_dict)
+    if language_counts.get('es', 0) > language_counts.get('en', 0):
+      report['cliff_notes'] = _translate_value(report['cliff_notes'], language_support, 'es')
     
     return report
 
