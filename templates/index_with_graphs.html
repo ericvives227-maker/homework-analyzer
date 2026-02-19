@@ -487,7 +487,6 @@
             const uiLabels = getLabels(primaryLang);
             // File info
             document.getElementById('file-info').innerHTML = `
-                <strong>${uiLabels.file}</strong> ${filename}<br>
                 <strong>${uiLabels.totalProblemsFound}</strong> ${data.total_problems}<br>
                 <strong>${uiLabels.problemTypes}</strong> ${data.problem_types.join(', ')}
             `;

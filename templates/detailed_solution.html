@@ -674,8 +674,7 @@
         
         function displayResults(data) {
             document.getElementById('file-info').innerHTML = `
-                <strong>📁 File:</strong> ${data.filename}<br>
-                <strong>📊 Problems:</strong> ${data.total_problems}<br>
+                <strong> Problems:</strong> ${data.total_problems}<br>
                 <strong>🏷️ Types:</strong> ${data.problem_types.join(', ')}<br>
                 <strong>🧠 Theories:</strong> ${data.statistics.total_theories} in ${data.statistics.total_domains} domains
             `;
