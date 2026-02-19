@@ -10,6 +10,8 @@ import sys
 import socket
 from pathlib import Path
 import logging
+import threading
+import time
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -26,6 +28,24 @@ app.config['UPLOAD_FOLDER'] = 'reports/uploads'
 # Create necessary directories
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs('reports/graphs', exist_ok=True)
+
+
+def delete_after_delay(filepath, delay_seconds=3600):
+    """
+    Delete a file after a specified delay (default: 1 hour).
+    Runs in a background thread for privacy protection.
+    """
+    def delayed_delete():
+        try:
+            time.sleep(delay_seconds)
+            if os.path.exists(filepath):
+                os.remove(filepath)
+                logger.info(f"🗑️ Auto-deleted for privacy: {filepath}")
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to auto-delete {filepath}: {str(e)}")
+    
+    thread = threading.Thread(target=delayed_delete, daemon=True)
+    thread.start()
 
 
 def get_local_ip():
@@ -122,6 +142,9 @@ def analyze():
             
             if not problems:
                 logger.warning("⚠️ No problems found in PDF")
+                # Delete uploaded file for privacy even when no problems found
+                delete_after_delay(str(filepath), delay_seconds=3600)
+                logger.info("🔒 Scheduling empty PDF deletion for privacy")
                 return jsonify({'error': 'No problems found in PDF. Please check the file format.'}), 400
             
             logger.info(f"✅ Found {len(problems)} problems")
@@ -166,6 +189,15 @@ def analyze():
                 'images': images
             }
             
+            # Schedule automatic deletion after 1 hour for privacy
+            logger.info("🔒 Scheduling file deletion in 1 hour for privacy protection")
+            delete_after_delay(str(filepath), delay_seconds=3600)
+            
+            # Delete generated graph files after 1 hour
+            for graph_path in graph_paths.values():
+                if graph_path and os.path.exists(graph_path):
+                    delete_after_delay(graph_path, delay_seconds=3600)
+            
             logger.info("✅ Analysis complete")
             return jsonify(response)
             
@@ -173,6 +205,12 @@ def analyze():
             import traceback
             logger.error(f"❌ Analysis error: {str(e)}")
             logger.error(traceback.format_exc())
+            
+            # Still delete uploaded file even if analysis fails (privacy)
+            if filepath and os.path.exists(filepath):
+                delete_after_delay(str(filepath), delay_seconds=3600)
+                logger.info("🔒 Scheduling failed upload deletion for privacy")
+            
             return jsonify({
                 'error': f'Analysis failed: {str(e)}',
                 'details': traceback.format_exc()
