@@ -251,6 +251,11 @@ def analyze():
                     except Exception as viz_error:
                         logger.warning(f"⚠️ Skipped visualization for problem {idx}: {str(viz_error)}")
                 logger.info(f"✅ Generated visualizations for {problems_with_viz}/{len(problems)} problems")
+                
+                # Debug: Log visualization URLs in response
+                for idx, sol in enumerate(report['problems_analyzed'][:3]):
+                    viz_url = sol.get('visualization', 'NONE')
+                    logger.info(f"📊 Solution {idx} visualization URL: {viz_url}")
             except Exception as e:
                 logger.warning(f"⚠️ Graph generation skipped: {str(e)}")
             

@@ -638,6 +638,13 @@
                 const keyConc = solution.key_concepts || labels.keyConceptDefault;
                 const mistakes = solution.common_mistakes || labels.commonMistakesDefault;
                 
+                // Debug logging
+                if (solution.visualization) {
+                    console.log(`✅ Solution ${idx} has visualization:`, solution.visualization);
+                } else {
+                    console.warn(`⚠️ Solution ${idx} has NO visualization`);
+                }
+                
                 // Build comprehensive steps HTML with theory context
                 const stepsHtml = (solution.steps || []).map((step, stepIdx) => {
                     // Enhanced step explanation
