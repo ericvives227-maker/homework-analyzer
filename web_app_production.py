@@ -169,7 +169,7 @@ def analyze():
                         images[key] = encoded
                 logger.info(f"✅ Generated {len(graph_paths)} graphs")
                 
-                # Generate individual problem visualizations for ALL problems (not just first 10)
+                # Generate individual problem visualizations and add to solutions
                 logger.info("🎨 Generating individual problem visualizations...")
                 problems_with_viz = 0
                 for idx, problem in enumerate(problems):
@@ -179,7 +179,10 @@ def analyze():
                             # Convert to base64 for frontend
                             encoded = image_to_base64(viz_path)
                             if encoded:
+                                # Add visualization to both problems and solutions
                                 problems[idx]['visualization'] = encoded
+                                if idx < len(report['problems_analyzed']):
+                                    report['problems_analyzed'][idx]['visualization'] = encoded
                                 problems_with_viz += 1
                                 # Schedule deletion of individual viz
                                 delete_after_delay(viz_path, delay_seconds=3600)
