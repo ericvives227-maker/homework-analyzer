@@ -283,8 +283,8 @@ Coverage:
             # Priority 1: Content-specific diagrams (Venn, trees, etc.)
             if has_sets or 'set theory' in problem_type:
                 # Draw Venn diagram with 2 or 3 sets
-                circle1 = Circle((0.35, 0.5), 0.25, fill=True, alpha=0.4, color='#667eea', edgecolor='blue', linewidth=2.5)
-                circle2 = Circle((0.65, 0.5), 0.25, fill=True, alpha=0.4, color='#f093fb', edgecolor='purple', linewidth=2.5)
+                circle1 = Circle((0.35, 0.5), 0.25, fill=True, alpha=0.4, facecolor='#667eea', edgecolor='blue', linewidth=2.5)
+                circle2 = Circle((0.65, 0.5), 0.25, fill=True, alpha=0.4, facecolor='#f093fb', edgecolor='purple', linewidth=2.5)
                 ax.add_patch(circle1)
                 ax.add_patch(circle2)
                 
