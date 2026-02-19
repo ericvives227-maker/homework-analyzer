@@ -97,11 +97,16 @@ def serve_image(filename):
         if not filename.startswith('problem_') or not filename.endswith('.png'):
             return jsonify({'error': 'Invalid image'}), 400
         
-        filepath = os.path.join('reports', 'graphs', f'{filename}.png')
+        # Try progression visualization first, then basic visualization
+        filepath_progression = os.path.join('reports', 'graphs', f'{filename}_progression.png')
+        filepath_basic = os.path.join('reports', 'graphs', f'{filename}.png')
         
-        # Ensure the file exists and is in the expected directory
-        if not os.path.exists(filepath):
-            logger.warning(f"⚠️ Image not found: {filepath}")
+        if os.path.exists(filepath_progression):
+            filepath = filepath_progression
+        elif os.path.exists(filepath_basic):
+            filepath = filepath_basic
+        else:
+            logger.warning(f"⚠️ Image not found: {filepath_basic} or {filepath_progression}")
             return jsonify({'error': 'Image not found'}), 404
         
         # Serve the image file
@@ -186,14 +191,20 @@ def analyze():
                 graph_paths = visualizer.generate_all_visualizations(problems, theories)
                 logger.info(f"✅ Generated {len(graph_paths)} graphs")
                 
-                # Generate individual problem visualizations
+                # Generate individual problem visualizations and add to solutions
                 logger.info("🎨 Generating individual problem visualizations...")
                 problems_with_viz = 0
                 for idx, problem in enumerate(problems):
                     try:
-                        viz_path = visualizer.generate_problem_visualization(problem, idx)
+                        # Try to generate progression visualization (step-by-step)
+                        viz_path = visualizer.generate_progression_visualization(problem, idx)
+                        
+                        # Fallback to basic visualization if progression fails
+                        if not viz_path:
+                            viz_path = visualizer.generate_problem_visualization(problem, idx)
+                        
                         if viz_path and os.path.exists(viz_path):
-                            # Store file path (not base64) for frontend to request
+                            # Store file path for frontend to request
                             viz_url = f"/api/image/problem_{idx}"
                             problems[idx]['visualization'] = viz_url
                             if idx < len(report['problems_analyzed']):
