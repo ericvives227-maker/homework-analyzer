@@ -23,11 +23,18 @@ sys.path.insert(0, str(Path(__file__).parent / 'src'))
 # Initialize Flask app
 app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB max file size
-app.config['UPLOAD_FOLDER'] = 'reports/uploads'
+
+# Use absolute paths for directory creation
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+app.config['UPLOAD_FOLDER'] = os.path.join(SCRIPT_DIR, 'reports', 'uploads')
+GRAPHS_DIR = os.path.join(SCRIPT_DIR, 'reports', 'graphs')
 
 # Create necessary directories
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-os.makedirs('reports/graphs', exist_ok=True)
+os.makedirs(GRAPHS_DIR, exist_ok=True)
+logger.info(f"📁 Project root: {SCRIPT_DIR}")
+logger.info(f"📁 Upload folder: {app.config['UPLOAD_FOLDER']}")
+logger.info(f"📁 Graphs folder: {GRAPHS_DIR}")
 
 
 def delete_after_delay(filepath, delay_seconds=3600):
@@ -100,9 +107,10 @@ def serve_image(filename):
             return jsonify({'error': 'Invalid image'}), 400
         
         # Try progression visualization first, then basic visualization
-        filepath_progression = os.path.join('reports', 'graphs', f'{filename}_progression.png')
-        filepath_basic = os.path.join('reports', 'graphs', f'{filename}.png')
+        filepath_progression = os.path.join(GRAPHS_DIR, f'{filename}_progression.png')
+        filepath_basic = os.path.join(GRAPHS_DIR, f'{filename}.png')
         
+        filepath = None
         if os.path.exists(filepath_progression):
             filepath = filepath_progression
             logger.info(f"✅ Serving progression visualization: {filename}")
@@ -110,14 +118,38 @@ def serve_image(filename):
             filepath = filepath_basic
             logger.info(f"✅ Serving basic visualization: {filename}")
         else:
-            logger.warning(f"⚠️ Image not found: {filepath_progression} or {filepath_basic}")
-            return jsonify({'error': 'Image not found'}), 404
+            logger.warning(f"⚠️ Image not found:")
+            logger.warning(f"  - Progression: {filepath_progression} (exists: {os.path.exists(filepath_progression)})")
+            logger.warning(f"  - Basic: {filepath_basic} (exists: {os.path.exists(filepath_basic)})")
+            logger.warning(f"  - Graphs dir: {GRAPHS_DIR}")
+            logger.warning(f"  - Files in graphs dir: {os.listdir(GRAPHS_DIR) if os.path.exists(GRAPHS_DIR) else 'N/A'}")
+            return jsonify({'error': 'Image not found', 'requested': filename}), 404
         
         # Serve the image file
+        logger.info(f"📤 Sending file: {filepath}")
         return send_file(filepath, mimetype='image/png', cache_timeout=3600)
     except Exception as e:
         logger.error(f"❌ Error serving image: {str(e)}")
-        return jsonify({'error': 'Failed to serve image'}), 500
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': 'Failed to serve image', 'details': str(e)}), 500
+
+
+@app.route('/api/debug/images')
+def debug_images():
+    """Debug endpoint to check what images exist"""
+    try:
+        files = []
+        if os.path.exists(GRAPHS_DIR):
+            files = os.listdir(GRAPHS_DIR)
+        
+        return jsonify({
+            'graphs_dir': GRAPHS_DIR,
+            'exists': os.path.exists(GRAPHS_DIR),
+            'files': files
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/api/status')
