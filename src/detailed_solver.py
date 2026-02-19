@@ -17,87 +17,87 @@ except Exception:  # pragma: no cover - optional dependency
   LangDetectException = Exception
 
 
+class _LanguageSupport:
+    """Lightweight language detection and translation wrapper."""
+
+    _SPANISH_MARKERS = {
+        'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'y', 'o', 'pero',
+        'porque', 'para', 'con', 'sin', 'sobre', 'entre', 'dado', 'dada', 'dados',
+        'dadas', 'encuentra', 'calcula', 'determina', 'resuelve', 'resolver',
+        'hallar', 'problema', 'ejercicio', 'pregunta', 'si', 'entonces', 'donde'
+    }
+
+    def __init__(self):
+        self._translator = Translator() if Translator else None
+        self._cache = {}
+
+    def detect_language(self, text):
+        if not text:
+            return 'es'
+        if detect is not None:
+            try:
+                detected = detect(text)
+                if detected:
+                    return detected
+            except LangDetectException:
+                return 'es'
+        text_lower = text.lower()
+        if re.search(r'[áéíóúñ¿¡]', text_lower):
+            return 'es'
+        hits = sum(1 for marker in self._SPANISH_MARKERS if marker in text_lower)
+        return 'es' if hits >= 2 else 'en'
+
+    def translate_text(self, text, target_lang):
+        if not text or target_lang == 'en':
+            return text
+        if not self._translator:
+            return text
+        cache_key = (target_lang, text)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+        try:
+            result = self._translator.translate(text, dest=target_lang)
+            translated = result.text if result else text
+        except Exception:
+            translated = text
+        self._cache[cache_key] = translated
+        return translated
+
+
+def _translate_value(value, translator, target_lang, skip_keys=None):
+    if skip_keys is None:
+        skip_keys = set()
+    if isinstance(value, str):
+        return translator.translate_text(value, target_lang)
+    if isinstance(value, list):
+        return [_translate_value(item, translator, target_lang, skip_keys=skip_keys) for item in value]
+    if isinstance(value, dict):
+        translated = {}
+        for key, item in value.items():
+            if key in skip_keys:
+                translated[key] = item
+            else:
+                translated[key] = _translate_value(item, translator, target_lang, skip_keys=skip_keys)
+        return translated
+    return value
+
+
 class DetailedSolutionGenerator:
     """Generates detailed, comprehensive step-by-step solutions"""
     
     def __init__(self):
         self.problem_patterns = {
-          'derivative': r'(deriv|d/d|prime|slope|derivada|derivar)',
-          'integral': r'(integr|∫|sum|integral)',
-          'limit': r'(limit|lim|approaches|→|limite|l[íi]mite|tiende)',
-          'equation': r'(solve|find|equation|=|resolver|resuelve|ecuaci[óo]n)',
-          'simplify': r'(simplify|reduce|factor|simplificar|reducir|factorizar)',
-          'geometry': r'(area|[áa]rea|volume|volumen|perimeter|per[ií]metro|angle|[áa]ngulo|triangle|tri[aá]ngulo|circle|c[ií]rculo)',
-          'force': r'(force|newton|acceleration|aceleraci[óo]n|F=ma|fuerza)',
-          'energy': r'(energy|work|kinetic|potential|energ[ií]a|trabajo|cin[eé]tica|potencial)',
-          'chemistry': r'(stoich|balance|react|mole|qu[ií]mica|reacci[óo]n|mol)',
-          'algebra': r'(quadratic|linear|factor|solve|[aá]lgebra|polynomial|polinomio|ecuaci[óo]n)'
+            'derivative': r'(deriv|d/d|prime|slope|derivada|derivar)',
+            'integral': r'(integr|∫|sum|integral)',
+            'limit': r'(limit|lim|approaches|→|limite|l[íi]mite|tiende)',
+            'equation': r'(solve|find|equation|=|resolver|resuelve|ecuaci[óo]n)',
+            'simplify': r'(simplify|reduce|factor|simplificar|reducir|factorizar)',
+            'geometry': r'(area|[áa]rea|volume|volumen|perimeter|per[ií]metro|angle|[áa]ngulo|triangle|tri[aá]ngulo|circle|c[ií]rculo)',
+            'force': r'(force|newton|acceleration|aceleraci[óo]n|F=ma|fuerza)',
+            'energy': r'(energy|work|kinetic|potential|energ[ií]a|trabajo|cin[eé]tica|potencial)',
+            'chemistry': r'(stoich|balance|react|mole|qu[ií]mica|reacci[óo]n|mol)',
+            'algebra': r'(quadratic|linear|factor|solve|[aá]lgebra|polynomial|polinomio|ecuaci[óo]n)'
         }
-
-
-    class _LanguageSupport:
-      """Lightweight language detection and translation wrapper."""
-
-      _SPANISH_MARKERS = {
-        'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'y', 'o', 'pero',
-        'porque', 'para', 'con', 'sin', 'sobre', 'entre', 'dado', 'dada', 'dados',
-        'dadas', 'encuentra', 'calcula', 'determina', 'resuelve', 'resolver',
-        'hallar', 'problema', 'ejercicio', 'pregunta', 'si', 'entonces', 'donde'
-      }
-
-      def __init__(self):
-        self._translator = Translator() if Translator else None
-        self._cache = {}
-
-      def detect_language(self, text):
-        if not text:
-          return 'es'
-        if detect is not None:
-          try:
-            detected = detect(text)
-            if detected:
-              return detected
-          except LangDetectException:
-            return 'es'
-        text_lower = text.lower()
-        if re.search(r'[áéíóúñ¿¡]', text_lower):
-          return 'es'
-        hits = sum(1 for marker in self._SPANISH_MARKERS if marker in text_lower)
-        return 'es' if hits >= 2 else 'en'
-
-      def translate_text(self, text, target_lang):
-        if not text or target_lang == 'en':
-          return text
-        if not self._translator:
-          return text
-        cache_key = (target_lang, text)
-        if cache_key in self._cache:
-          return self._cache[cache_key]
-        try:
-          result = self._translator.translate(text, dest=target_lang)
-          translated = result.text if result else text
-        except Exception:
-          translated = text
-        self._cache[cache_key] = translated
-        return translated
-
-
-    def _translate_value(value, translator, target_lang, skip_keys=None):
-      if skip_keys is None:
-        skip_keys = set()
-      if isinstance(value, str):
-        return translator.translate_text(value, target_lang)
-      if isinstance(value, list):
-        return [_translate_value(item, translator, target_lang, skip_keys=skip_keys) for item in value]
-      if isinstance(value, dict):
-        translated = {}
-        for key, item in value.items():
-          if key in skip_keys:
-            translated[key] = item
-          else:
-            translated[key] = _translate_value(item, translator, target_lang, skip_keys=skip_keys)
-        return translated
-      return value
     
     def analyze_problem_requirements(self, text):
         """Deep analysis of what the problem is asking for"""
