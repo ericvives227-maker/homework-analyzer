@@ -168,6 +168,22 @@ def analyze():
                     if encoded:
                         images[key] = encoded
                 logger.info(f"✅ Generated {len(graph_paths)} graphs")
+                
+                # Generate individual problem visualizations
+                logger.info("🎨 Generating individual problem visualizations...")
+                for idx, problem in enumerate(problems):
+                    try:
+                        viz_path = visualizer.generate_problem_visualization(problem, idx)
+                        if viz_path and os.path.exists(viz_path):
+                            # Convert to base64 for frontend
+                            encoded = image_to_base64(viz_path)
+                            if encoded:
+                                problems[idx]['visualization'] = encoded
+                                # Schedule deletion of individual viz
+                                delete_after_delay(viz_path, delay_seconds=3600)
+                    except Exception as viz_error:
+                        logger.warning(f"⚠️ Skipped visualization for problem {idx}: {str(viz_error)}")
+                logger.info(f"✅ Generated {sum(1 for p in problems if 'visualization' in p)} problem visualizations")
             except Exception as e:
                 logger.warning(f"⚠️ Graph generation skipped: {str(e)}")
             

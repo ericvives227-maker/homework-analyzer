@@ -681,6 +681,15 @@
                             </p>
                         </div>
                         
+                        ${solution.visualization ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #f0f7ff; border-radius: 8px; text-align: center;">
+                            <strong style="color: #1565c0; display: block; margin-bottom: 12px; font-size: 1em;">📊 Visual Representation</strong>
+                            <img src="data:image/png;base64,${solution.visualization}" 
+                                 alt="Problem Visualization" 
+                                 style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        </div>
+                        ` : ''}
+                        
                         ${solution.problem_analysis ? `
                         <div style="margin-bottom: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #1976d2;">
                             <strong style="color: #0d47a1; display: block; margin-bottom: 12px; font-size: 1.05em;">${labels.problemAnalysis}</strong>

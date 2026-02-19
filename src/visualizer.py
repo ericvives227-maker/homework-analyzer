@@ -261,6 +261,170 @@ Coverage:
         
         return filepath
     
+    def generate_problem_visualization(self, problem, problem_index):
+        """Generate a visualization for an individual problem based on its type"""
+        import numpy as np
+        
+        problem_type = problem.get('type', '').lower()
+        
+        try:
+            fig, ax = plt.subplots(figsize=(5, 4))
+            
+            if 'derivative' in problem_type or 'calculus' in problem_type:
+                # Plot a generic function and its tangent line
+                x = np.linspace(-3, 3, 200)
+                y = x**3 - 2*x**2 + x + 1
+                ax.plot(x, y, 'b-', linewidth=2.5, label='f(x)')
+                
+                # Tangent at x=1
+                x_tan = 1
+                y_tan = x_tan**3 - 2*x_tan**2 + x_tan + 1
+                slope = 3*x_tan**2 - 4*x_tan + 1
+                y_tangent = slope * (x - x_tan) + y_tan
+                ax.plot(x, y_tangent, 'r--', linewidth=2, label="f'(x) at x=1")
+                ax.plot(x_tan, y_tan, 'ro', markersize=10)
+                
+                ax.set_xlabel('x', fontsize=10, weight='bold')
+                ax.set_ylabel('f(x)', fontsize=10, weight='bold')
+                ax.set_title('Function & Derivative', fontsize=11, weight='bold')
+                ax.grid(True, alpha=0.3)
+                ax.legend(fontsize=9)
+                ax.axhline(y=0, color='k', linewidth=0.5)
+                ax.axvline(x=0, color='k', linewidth=0.5)
+                
+            elif 'integral' in problem_type:
+                # Show area under curve
+                x = np.linspace(0, 4, 200)
+                y = 2 + 0.5*x - 0.1*x**2
+                ax.plot(x, y, 'b-', linewidth=2.5, label='f(x)')
+                
+                # Shade area under curve
+                x_fill = np.linspace(1, 3, 100)
+                y_fill = 2 + 0.5*x_fill - 0.1*x_fill**2
+                ax.fill_between(x_fill, 0, y_fill, alpha=0.3, color='lightblue', label='∫f(x)dx')
+                
+                ax.set_xlabel('x', fontsize=10, weight='bold')
+                ax.set_ylabel('f(x)', fontsize=10, weight='bold')
+                ax.set_title('Area Under Curve', fontsize=11, weight='bold')
+                ax.grid(True, alpha=0.3)
+                ax.legend(fontsize=9)
+                ax.axhline(y=0, color='k', linewidth=0.5)
+                ax.set_ylim(0, max(y)*1.2)
+                
+            elif 'physics' in problem_type or 'motion' in problem_type or 'kinematics' in problem_type:
+                # Show motion graph (position vs time)
+                t = np.linspace(0, 5, 100)
+                x_pos = 10 + 5*t - 0.5*t**2  # s = s0 + v0*t + 0.5*a*t^2
+                v = 5 - t  # velocity
+                
+                ax2 = ax.twinx()
+                line1 = ax.plot(t, x_pos, 'b-', linewidth=2.5, label='Position')
+                line2 = ax2.plot(t, v, 'r--', linewidth=2, label='Velocity')
+                
+                ax.set_xlabel('Time (s)', fontsize=10, weight='bold')
+                ax.set_ylabel('Position (m)', fontsize=10, weight='bold', color='b')
+                ax2.set_ylabel('Velocity (m/s)', fontsize=10, weight='bold', color='r')
+                ax.set_title('Motion Graph', fontsize=11, weight='bold')
+                ax.grid(True, alpha=0.3)
+                ax.tick_params(axis='y', labelcolor='b')
+                ax2.tick_params(axis='y', labelcolor='r')
+                
+                lines = line1 + line2
+                labels = [l.get_label() for l in lines]
+                ax.legend(lines, labels, fontsize=9, loc='upper left')
+                
+            elif 'algebra' in problem_type or 'equation' in problem_type:
+                # Show intersection of two functions
+                x = np.linspace(-5, 5, 200)
+                y1 = 2*x + 3
+                y2 = -x**2 + 5
+                
+                ax.plot(x, y1, 'b-', linewidth=2.5, label='y = 2x + 3')
+                ax.plot(x, y2, 'r-', linewidth=2.5, label='y = -x² + 5')
+                
+                # Mark intersections (approximate)
+                idx = np.argwhere(np.diff(np.sign(y1 - y2))).flatten()
+                if len(idx) > 0:
+                    for i in idx[:2]:  # Show max 2 intersections
+                        ax.plot(x[i], y1[i], 'go', markersize=10)
+                
+                ax.set_xlabel('x', fontsize=10, weight='bold')
+                ax.set_ylabel('y', fontsize=10, weight='bold')
+                ax.set_title('Solving Equations', fontsize=11, weight='bold')
+                ax.grid(True, alpha=0.3)
+                ax.legend(fontsize=9)
+                ax.axhline(y=0, color='k', linewidth=0.5)
+                ax.axvline(x=0, color='k', linewidth=0.5)
+                
+            elif 'geometry' in problem_type or 'triangle' in problem_type:
+                # Draw a triangle with labels
+                triangle = plt.Polygon([(0, 0), (4, 0), (2, 3)], fill=False, edgecolor='blue', linewidth=2.5)
+                ax.add_patch(triangle)
+                
+                # Add labels
+                ax.text(2, -0.5, 'b', fontsize=12, ha='center', weight='bold')
+                ax.text(-0.3, 1.5, 'a', fontsize=12, ha='center', weight='bold')
+                ax.text(4.3, 1.5, 'c', fontsize=12, ha='center', weight='bold')
+                ax.plot([2, 2], [0, 3], 'r--', linewidth=1.5, label='height')
+                
+                ax.set_xlim(-1, 5)
+                ax.set_ylim(-1, 4)
+                ax.set_aspect('equal')
+                ax.set_title('Geometry Problem', fontsize=11, weight='bold')
+                ax.legend(fontsize=9)
+                ax.axis('off')
+                
+            elif 'chemistry' in problem_type:
+                # Show reaction progress
+                stages = ['Reactants', 'Transition\nState', 'Products']
+                energy = [20, 60, 15]
+                
+                ax.plot([0, 1, 2], energy, 'b-o', linewidth=2.5, markersize=10)
+                ax.fill_between([0, 1, 2], 0, energy, alpha=0.2, color='lightblue')
+                
+                ax.set_xticks([0, 1, 2])
+                ax.set_xticklabels(stages, fontsize=9)
+                ax.set_ylabel('Energy', fontsize=10, weight='bold')
+                ax.set_title('Reaction Energy Diagram', fontsize=11, weight='bold')
+                ax.grid(True, alpha=0.3, axis='y')
+                ax.set_ylim(0, 70)
+                
+                # Label activation energy
+                ax.annotate('', xy=(0.5, 60), xytext=(0.5, 20),
+                           arrowprops=dict(arrowstyle='<->', color='red', lw=2))
+                ax.text(0.7, 40, 'Ea', fontsize=11, color='red', weight='bold')
+                
+            else:
+                # Generic graph for other problem types
+                categories = ['Given', 'Process', 'Solution']
+                values = [1, 2, 3]
+                colors_bar = ['#667eea', '#764ba2', '#43e97b']
+                
+                ax.bar(categories, values, color=colors_bar, edgecolor='black', linewidth=1.5)
+                ax.set_ylabel('Progress', fontsize=10, weight='bold')
+                ax.set_title('Problem Solving Steps', fontsize=11, weight='bold')
+                ax.set_ylim(0, 4)
+                
+                for i, v in enumerate(values):
+                    ax.text(i, v + 0.1, f'Step {v}', ha='center', va='bottom', 
+                           fontsize=10, weight='bold')
+            
+            plt.tight_layout()
+            
+            # Save
+            graphs_dir = os.path.join(self.output_dir, 'graphs')
+            os.makedirs(graphs_dir, exist_ok=True)
+            filepath = os.path.join(graphs_dir, f'problem_{problem_index}_visual.png')
+            plt.savefig(filepath, dpi=150, bbox_inches='tight')
+            plt.close()
+            
+            return filepath
+            
+        except Exception as e:
+            print(f"⚠️ Failed to generate visualization for problem {problem_index}: {e}")
+            plt.close()
+            return None
+    
     def generate_all_visualizations(self, problems, theories_dict):
         """Generate all visualizations"""
         print("\n📊 Generating visualizations...\n")
