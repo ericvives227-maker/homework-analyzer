@@ -100,36 +100,44 @@ def analyzer():
 def serve_image(filename):
     """Serve visualization images"""
     try:
+        logger.info(f"🖼️ IMAGE REQUEST: {filename}")
+        
         # Security: only allow serving problem_N format (N = digit index)
         import re
         if not re.match(r'^problem_\d+$', filename):
-            logger.warning(f"⚠️ Invalid image request: {filename}")
+            logger.warning(f"❌ Invalid image request: {filename}")
             return jsonify({'error': 'Invalid image'}), 400
         
         # Try progression visualization first, then basic visualization
         filepath_progression = os.path.join(GRAPHS_DIR, f'{filename}_progression.png')
         filepath_basic = os.path.join(GRAPHS_DIR, f'{filename}.png')
         
+        logger.info(f"  Looking for: {filepath_progression}")
+        logger.info(f"    Exists: {os.path.exists(filepath_progression)}")
+        logger.info(f"  Fallback: {filepath_basic}")
+        logger.info(f"    Exists: {os.path.exists(filepath_basic)}")
+        
         filepath = None
         if os.path.exists(filepath_progression):
             filepath = filepath_progression
-            logger.info(f"✅ Serving progression visualization: {filename}")
+            logger.info(f"✅ Found progression visualization: {filename} ({os.path.getsize(filepath)} bytes)")
         elif os.path.exists(filepath_basic):
             filepath = filepath_basic
-            logger.info(f"✅ Serving basic visualization: {filename}")
+            logger.info(f"✅ Found basic visualization: {filename} ({os.path.getsize(filepath)} bytes)")
         else:
-            logger.warning(f"⚠️ Image not found:")
-            logger.warning(f"  - Progression: {filepath_progression} (exists: {os.path.exists(filepath_progression)})")
-            logger.warning(f"  - Basic: {filepath_basic} (exists: {os.path.exists(filepath_basic)})")
-            logger.warning(f"  - Graphs dir: {GRAPHS_DIR}")
-            logger.warning(f"  - Files in graphs dir: {os.listdir(GRAPHS_DIR) if os.path.exists(GRAPHS_DIR) else 'N/A'}")
+            logger.warning(f"❌ Image NOT found for {filename}")
+            if os.path.exists(GRAPHS_DIR):
+                files = os.listdir(GRAPHS_DIR)
+                logger.warning(f"  Available files in {GRAPHS_DIR}: {files}")
+            else:
+                logger.warning(f"  GRAPHS_DIR doesn't exist: {GRAPHS_DIR}")
             return jsonify({'error': 'Image not found', 'requested': filename}), 404
         
         # Serve the image file
-        logger.info(f"📤 Sending file: {filepath}")
+        logger.info(f"📤 Sending {os.path.getsize(filepath)} bytes from {filepath}")
         return send_file(filepath, mimetype='image/png', cache_timeout=3600)
     except Exception as e:
-        logger.error(f"❌ Error serving image: {str(e)}")
+        logger.error(f"❌ Error serving image {filename}: {str(e)}")
         import traceback
         traceback.print_exc()
         return jsonify({'error': 'Failed to serve image', 'details': str(e)}), 500
@@ -220,6 +228,8 @@ def analyze():
             
             # Generate graphs (optional)
             graph_paths = {}
+            logger.info(f"🔍 GRAPHS_DIR is set to: {GRAPHS_DIR}")
+            logger.info(f"🔍 GRAPHS_DIR exists: {os.path.exists(GRAPHS_DIR)}")
             try:
                 from visualizer import ReportVisualizer
                 logger.info("📊 Generating visualizations...")
@@ -240,22 +250,26 @@ def analyze():
                             viz_path = visualizer.generate_problem_visualization(problem, idx)
                         
                         if viz_path and os.path.exists(viz_path):
-                            # Store file path for frontend to request
                             viz_url = f"/api/image/problem_{idx}"
+                            logger.info(f"   ✅ Problem {idx}: Generated {os.path.basename(viz_path)} ({os.path.getsize(viz_path)} bytes)")
+                            logger.info(f"   -> Setting visualization URL: {viz_url}")
+                            
+                            # Add to both problems and solutions
                             problems[idx]['visualization'] = viz_url
                             if idx < len(report['problems_analyzed']):
                                 report['problems_analyzed'][idx]['visualization'] = viz_url
+                                logger.info(f"   -> Added to report['problems_analyzed'][{idx}]")
+                            else:
+                                logger.warning(f"   ⚠️ Index {idx} out of range for solutions (length={len(report['problems_analyzed'])})")
                             problems_with_viz += 1
+                            
                             # Schedule deletion of individual viz
                             delete_after_delay(viz_path, delay_seconds=3600)
+                        else:
+                            logger.warning(f"   ⚠️ Problem {idx}: No visualization path or file doesn't exist")
                     except Exception as viz_error:
-                        logger.warning(f"⚠️ Skipped visualization for problem {idx}: {str(viz_error)}")
+                        logger.warning(f"   ❌ Problem {idx}: {str(viz_error)}")
                 logger.info(f"✅ Generated visualizations for {problems_with_viz}/{len(problems)} problems")
-                
-                # Debug: Log visualization URLs in response
-                for idx, sol in enumerate(report['problems_analyzed'][:3]):
-                    viz_url = sol.get('visualization', 'NONE')
-                    logger.info(f"📊 Solution {idx} visualization URL: {viz_url}")
             except Exception as e:
                 logger.warning(f"⚠️ Graph generation skipped: {str(e)}")
             
@@ -276,6 +290,13 @@ def analyze():
                 'graphs': list(graph_paths.keys())
             }
             
+            # Debug: Check what's in response before sending
+            logger.info(f"📤 RESPONSE CHECK: Sending {len(response['solutions'])} solutions")
+            for idx, sol in enumerate(response['solutions'][:3]):
+                has_viz = 'visualization' in sol and sol['visualization'] is not None
+                viz_val = sol.get('visualization', 'KEY_MISSING')
+                logger.info(f"   Solution {idx}: visualization={has_viz}, value={viz_val}")
+            
             # Schedule automatic deletion after 1 hour for privacy
             logger.info("🔒 Scheduling file deletion in 1 hour for privacy protection")
             delete_after_delay(str(filepath), delay_seconds=3600)
@@ -285,7 +306,7 @@ def analyze():
                 if graph_path and os.path.exists(graph_path):
                     delete_after_delay(graph_path, delay_seconds=3600)
             
-            logger.info("✅ Analysis complete")
+            logger.info("✅ Analysis complete - sending response to frontend")
             return jsonify(response)
             
         except Exception as e:
